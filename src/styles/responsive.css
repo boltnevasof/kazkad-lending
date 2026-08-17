@@ -1,0 +1,352 @@
+/* Адаптив.
+ *
+ * Файл грузится последним и держит все медиазапросы проекта. Так сделано не
+ * ради порядка: @media не добавляет специфичности, поэтому правило из
+ * медиазапроса в site.css проигрывало обычному классу из motion.css просто
+ * потому, что motion.css идёт в каскаде позже. Собранные в конец, они
+ * перебивают базовые стили без !important. */
+
+/* ------------------------------------------------------------ планшет вширь */
+
+@media (max-width: 1200px) {
+  .kz-cases-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------------------------ планшет */
+
+@media (max-width: 1000px) {
+  /* Асимметричный грид 34/66 схлопывается: на узком экране левая колонка
+     съедает меру строки, а подпись читается и над контентом. */
+  /* minmax(0, 1fr), а не 1fr: минимум колонки по умолчанию равен min-content
+     содержимого, и лента конвейера из тридцати шашек раздувала её до 402px,
+     из-за чего вся страница получала горизонтальную прокрутку. */
+  .kz-split-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .kz-aside {
+    padding-top: 0;
+  }
+
+  .kz-display-indent {
+    margin-left: 0;
+  }
+
+  /* Колонка задач шире, но таблица не складывается: Гант без поля справа
+     перестаёт быть Гантом. */
+  .kz-gantt {
+    --kz-gantt-labels: 42%;
+  }
+
+  .kz-gantt-notes {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .kz-cases-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kz-case-cta {
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .kz-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ------------------------------------------------- шапка: переход на бургер */
+
+/* Ссылки и CTA перестают помещаться рядом с логотипом раньше, чем начинается
+ * телефонная раскладка: на 768px правый край кнопки уходил за границу
+ * контейнера и наезжал на «контакты». Поэтому у шапки свой порог. */
+@media (max-width: 900px) {
+  .kz-nav__links,
+  .kz-nav__cta {
+    display: none;
+  }
+
+  .kz-nav__burger {
+    display: inline-flex;
+  }
+}
+
+/* ----------------------------------------------------------------- телефон */
+
+@media (max-width: 760px) {
+  :root {
+    --nav-height: 64px;
+    --section-y: 72px;
+    --container-gutter: 20px;
+  }
+
+  .kz-site {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ---- шапка ---- */
+
+  /* backdrop-filter на мобильных стоит дорого и ради 64px полосы не окупается.
+     Слой остаётся, плотность по-прежнему набирается прокруткой — гасится
+     только размытие, заливка становится сплошной. */
+  .kz-nav::before {
+    background: var(--surface-page);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* ---- герой ---- */
+
+  .kz-hero-body {
+    padding-top: calc(var(--nav-height) + 36px);
+    padding-bottom: 48px;
+  }
+
+  /* Свечение задано inline-шириной в компоненте — перебиваем на узком экране,
+     иначе звезда перекрывает весь заголовок. */
+  .kz-hero-glow {
+    width: 300px !important;
+    left: 4% !important;
+    top: -16px !important;
+    opacity: 0.42 !important;
+  }
+
+  .kz-hero-lead-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .kz-hero-lead {
+    flex: none;
+    font-size: 17px;
+  }
+
+  /* На телефоне лента занимает всю ширину, переход уходит под неё и
+     разворачивается в строку: вертикальный прямоугольник там не нужен. */
+  .kz-hero-showcase {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .kz-hero-all {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    min-height: 60px;
+    padding: 0 16px;
+  }
+
+  /* В строке подпись снова горизонтальная. */
+  .kz-hero-all__label {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+
+  .kz-hero-all__arrow {
+    order: 1;
+  }
+
+  /* Три квадрата в столбик занимали три экрана. На телефоне это одна лента
+     в размер плитки из концепта (210px), подрезанная правым краем экрана. */
+  .kz-hero-cases {
+    display: flex;
+    gap: 12px;
+    margin-right: calc(-1 * var(--container-gutter));
+    padding-right: var(--container-gutter);
+    overflow-x: auto;
+    /* Явно: иначе вторая ось вычисляется в auto и ряд получает
+       вертикальную прокрутку. Подъёму плитки даём место полями. */
+    overflow-y: hidden;
+    padding-block: 6px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .kz-hero-cases::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kz-hero-cases > .kz-tile {
+    flex: none;
+    width: 200px;
+  }
+
+  /* ---- разделы ---- */
+
+  /* Гант складывается: задача над своей дорожкой. В две колонки на телефоне
+     под названия уходила почти половина ширины, а на 21 день оставалось
+     меньше 180px. Теперь дорожка занимает весь экран. */
+  .kz-gantt__head,
+  .kz-gantt__row {
+    grid-template-columns: 1fr;
+  }
+
+  /* В шапке левая ячейка пустая — в один столбец она давала бы пустую строку. */
+  .kz-gantt__head .kz-gantt__label {
+    display: none;
+  }
+
+  /* justify-content на десктопе центрует колонку по вертикали; в строке он
+     начал бы центровать по горизонтали, поэтому возвращаем к левому краю. */
+  .kz-gantt__label {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .kz-gantt__track {
+    height: 40px;
+  }
+
+  .kz-gantt__weeks span {
+    padding-left: 12px;
+  }
+
+  /* Схема конвейера на телефоне: коробки мельче, лента во всю ширину. */
+  .kz-conveyor {
+    --kz-box: 36px;
+    padding-right: 0;
+  }
+
+  .kz-conveyor__belt {
+    height: 18px;
+  }
+
+  .kz-conveyor__legs {
+    height: 16px;
+  }
+
+  .kz-cases-head {
+    gap: 20px;
+  }
+
+  .kz-case-slide {
+    width: min(78vw, 320px);
+  }
+
+  .kz-contact-lines {
+    gap: 14px 24px;
+  }
+
+  /* ---- страницы кейсов ---- */
+
+  .kz-page {
+    padding: calc(var(--nav-height) + 36px) 0 var(--section-y);
+  }
+
+  .kz-page-filters {
+    margin-top: 32px;
+    /* Вкладки уходят под края экрана: обрезанная справа подсказывает,
+       что список направлений продолжается. */
+    margin-inline: calc(-1 * var(--container-gutter));
+    padding-inline: var(--container-gutter);
+  }
+
+  .kz-cases-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 32px;
+  }
+
+  .kz-case-media {
+    margin-top: 36px;
+    height: min(38vh, 300px);
+  }
+
+  .kz-case-meta {
+    gap: 20px 32px;
+    margin-top: 28px;
+    padding-bottom: 28px;
+  }
+
+  .kz-case-row {
+    padding: 24px 0;
+  }
+
+  .kz-case-metrics {
+    gap: 28px 40px;
+    padding: 36px 0;
+  }
+
+  .kz-case-cta {
+    padding: 40px 0;
+  }
+
+  .kz-case-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .kz-case-nav__link {
+    padding: 20px;
+  }
+
+  .kz-case-nav__link.is-next {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  /* ---- подвал ---- */
+
+  .kz-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* Ссылки в подвале — основная навигация на телефоне, поэтому им нужна
+     полноценная зона нажатия. */
+  .kz-footer-col {
+    gap: 4px;
+  }
+
+  .kz-footer-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .kz-footer-bottom {
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+/* ------------------------------------------------------------ узкий телефон */
+
+@media (max-width: 420px) {
+  .kz-cases-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kz-hero-cases > .kz-tile {
+    width: 176px;
+  }
+
+  .kz-case-metrics {
+    gap: 24px 32px;
+  }
+}
+
+/* --------------------------------------------------- невысокий экран в ландшафте */
+
+/* Телефон боком: 64px шапки плюс полный отступ съедают весь экран. */
+@media (max-height: 520px) and (max-width: 1000px) {
+  .kz-hero-body {
+    padding-top: calc(var(--nav-height) + 24px);
+    padding-bottom: 32px;
+  }
+
+  .kz-menu__links a {
+    font-size: clamp(22px, 6vw, 30px);
+  }
+}

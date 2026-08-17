@@ -1,0 +1,1041 @@
+/* Моушен-слой лендинга.
+ *
+ * Правило, которое здесь держится везде: анимируются только `opacity`,
+ * `translate`/`transform`, `scale` и `clip-path` — никаких layout-свойств.
+ * Появление блоков едет на CSS-свойстве `translate`, ховеры — на `transform`;
+ * они складываются независимо, поэтому подъём плитки не спорит с её проявлением.
+ *
+ * Тайминги и кривые — из токенов дизайн-системы (tokens/motion.css). */
+
+:root {
+  --kz-reveal-dur: 620ms;
+  /* Подмена стрелок заметно медленнее контролов: движение должно читаться,
+   * а не мелькать. */
+  --kz-arrow-dur: 460ms;
+  --kz-curtain-cover: 300ms;
+  --kz-curtain-uncover: 360ms;
+  --kz-curtain-step: 26ms;
+  /* Полотно перекрытий — чёрное, а не ink: это не текст и не поверхность,
+   * а полный блэкаут между кадрами. */
+  --kz-curtain-fill: #000000;
+}
+
+/* ---------------------------------------------------------------- проявление */
+
+/* Возврат на уже виденную страницу: показываем всё одновременно, без лесенки.
+ * Класс живёт один кадр, ровно на момент старта переходов. */
+.kz-no-stagger [data-reveal],
+.kz-no-stagger .kz-word__in,
+.kz-no-stagger .kz-gantt__bar,
+.kz-no-stagger .kz-conveyor__box,
+.kz-no-stagger .kz-conveyor__legs span,
+.kz-no-stagger .kz-conveyor__rollers span,
+.kz-no-stagger .kz-conveyor__floor {
+  transition-delay: 0s !important;
+}
+
+[data-reveal]:not(.kz-split) {
+  opacity: 0;
+  translate: 0 16px;
+  transition:
+    opacity var(--kz-reveal-dur) var(--ease-out) var(--kz-delay, 0ms),
+    translate var(--kz-reveal-dur) var(--ease-out) var(--kz-delay, 0ms);
+}
+
+/* Вариант для боковых подписей: приезжают слева, а не снизу.
+ * Стоит до .is-in намеренно: специфичность у обоих селекторов одинаковая
+ * (0,3,0), и решает порядок. Ниже .is-in эта строка держала бы подпись
+ * сдвинутой навсегда — на телефоне она упиралась в край экрана. */
+[data-reveal].kz-from-left:not(.kz-split) {
+  translate: -20px 0;
+}
+
+[data-reveal]:not(.kz-split).is-in {
+  opacity: 1;
+  translate: none;
+}
+
+/* Лента едет. Это единственная непрерывная анимация на сайте, и она здесь
+ * не украшение: без движения схема читается как ряд коробок, а не как
+ * конвейер. Сдвиг ровно на шаг шашки, linear, без пауз — цикл не виден.
+ * Дизайн-система описывает моушен только как входы, так что это осознанное
+ * отступление ради читаемости схемы. */
+@keyframes kz-belt {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--kz-tread));
+  }
+}
+
+.kz-conveyor__treads {
+  animation: kz-belt 1.5s linear infinite;
+}
+
+/* Квадрат едет от левого края за правый. Стартует за кадром на свою ширину,
+ * приезжает на 100% — то есть на всю длину ленты. */
+@keyframes kz-ride {
+  from {
+    transform: translateX(calc(-1 * var(--kz-box) - 10px));
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Шесть квадратов на 12s — сдвиг фазы ровно 2s, поток идёт без разрывов. */
+.kz-conveyor__rider {
+  animation: kz-ride 12s linear infinite;
+  animation-delay: calc(var(--kz-i, 0) * -2s);
+}
+
+/* Опоры и пол проявляются вместе с машиной. */
+.kz-conveyor__legs span,
+.kz-conveyor__floor {
+  opacity: 0;
+  transition: opacity 420ms var(--ease-out) calc(200ms + var(--kz-i, 0) * 60ms);
+}
+
+.kz-conveyor.is-in .kz-conveyor__legs span,
+.kz-conveyor.is-in .kz-conveyor__floor {
+  opacity: 1;
+}
+
+/* Лента прочерчивается слева направо — коробки встают уже на неё. */
+.kz-conveyor__belt {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 620ms var(--ease-out);
+}
+
+.kz-conveyor.is-in .kz-conveyor__belt {
+  transform: scaleX(1);
+}
+
+/* Отрезки прочерчиваются слева направо, строка за строкой: лесенка
+ * собирается сверху вниз, как и идут этапы. translateY держит отрезок
+ * по центру строки, поэтому он входит в ту же трансформацию, что и рост. */
+.kz-gantt__bar {
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-reveal) var(--ease-out) calc(160ms + var(--kz-i, 0) * 140ms);
+}
+
+.kz-gantt.is-in .kz-gantt__bar {
+  transform: translateY(-50%) scaleX(1);
+}
+
+/* --------------------------------------------------- текстовые ссылки */
+
+/* Тот же приём, что в шапке: линия растёт слева направо, а не появляется целиком. */
+.kz-footer-link,
+.kz-contact-lines a {
+  position: relative;
+  align-self: flex-start;
+}
+
+.kz-footer-link::after,
+.kz-contact-lines a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.kz-footer-link:hover::after,
+.kz-contact-lines a:hover::after {
+  transform: scaleX(1);
+}
+
+/* -------------------------------------------------------- заголовки по словам */
+
+/* display у .kz-split намеренно не задан: тег-обёртка приходит из вызова
+ * (h2 — блок, span внутри заголовка — строчный). */
+
+.kz-word {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  /* overflow:hidden уводит базовую линию inline-block на нижний край поля,
+   * поэтому выравниваем слова по верху строки — иначе они «просядут». */
+  vertical-align: top;
+  /* Маска режет всё ниже строки. Выносим подстрочные элементы (р, у, д, ц)
+   * за линию отсечения паддингом и возвращаем высоту отрицательным полем. */
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+}
+
+.kz-word__in {
+  display: inline-block;
+  translate: 0 125%;
+  transition: translate 880ms var(--ease-out) var(--kz-delay, 0ms);
+}
+
+.kz-split.is-in .kz-word__in {
+  translate: none;
+}
+
+/* --------------------------------------------------------------------- шапка */
+
+/* fixed, а не sticky: sticky обрезается любым предком с overflow, а секция
+ * героя его имеет — шапка исчезала, стоило прокрутить страницу дальше. */
+.kz-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--nav-height);
+  background: transparent;
+}
+
+/* Стекло вынесено в отдельный слой и проявляется прозрачностью, а не
+ * переключением свойств.
+ *
+ * Так сделано по двум причинам. Первая: backdrop-filter не анимируется
+ * переходом со значения none — блюр включался скачком, и именно он давал
+ * рывок. Второй слой гасится прозрачностью целиком, вместе с блюром, заливкой
+ * и линейкой. Вторая: --kz-nav-p считается от позиции прокрутки (см. App.jsx),
+ * поэтому шапка не щёлкает на пороге, а набирает плотность по мере ухода
+ * страницы вверх. Дизайн-система описывает порог в 24px — здесь он намеренно
+ * растянут в диапазон. */
+.kz-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--glass-fill);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  box-shadow: 0 1px 0 var(--border-hairline);
+  opacity: var(--kz-nav-p, 0);
+  /* Короткий линейный доводчик: сглаживает шаг между кадрами прокрутки
+   * и даёт слою чуть запаздывать за страницей. */
+  transition: opacity 160ms linear;
+}
+
+/* Псевдоэлемент позиционирован и по порядку отрисовки лёг бы поверх
+ * содержимого — поднимаем содержимое над ним. */
+.kz-nav__inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gutter);
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.kz-nav__logo {
+  display: flex;
+  flex: none;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+
+.kz-nav__links {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-left: min(300px, 16vw);
+}
+
+/* Синяя черта под активным разделом переезжает от пункта к пункту.
+ * Один элемент на всю навигацию, а не подчёркивание у каждого — тогда
+ * переход читается как движение, а не как включение и выключение. */
+.kz-nav__marker {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: var(--kz-w, 0);
+  background: var(--surface-accent);
+  transform: translateX(var(--kz-x, 0));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 460ms var(--ease-out),
+    width 460ms var(--ease-out),
+    opacity var(--duration-base) var(--ease-standard);
+}
+
+.kz-nav__marker.is-on {
+  opacity: 1;
+}
+
+.kz-nav__link {
+  position: relative;
+  padding-bottom: 5px;
+  font: var(--type-nav);
+  color: var(--text-muted);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+/* Подчёркивание растёт слева направо — только под тем пунктом, на котором курсор.
+ * Активный раздел подчёркнут постоянно. */
+.kz-nav__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.kz-nav__link:hover,
+.kz-nav__link.is-active {
+  color: var(--text-strong);
+}
+
+/* Активный раздел держит синяя черта .kz-nav__marker, поэтому ink-линия
+ * остаётся только за наведением. */
+.kz-nav__link:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.kz-nav__cta {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  margin-left: auto;
+  height: 34px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: none;
+}
+
+.kz-nav__cta-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  background: var(--ink-100);
+  color: var(--text-body);
+  font: var(--type-body-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.kz-nav__cta:hover .kz-nav__cta-label {
+  background: var(--ink-200);
+}
+
+.kz-nav__cta-arrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  flex: none;
+  overflow: hidden;
+  background: var(--surface-accent);
+  color: var(--ink-000);
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.kz-nav__cta:hover .kz-nav__cta-arrow {
+  background: var(--blue-700);
+}
+
+.kz-nav__cta-arrow > span {
+  transition: transform var(--kz-arrow-dur) var(--ease-out);
+}
+
+.kz-nav__cta-arrow > span:last-child {
+  position: absolute;
+  transform: translateX(-140%);
+}
+
+.kz-nav__cta:hover .kz-nav__cta-arrow > span:first-child {
+  transform: translateX(140%);
+}
+
+.kz-nav__cta:hover .kz-nav__cta-arrow > span:last-child {
+  transform: translateX(0);
+}
+
+.kz-nav__cta:active {
+  transform: scale(var(--press-scale));
+  transition: transform var(--duration-instant) var(--ease-standard);
+}
+
+/* ---------------------------------------------------------- бургер и меню */
+
+/* Показывается только на телефоне — см. responsive.css. */
+.kz-nav__burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  margin-right: -10px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-body);
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.kz-nav.is-menu .kz-nav__burger {
+  color: var(--ink-000);
+}
+
+/* Под открытым меню шапка прозрачна: белое стекло поверх чёрного полотна
+ * выглядело бы плашкой за логотипом. */
+.kz-nav.is-menu::before {
+  opacity: 0;
+}
+
+/* Три полоски складываются в крестик: верхняя и нижняя съезжаются к центру
+ * и поворачиваются, средняя схлопывается по ширине. Никакого масштабирования
+ * и отскока — только сдвиг и поворот, как требует моушен дизайн-системы. */
+.kz-burger {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 14px;
+}
+
+.kz-burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transition:
+    transform 380ms var(--ease-out),
+    opacity 200ms var(--ease-standard);
+}
+
+.kz-burger span:nth-child(1) {
+  top: 0;
+}
+
+.kz-burger span:nth-child(2) {
+  top: 6px;
+  transform-origin: left center;
+}
+
+.kz-burger span:nth-child(3) {
+  top: 12px;
+}
+
+.kz-nav.is-menu .kz-burger span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.kz-nav.is-menu .kz-burger span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.kz-nav.is-menu .kz-burger span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Полотно меню — то же чёрное, что у шторки и заставки: на сайте ровно один
+ * язык перекрытий. Раскрывается clip-path'ом сверху вниз. */
+.kz-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--nav-height) + 32px) var(--container-gutter) 40px;
+  background: var(--kz-curtain-fill);
+  clip-path: inset(0 0 100% 0);
+  /* visibility снимается без задержки при открытии и с задержкой на всю
+   * анимацию при закрытии — полотно успевает уехать до того, как исчезнет. */
+  visibility: hidden;
+  transition:
+    clip-path 520ms var(--ease-out),
+    visibility 0s linear 520ms;
+}
+
+.kz-menu.is-open {
+  clip-path: inset(0 0 0 0);
+  visibility: visible;
+  transition:
+    clip-path 520ms var(--ease-out),
+    visibility 0s;
+}
+
+.kz-menu__links {
+  display: flex;
+  flex-direction: column;
+}
+
+.kz-menu__links a {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  font: var(--weight-bold) clamp(28px, 8vw, 40px) / 1.1 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+  color: var(--ink-000);
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    opacity 420ms var(--ease-out),
+    translate 420ms var(--ease-out);
+}
+
+.kz-menu__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  font: var(--type-body);
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    opacity 420ms var(--ease-out),
+    translate 420ms var(--ease-out);
+}
+
+/* Пункты въезжают по очереди, уже после того как полотно раскрылось. */
+.kz-menu.is-open .kz-menu__links a,
+.kz-menu.is-open .kz-menu__foot {
+  opacity: 1;
+  translate: none;
+  transition-delay: calc(180ms + var(--kz-i, 0) * 60ms);
+}
+
+.kz-menu__foot a {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.kz-menu__foot a:hover {
+  color: var(--ink-000);
+}
+
+.kz-menu__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 28px;
+  background: var(--surface-accent);
+  font: var(--weight-semibold) var(--size-body)/1 var(--font-core);
+}
+
+.kz-menu__cta,
+.kz-menu__cta:hover {
+  color: var(--ink-000);
+}
+
+/* ------------------------------------------------------------------- кнопки */
+
+.kz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-body);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-instant) var(--ease-standard);
+}
+
+.kz-btn:active {
+  transform: scale(var(--press-scale));
+}
+
+.kz-btn--sm {
+  height: 36px;
+  padding: 0 14px;
+  gap: 6px;
+  font: var(--type-body-sm);
+}
+
+.kz-btn--md {
+  height: 44px;
+  padding: 0 20px;
+  gap: 8px;
+  font: var(--type-body-sm);
+}
+
+.kz-btn--lg {
+  height: 56px;
+  padding: 0 28px;
+  gap: 10px;
+  font: var(--type-body);
+}
+
+.kz-btn--xl {
+  height: 64px;
+  padding: 0 32px;
+  gap: 12px;
+  font: var(--weight-semibold) 18px/1 var(--font-core);
+  letter-spacing: -0.01em;
+}
+
+.kz-btn--sm,
+.kz-btn--md,
+.kz-btn--lg {
+  font-weight: var(--weight-semibold);
+}
+
+/* Цвет продублирован в :hover намеренно. Кнопка бывает ссылкой, а в базовых
+ * стилях дизайн-системы есть `a:hover{color:var(--text-link-hover)}` — этот
+ * селектор специфичнее одного класса и перекрашивал текст в тот же синий,
+ * в который уходит фон. Пара «класс + :hover» его перебивает. */
+.kz-btn--primary,
+.kz-btn--primary:hover {
+  color: var(--text-inverse);
+}
+
+.kz-btn--primary {
+  background: var(--surface-accent);
+}
+
+.kz-btn--primary:hover {
+  background: var(--blue-700);
+}
+
+.kz-btn--ghost {
+  background: transparent;
+  color: var(--text-body);
+}
+
+.kz-btn--ghost:hover {
+  background: var(--state-hover-tint);
+  color: var(--text-accent);
+}
+
+.kz-btn--secondary,
+.kz-btn--secondary:hover {
+  color: var(--text-body);
+}
+
+.kz-btn--secondary {
+  background: transparent;
+  border-color: var(--border-default);
+}
+
+.kz-btn--secondary:hover {
+  border-color: var(--border-strong);
+}
+
+.kz-btn__label {
+  display: block;
+}
+
+/* Переход к списку кейсов: заливка поднимается снизу, по вертикали блока.
+ * Цвет продублирован в :hover, потому что это ссылка, а `a:hover` из базовых
+ * стилей специфичнее одного класса. */
+.kz-hero-all {
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.kz-hero-all,
+.kz-hero-all:not(:hover) {
+  color: var(--text-strong);
+}
+
+.kz-hero-all::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--surface-accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 460ms var(--ease-out);
+}
+
+.kz-hero-all:hover::before {
+  transform: scaleY(1);
+}
+
+.kz-hero-all:hover {
+  color: var(--ink-000);
+  border-color: var(--surface-accent);
+}
+
+/* Стрелка уходит вправо вверх, туда же, куда ведёт подпись. */
+.kz-hero-all__arrow {
+  transition: transform var(--kz-arrow-dur) var(--ease-out);
+}
+
+.kz-hero-all:hover .kz-hero-all__arrow {
+  transform: translate(3px, -3px);
+}
+
+.kz-btn__arrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+}
+
+.kz-btn__arrow > span {
+  transition: transform var(--kz-arrow-dur) var(--ease-out);
+}
+
+.kz-btn__arrow > span:last-child {
+  position: absolute;
+  transform: translateX(-160%);
+}
+
+.kz-btn:hover .kz-btn__arrow > span:first-child {
+  transform: translateX(160%);
+}
+
+.kz-btn:hover .kz-btn__arrow > span:last-child {
+  transform: translateX(0);
+}
+
+/* -------------------------------------------------------------- плитки кейсов */
+
+.kz-tile {
+  --kz-inset: 15px;
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  /* Только состояния наведения: появления у плитки нет. */
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.kz-tile--sm {
+  --kz-inset: 12px;
+}
+
+/* Плитка — тоже ссылка, поэтому цвет дублируется в :hover: иначе `a:hover`
+ * из базовых стилей перекрашивал заголовок на светлых заливках в синий. */
+.kz-tile,
+.kz-tile:hover {
+  color: var(--text-strong);
+}
+
+.kz-tile.is-dark,
+.kz-tile.is-dark:hover {
+  color: var(--ink-000);
+}
+
+
+.kz-tile:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-4px);
+}
+
+.kz-tile__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.kz-tile__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  transition: transform var(--duration-reveal) var(--ease-out);
+}
+
+.kz-tile:hover .kz-tile__media img {
+  transform: scale(1.06);
+}
+
+/* Ink-вуаль поверх снимка: без неё белый заголовок не держит контраст. */
+.kz-tile__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--scrim-image);
+}
+
+.kz-tile__title {
+  position: absolute;
+  left: var(--kz-inset);
+  top: var(--kz-inset);
+  right: var(--kz-inset);
+  z-index: 1;
+  font: var(--weight-semibold) 18px / 1.28 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+.kz-tile--sm .kz-tile__title {
+  font-size: 15px;
+}
+
+.kz-tile__link {
+  position: absolute;
+  left: var(--kz-inset);
+  bottom: var(--kz-inset);
+  z-index: 1;
+  font: var(--weight-medium) 14px / 1 var(--font-core);
+  transition: transform var(--kz-arrow-dur) var(--ease-out);
+}
+
+.kz-tile--sm .kz-tile__link {
+  font-size: 13px;
+}
+
+.kz-tile:hover .kz-tile__link {
+  transform: translateX(4px);
+}
+
+.kz-tile__arrow {
+  position: absolute;
+  right: var(--kz-inset);
+  bottom: var(--kz-inset);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  background: var(--surface-accent);
+  color: var(--ink-000);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.kz-tile--sm .kz-tile__arrow {
+  width: 24px;
+  height: 24px;
+}
+
+.kz-tile.is-dark .kz-tile__arrow {
+  background: var(--ink-000);
+  color: var(--blue-600);
+}
+
+.kz-tile:hover .kz-tile__arrow {
+  transform: translateX(3px);
+}
+
+.kz-tile:not(.is-dark):hover .kz-tile__arrow {
+  background: var(--blue-700);
+}
+
+.kz-tile__arrow > span {
+  transition: transform var(--kz-arrow-dur) var(--ease-out);
+}
+
+.kz-tile__arrow > span:last-child {
+  position: absolute;
+  transform: translateX(-160%);
+}
+
+.kz-tile:hover .kz-tile__arrow > span:first-child {
+  transform: translateX(160%);
+}
+
+.kz-tile:hover .kz-tile__arrow > span:last-child {
+  transform: translateX(0);
+}
+
+/* ------------------------------------------------------------------ шторка */
+
+.kz-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  pointer-events: none;
+}
+
+/* Во время перелистывания экран не кликается — иначе второй клик собьёт анимацию. */
+.kz-curtain.is-cover,
+.kz-curtain.is-reveal {
+  pointer-events: auto;
+}
+
+.kz-curtain__panel {
+  background: var(--kz-curtain-fill);
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.kz-curtain.is-cover .kz-curtain__panel {
+  transform: scaleY(1);
+  transition: transform var(--kz-curtain-cover) var(--ease-standard) calc(var(--kz-i) * var(--kz-curtain-step));
+}
+
+.kz-curtain.is-reveal .kz-curtain__panel {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--kz-curtain-uncover) var(--ease-out) calc(var(--kz-last) * var(--kz-curtain-step));
+}
+
+/* ------------------------------------------------------------ логотип-буквы */
+
+/* Из полного логотипа показываем только надпись. Исходник 384×86, марка
+ * занимает x=5…84 — уводим её за левый край обёртки, ширину задаём по остатку. */
+.kz-wordmark {
+  display: block;
+  overflow: hidden;
+  height: var(--kz-wm-h, 44px);
+  width: calc(var(--kz-wm-h, 44px) * 294 / 86);
+}
+
+.kz-wordmark img {
+  display: block;
+  height: var(--kz-wm-h, 44px);
+  width: auto;
+  max-width: none;
+  margin-left: calc(var(--kz-wm-h, 44px) * -88 / 86);
+}
+
+/* ---------------------------------------------------------------- заставка */
+
+.kz-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  /* Фон под половинами: пока полотно закрыто, стык между ними не может
+   * дать щель на дробной высоте окна. Снимается ровно в момент раскрытия. */
+  background: var(--kz-curtain-fill);
+}
+
+.kz-preloader.is-open {
+  background: transparent;
+}
+
+/* Две половины чёрного полотна расходятся вверх и вниз и открывают страницу. */
+.kz-preloader__half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: var(--kz-curtain-fill);
+  transition: transform 780ms var(--ease-out);
+}
+
+.kz-preloader__half--top {
+  top: 0;
+}
+
+.kz-preloader__half--bottom {
+  bottom: 0;
+}
+
+.kz-preloader.is-open .kz-preloader__half--top {
+  transform: translateY(-100%);
+}
+
+.kz-preloader.is-open .kz-preloader__half--bottom {
+  transform: translateY(100%);
+}
+
+/* Логотип стоит по центру экрана и разрезан стыком половин: каждая половина
+ * содержит свою копию в коробке высотой во весь экран и обрезает лишнее
+ * собственным overflow. При раскрытии логотип разъезжается вместе с полотном.
+ * Коробка задана в процентах от половины (200% = полный экран), поэтому центр
+ * совпадает точно и не зависит от округления высоты окна. */
+.kz-preloader__logo {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 560ms var(--ease-out);
+}
+
+.kz-preloader__half--top .kz-preloader__logo {
+  top: 0;
+}
+
+.kz-preloader__half--bottom .kz-preloader__logo {
+  bottom: 0;
+}
+
+.kz-preloader.is-logo .kz-preloader__logo,
+.kz-preloader.is-open .kz-preloader__logo {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------- уважение к настройкам */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal]:not(.kz-split),
+  .kz-word__in,
+  .kz-tile {
+    opacity: 1 !important;
+    translate: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  .kz-word {
+    overflow: visible;
+  }
+
+  .kz-curtain,
+  .kz-preloader {
+    display: none;
+  }
+
+  /* Конвейер останавливается. Квадраты при этом расставляются по ленте
+   * вручную — иначе все шесть остались бы за левым краем. */
+  .kz-conveyor__treads,
+  .kz-conveyor__rider {
+    animation: none;
+  }
+
+  .kz-conveyor__rider {
+    transform: translateX(calc(var(--kz-i, 0) * 17% + 4%));
+  }
+
+  .kz-conveyor__legs span,
+  .kz-conveyor__floor,
+  .kz-conveyor__belt {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .kz-tile:hover,
+  .kz-btn:active,
+  .kz-nav__cta:active {
+    transform: none;
+  }
+
+  .kz-tile__media img,
+  .kz-btn__arrow > span,
+  .kz-nav__cta-arrow > span,
+  .kz-tile__arrow > span {
+    transition: none;
+  }
+}

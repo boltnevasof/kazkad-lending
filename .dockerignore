@@ -1,0 +1,15 @@
+.git
+.gitignore
+node_modules
+dist
+npm-debug.log*
+.DS_Store
+.idea
+.vscode
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# Исходная папка скилла Claude Design: копия уже лежит в src/design-system
+# и public/assets, в сборке не участвует.
+Kazkad Design System

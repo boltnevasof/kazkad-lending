@@ -1,0 +1,68 @@
+import { useEffect, useState } from 'react';
+import { Tabs } from '../design-system/index.js';
+import CaseTile from '../components/CaseTile.jsx';
+import SplitText from '../components/SplitText.jsx';
+import Footer from '../sections/Footer.jsx';
+import { CASES } from '../content/site.js';
+import { useNav } from '../lib/nav.js';
+
+const ALL = CASES.filters[0];
+
+export default function CasesPage() {
+  const { goSection, goPath } = useNav();
+  const [tab, setTab] = useState(ALL);
+  const shown = tab === ALL ? CASES.items : CASES.items.filter((c) => c.group === tab);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <>
+      <section className="kz-page">
+        <div className="kz-container">
+          <div className="kz-split-grid">
+            <span className="kz-aside kz-from-left" data-reveal="">
+              кейсы {CASES.items.length}
+            </span>
+            <div className="kz-measure">
+              <SplitText as="h1" text={CASES.pageTitle} className="kz-title-lg" />
+              <p className="kz-lead" data-reveal="" style={{ marginTop: 20, '--kz-delay': '220ms' }}>
+                {CASES.pageLead}
+              </p>
+            </div>
+          </div>
+
+          <div className="kz-page-filters" data-reveal="" style={{ '--kz-delay': '320ms' }}>
+            <Tabs items={CASES.filters} value={tab} onChange={setTab} />
+          </div>
+
+          <div className="kz-cases-grid">
+            {shown.map((c) => (
+              <CaseTile
+                slug={c.slug}
+                key={c.slug}
+                title={c.title}
+                image={c.image}
+                fill={c.fill}
+                href={`/cases/${c.slug}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  goPath(`/cases/${c.slug}`);
+                }}
+              />
+            ))}
+          </div>
+
+          {shown.length === 0 && (
+            <p className="kz-lead" style={{ marginTop: 40 }}>
+              В этом направлении пока нет запущенных проектов.
+            </p>
+          )}
+        </div>
+      </section>
+
+      <Footer onNavigate={goSection} />
+    </>
+  );
+}

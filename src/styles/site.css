@@ -1,0 +1,992 @@
+/* Раскладка лендинга.
+ *
+ * Дизайн-система задаёт токены и компоненты, но не сетку страницы. Классы ниже
+ * держат концептовый асимметричный грид 34/66 и адаптив: секции пишут разметку
+ * классами, а не inline-стилями, иначе media-queries их не перебьют. */
+
+/* scroll-behavior намеренно не smooth: переход между разделами делает шторка
+ * (motion.css), а прыжок под ней должен быть мгновенным. */
+
+/* Якорные переходы не должны заезжать под липкую шапку. */
+[id] {
+  scroll-margin-top: var(--nav-height);
+}
+
+/* Страховка от горизонтальной прокрутки, поставленная на корне документа —
+ * именно он управляет прокруткой страницы, и правило на внутреннем блоке
+ * ничего бы не дало, если вылезает что-то вне его.
+ *
+ * Именно clip, а не hidden: hidden превратил бы корень в полосу прокрутки
+ * и сломал бы scroll-margin у якорей, а clip просто отсекает вылет.
+ * Вертикальная прокрутка не задета. */
+html {
+  overflow-x: clip;
+}
+
+.kz-site {
+  overflow-x: clip;
+}
+
+/* Мелкие подписи набираем Manrope, а не Martian Mono. Моноширинная гарнитура
+ * в дизайн-системе ничем не подтверждена и подставлена наугад, её же readme
+ * это признаёт и разрешает замену. Машинные буквоформы Martian Mono спорят
+ * с остальной страницей, одна гарнитура держит её цельной.
+ * Переопределяем токен здесь, а не в src/design-system: та папка копируется
+ * из скилла один в один и правится только перегенерацией. */
+:root {
+  --type-eyebrow: var(--weight-semibold) var(--size-micro) / 1.2 var(--font-core);
+  --tracking-micro: 0.09em;
+}
+
+/* ---- Асимметричный грид: узкая левая колонка + контент ---- */
+
+.kz-split-grid {
+  display: grid;
+  grid-template-columns: 34% minmax(0, 1fr);
+  align-items: start;
+}
+
+.kz-aside {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  padding-top: 6px;
+}
+
+.kz-section {
+  padding: var(--section-y) 0;
+}
+
+.kz-measure {
+  max-width: 640px;
+}
+
+/* ---- Типографика секций ---- */
+
+.kz-display {
+  font: var(--weight-bold) clamp(34px, 3.55vw, 52px) / 1.06 var(--font-core);
+  letter-spacing: var(--tracking-display);
+  margin: 0;
+}
+
+.kz-line {
+  display: block;
+}
+
+/* Средняя строка заголовка героя: отступ и синий — как на концепт-борде. */
+.kz-display-indent {
+  display: block;
+  margin-left: 38%;
+  color: var(--text-accent);
+}
+
+.kz-title {
+  font: var(--weight-bold) clamp(26px, 2.6vw, 36px) / 1.12 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+  margin: 0;
+}
+
+.kz-title-lg {
+  font: var(--weight-bold) clamp(28px, 3vw, 44px) / 1.1 var(--font-core);
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.kz-lead {
+  font: var(--type-body-lg);
+  color: var(--text-muted);
+}
+
+/* ---- Герой ---- */
+
+/* Система координат для свечения: та же ширина, что у контейнера, и та же
+ * центровка. Проценты внутри считаются от колонки контента, а не от экрана,
+ * поэтому звезда стоит за левым краем заголовка на любой ширине монитора. */
+.kz-hero-glow-anchor {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, var(--container-max));
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Шапка зафиксирована и не занимает места в потоке — её высоту герой
+ * компенсирует собственным отступом. */
+.kz-hero-body {
+  position: relative;
+  padding-top: calc(var(--nav-height) + 110px);
+  padding-bottom: 88px;
+}
+
+.kz-hero-lead-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 48px;
+  margin-top: 40px;
+}
+
+.kz-hero-lead {
+  flex: 0 1 420px;
+  min-width: 0;
+  font: var(--weight-regular) 20px / 1.4 var(--font-core);
+  color: var(--text-muted);
+}
+
+/* Плитки и переход к списку стоят в одну строку. Зазор тот же, что между
+ * плитками, поэтому кнопка попадает в ритм ряда, а не висит отдельно. */
+.kz-hero-showcase {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 56px;
+}
+
+/* flex: 0 1 auto — ряд не растёт шире своих 210px на колонку, но сжимается,
+ * когда места не хватает. С flex: none он не помещался на планшете, и полосу
+ * «все проекты» срезал overflow героя. */
+/* Колонок ровно столько, сколько плиток: при двух кейсах фиксированные три
+ * оставляли бы дыру перед полосой перехода. */
+.kz-hero-cases {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 210px);
+  gap: 12px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+/* Переход к списку кейсов: вертикальный прямоугольник в рост плиток.
+ * align-self: stretch берёт высоту ряда, поэтому она всегда равна плиткам,
+ * даже если те поменяют размер. Ширина меньше — квадрат в этом ряду
+ * неизбежно читался бы как четвёртый кейс. */
+.kz-hero-all {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  width: 64px;
+  flex: none;
+  padding: 14px 0;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  color: var(--text-strong);
+}
+
+.kz-hero-all__arrow {
+  position: relative;
+  flex: none;
+}
+
+/* Строка идёт снизу вверх: vertical-rl даёт вертикальный набор,
+ * поворот на 180° разворачивает его в привычном направлении чтения. */
+.kz-hero-all__label {
+  position: relative;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font: var(--weight-semibold) 15px / 1 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+}
+
+
+
+/* ---- Метод: схема конвейера ---- */
+
+.kz-conveyor {
+  /* Шаг шашек на ленте: на столько же лента уезжает за цикл, поэтому стык
+   * не виден. Размер коробки вынесен сюда же — от него считается выезд. */
+  --kz-tread: 14px;
+  --kz-box: 44px;
+  margin: 0;
+  padding-right: 40px;
+}
+
+.kz-conveyor__machine {
+  position: relative;
+}
+
+/* Дорожка коробок над лентой. Всё, что выехало за края, обрезается —
+ * коробка появляется из-за левого края и уходит за правый. */
+.kz-conveyor__lane {
+  position: relative;
+  height: calc(var(--kz-box) + 6px);
+  overflow: hidden;
+}
+
+/* Полоса во всю ширину ленты: сдвиг на 100% — это длина ленты,
+ * а не ширина коробки, поэтому проценты считаются от нужной величины. */
+.kz-conveyor__rider {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--kz-box);
+}
+
+.kz-conveyor__box {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--kz-box);
+  height: var(--kz-box);
+  background: var(--surface-accent);
+}
+
+/* Полотно с торцевыми валами. Валы — бруски, а не круги: скруглений
+ * в системе нет нигде. */
+.kz-conveyor__belt {
+  position: relative;
+  height: 22px;
+  /* Ряд шашек длиннее ленты и не переносится, поэтому его min-content не
+   * должен участвовать в расчёте ширины родителя. */
+  min-width: 0;
+  overflow: hidden;
+  background: var(--surface-subtle);
+  border-top: 2px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-default);
+  border-left: 4px solid var(--border-strong);
+  border-right: 4px solid var(--border-strong);
+}
+
+/* Ряд шире ленты на один шаг: крайняя шашка занимает место ушедшей. */
+.kz-conveyor__treads {
+  display: flex;
+  gap: calc(var(--kz-tread) - 2px);
+  margin-left: calc(-1 * var(--kz-tread));
+  height: 100%;
+}
+
+.kz-conveyor__treads span {
+  width: 2px;
+  flex: none;
+  background: var(--ink-300);
+}
+
+.kz-conveyor__legs {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12%;
+  height: 22px;
+}
+
+.kz-conveyor__legs span {
+  width: 3px;
+  flex: none;
+  background: var(--ink-300);
+}
+
+.kz-conveyor__floor {
+  display: block;
+  height: 1px;
+  background: var(--border-default);
+}
+
+.kz-conveyor__caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+/* ---- Этапы: диаграмма Ганта ---- */
+
+/* Таблица: слева колонка задач, справа сплошное поле с отрезками.
+ * Ширина колонки задач вынесена в переменную, потому что её используют
+ * и шапка, и строки, и адаптив. */
+.kz-gantt {
+  --kz-gantt-labels: 34%;
+  margin-top: 40px;
+  background: var(--surface-page);
+  border: 1px solid var(--border-default);
+}
+
+.kz-gantt__head,
+.kz-gantt__row {
+  display: grid;
+  grid-template-columns: var(--kz-gantt-labels) minmax(0, 1fr);
+  align-items: center;
+}
+
+.kz-gantt__head {
+  border-bottom: 1px solid var(--border-default);
+}
+
+.kz-gantt__row + .kz-gantt__row {
+  border-top: 1px solid var(--border-hairline);
+}
+
+.kz-gantt__label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px 12px 16px;
+  border-right: 1px solid var(--border-default);
+  align-self: stretch;
+  justify-content: center;
+}
+
+/* Диапазон дней — главная величина в этой таблице, поэтому он ink и крупнее
+ * обычной микроподписи. Название задачи под ним идёт вторым планом. */
+.kz-gantt__days {
+  font: var(--weight-bold) 15px / 1.2 var(--font-core);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+
+.kz-gantt__task {
+  font: var(--weight-regular) var(--size-body-sm) / 1.35 var(--font-core);
+  color: var(--text-muted);
+}
+
+/* Шапка недель делится теми же линиями, что и поле, — колонки совпадают. */
+.kz-gantt__weeks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.kz-gantt__weeks span {
+  padding: 10px 0 10px 12px;
+  border-right: 1px solid var(--border-hairline);
+}
+
+.kz-gantt__weeks span:last-child {
+  border-right: none;
+}
+
+.kz-gantt__track {
+  position: relative;
+  height: 46px;
+}
+
+.kz-gantt__weekgrid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.kz-gantt__weekgrid span {
+  border-right: 1px solid var(--border-hairline);
+}
+
+.kz-gantt__weekgrid span:last-child {
+  border-right: none;
+}
+
+/* Отрезок задачи. left и width приходят из данных в процентах от 21 дня. */
+.kz-gantt__bar {
+  position: absolute;
+  top: 50%;
+  height: 18px;
+}
+
+/* Описания вынесены из строк: в самой таблице они распирали её по высоте.
+ * Связь со строкой держит подпись с диапазоном дней. */
+.kz-gantt-notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 28px;
+}
+
+.kz-gantt-notes > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kz-gantt-notes p {
+  font: var(--weight-regular) 15px / 1.5 var(--font-core);
+  color: var(--text-muted);
+}
+
+/* ---- Графика кейсов ---- */
+
+/* Одна и та же схема ложится и на светлую, и на синюю плитку: конкретные
+ * цвета приходят переменными, которые переопределяет тёмный вариант. */
+.kz-art {
+  --kz-art-line: var(--ink-300);
+  --kz-art-fill: var(--ink-100);
+  --kz-art-accent: var(--surface-accent);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.is-dark .kz-art {
+  --kz-art-line: rgba(255, 255, 255, 0.42);
+  --kz-art-fill: rgba(255, 255, 255, 0.16);
+  --kz-art-accent: var(--ink-000);
+}
+
+/* В плитке графика занимает нижнюю часть: сверху заголовок, снизу ссылка
+ * со стрелкой, поэтому поля неравные. */
+.kz-art--tile {
+  padding: 34% 13% 19%;
+}
+
+.kz-art--wide {
+  padding: 9% 0;
+  justify-content: center;
+}
+
+.kz-art__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.kz-art--wide .kz-art__inner {
+  flex: none;
+  width: min(560px, 76%);
+}
+
+/* ---- каталог ---- */
+
+.kz-art__chips {
+  display: flex;
+  gap: 6px;
+  height: 6px;
+  flex: none;
+}
+
+.kz-art__chips span {
+  width: 22%;
+  background: var(--kz-art-line);
+}
+
+.kz-art__chips span.is-accent {
+  background: var(--kz-art-accent);
+}
+
+.kz-art__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--kz-art-line);
+}
+
+.kz-art__thumb {
+  flex: 1;
+  min-height: 0;
+  background: var(--kz-art-fill);
+}
+
+.kz-art__line {
+  height: 3px;
+  width: 70%;
+  flex: none;
+  background: var(--kz-art-line);
+}
+
+.kz-art__card.is-accent {
+  border-color: var(--kz-art-accent);
+}
+
+.kz-art__card.is-accent .kz-art__thumb,
+.kz-art__card.is-accent .kz-art__line {
+  background: var(--kz-art-accent);
+}
+
+/* ---- рынок ---- */
+
+.kz-art__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__bars span {
+  flex: 1;
+  background: var(--kz-art-line);
+}
+
+.kz-art__bars span.is-accent {
+  background: var(--kz-art-accent);
+}
+
+.kz-art__outcomes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  height: 22%;
+  flex: none;
+}
+
+.kz-art__outcomes span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--kz-art-line);
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--kz-art-line);
+}
+
+.kz-art__outcomes span.is-accent {
+  border-color: var(--kz-art-accent);
+  color: var(--kz-art-accent);
+}
+
+/* ---- логистика ---- */
+
+.kz-art__train {
+  display: flex;
+  gap: 5px;
+  height: 26%;
+  flex: none;
+}
+
+.kz-art__train span {
+  flex: 1;
+  border: 1px solid var(--kz-art-line);
+  background: var(--kz-art-fill);
+}
+
+.kz-art__train span.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+.kz-art__rail {
+  height: 2px;
+  margin-top: -4px;
+  flex: none;
+  background: var(--kz-art-line);
+}
+
+/* ---- строки таблиц (заявки и транзакции) ---- */
+
+.kz-art__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+  padding: 0 5px;
+  border: 1px solid var(--kz-art-line);
+}
+
+.kz-art__row.is-accent {
+  border-color: var(--kz-art-accent);
+}
+
+.kz-art__cell {
+  height: 3px;
+  background: var(--kz-art-line);
+}
+
+.kz-art__row.is-accent .kz-art__cell {
+  background: var(--kz-art-accent);
+}
+
+.kz-art__cell--id {
+  width: 14%;
+  flex: none;
+}
+
+.kz-art__cell--name {
+  flex: 1;
+}
+
+.kz-art__cell--mark {
+  width: 8px;
+  height: 8px;
+  flex: none;
+}
+
+.kz-art__cell--sum {
+  width: 22%;
+  flex: none;
+}
+
+/* ---- бухучёт ---- */
+
+.kz-art__card-strip {
+  display: flex;
+  align-items: flex-end;
+  height: 26%;
+  flex: none;
+  padding: 5px;
+  border: 1px solid var(--kz-art-line);
+  background: var(--kz-art-fill);
+}
+
+.kz-art__card-strip span {
+  width: 40%;
+  height: 4px;
+  background: var(--kz-art-accent);
+}
+
+/* ---- дисторшн-грид ---- */
+
+/* Неравные дорожки и есть дисторсия: к центру ячейки крупнее, к краям мельче.
+ * Ни одной кривой, только прямоугольники. */
+.kz-art__grid-chart {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1.7fr 1.4fr 1fr;
+  grid-template-rows: 1fr 1.4fr 1.7fr 1.4fr 1fr;
+  gap: 2px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__grid-chart span {
+  border: 1px solid var(--kz-art-line);
+}
+
+.kz-art__grid-chart span.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+/* ---- съёмка и код ---- */
+
+.kz-art__frames {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__frames span {
+  border: 1px solid var(--kz-art-line);
+  background: var(--kz-art-fill);
+}
+
+.kz-art__frames span.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+/* Код, по которому родитель забирает свои кадры. */
+.kz-art__code {
+  display: flex;
+  gap: 4px;
+  height: 18%;
+  flex: none;
+}
+
+.kz-art__code span {
+  flex: 1;
+  border: 1px solid var(--kz-art-line);
+}
+
+/* ---- Кейсы ---- */
+
+/* Счётчик стоит в строку с заголовком, а не подписью над ним — так требует
+ * readme.md дизайн-системы (никаких eyebrow над заголовками). */
+.kz-cases-count {
+  font: var(--type-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  margin-left: 14px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Лента занимает всю ширину экрана, а отступ до первой плитки задаёт распорка
+ * внутри ряда. Если сдвигать саму ленту, её левая граница режет уезжающие
+ * плитки посреди экрана вместо того, чтобы отпускать их за край. */
+.kz-cases-scroller {
+  margin-top: 34px;
+  overflow-x: auto;
+  /* Обязательно явным образом: при overflow-x: auto вторая ось по спецификации
+   * тоже вычисляется в auto, и ряд получал ненужную вертикальную прокрутку —
+   * плитка на ховере поднимается и вылезает за бокс. Подъёму даём место
+   * вертикальными полями, а не прокруткой. */
+  overflow-y: hidden;
+  padding-block: 6px;
+  -webkit-overflow-scrolling: touch;
+  /* scroll-snap здесь намеренно нет: при mandatory браузер пересчитывал точки
+   * привязки на каждой перерисовке плиток и уводил ряд к последней — первая
+   * плитка оказывалась обрезанной. */
+  /* Полосу прокрутки под рядом не показываем — обрезанная справа плитка
+   * сама говорит, что ряд едет дальше. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.kz-cases-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.kz-cases-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.kz-cases-row {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+}
+
+.kz-case-slide {
+  flex: none;
+  width: 340px;
+}
+
+/* Отступы по краям ряда — отдельными элементами, а не padding: padding
+ * в конце flex-контейнера с overflow не везде попадает в scrollWidth, и
+ * последняя плитка упиралась в край экрана.
+ * Из ширины вычитаем gap ряда, чтобы первая плитка встала ровно по колонке. */
+.kz-cases-lead {
+  flex: none;
+  width: calc(max(var(--container-gutter), (100vw - var(--container-max)) / 2 + var(--container-gutter)) - 12px);
+}
+
+.kz-cases-tail {
+  flex: none;
+  width: calc(var(--container-gutter) - 12px);
+}
+
+/* ---- Контакты ---- */
+
+.kz-contact-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-hairline);
+  font: var(--type-body);
+}
+
+/* ---- Отдельные страницы: /cases и /cases/:slug ---- */
+
+/* Шапка зафиксирована, поэтому у страниц свой верхний отступ. */
+.kz-page {
+  padding: calc(var(--nav-height) + 72px) 0 var(--section-y);
+}
+
+.kz-page-filters {
+  margin-top: 48px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.kz-page-filters::-webkit-scrollbar {
+  display: none;
+}
+
+/* Четыре плитки в ряд с зазором 12px — раскладка кейсов из дизайн-системы. */
+.kz-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.kz-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.kz-back:hover {
+  color: var(--text-strong);
+}
+
+.kz-case-media {
+  position: relative;
+  margin-top: 56px;
+  height: min(52vh, 480px);
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+
+.kz-case-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.kz-case-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  margin-top: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.kz-case-meta > span {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kz-case-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--weight-semibold) var(--size-body) / 1.3 var(--font-core);
+}
+
+.kz-case-meta b {
+  font: var(--weight-semibold) var(--size-body)/1.3 var(--font-core);
+  color: var(--text-strong);
+}
+
+/* Блоки разделены волосяными линейками, а не карточками. */
+.kz-case-row {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.kz-case-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 64px;
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.kz-case-metrics > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kz-case-metrics b {
+  font: var(--weight-black) clamp(36px, 3.6vw, 56px) / 1 var(--font-core);
+  letter-spacing: var(--tracking-display);
+  color: var(--text-strong);
+}
+
+.kz-case-metrics span {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.kz-case-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 48px;
+  flex-wrap: wrap;
+  padding: 56px 0;
+}
+
+.kz-case-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-hairline);
+}
+
+.kz-case-nav__link {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 28px;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-strong);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.kz-case-nav__link.is-next {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.kz-case-nav__link:hover {
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+}
+
+.kz-case-nav__title {
+  font: var(--weight-semibold) var(--size-body-lg)/1.3 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+/* ---- Правовые страницы ---- */
+
+/* Заголовок раздела политики живёт в узкой колонке рядом с текстом, поэтому
+ * он мельче обычного h2 и не спорит с заголовком страницы. */
+.kz-legal__title {
+  font: var(--weight-semibold) var(--size-body) / 1.3 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+  color: var(--text-strong);
+  margin: 0;
+  padding-right: 40px;
+}
+
+.kz-legal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font: var(--type-body);
+  color: var(--text-muted);
+}
+
+/* ---- Подвал ---- */
+
+.kz-footer-grid {
+  display: grid;
+  grid-template-columns: 34% 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.kz-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font: var(--type-body-sm);
+}
+
+.kz-footer-bottom {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* Адаптив вынесен в responsive.css — он грузится последним.
+ * Медиазапросы не добавляют специфичности, поэтому правило из @media,
+ * стоящее раньше в каскаде, проигрывает обычному классу из motion.css. */

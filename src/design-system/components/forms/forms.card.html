@@ -1,0 +1,21 @@
+<!-- @dsCard group="Components" viewport="700x380" name="Forms" subtitle="Field, input, textarea, select, checkbox, radio, switch" -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script>window.KZ_ICON_BASE='../../assets/icons/';window.KZ_ASSET_BASE='../../assets/';</script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--surface-page);font:var(--type-body)}.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}.col{display:flex;flex-direction:column;gap:16px}</style></head><body><div id="root"></div>
+<script type="text/babel">
+const {Field,Input,Textarea,Select,Checkbox,Radio,Switch}=window.KazkadDesignSystem_9d433b;
+function Demo(){const [ok,setOk]=React.useState(true);const [ch,setCh]=React.useState('tg');const [on,setOn]=React.useState(true);
+return <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24}}>
+<Field label="Как вас зовут" htmlFor="a"><Input id="a" icon="users" placeholder="Имя"/></Field>
+<Field label="Почта" htmlFor="b" error="Проверьте адрес"><Input id="b" invalid defaultValue="hello@"/></Field>
+<Field label="Тип продукта" htmlFor="c" hint="Уточним на созвоне"><Select id="c" placeholder="Выберите" options={['Лендинг','Веб-сервис','Интеграция']}/></Field>
+<Field label="Бюджет" htmlFor="d"><Input id="d" placeholder="от 500 000 ₽"/></Field>
+<Field label="Задача" htmlFor="e" style={{gridColumn:'1 / -1'}}><Textarea id="e" rows={3} placeholder="Что нужно сделать и к какому сроку"/></Field>
+<div className="row" style={{gridColumn:'1 / -1',gap:24}}><Checkbox checked={ok} onChange={setOk} label="Согласен на обработку данных"/><Radio name="ch" value="tg" checked={ch==='tg'} onChange={setCh} label="Telegram"/><Radio name="ch" value="mail" checked={ch==='mail'} onChange={setCh} label="Почта"/><Switch checked={on} onChange={setOn} label="Нужна поддержка"/></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script></body></html>
