@@ -41,10 +41,11 @@ export default function Cases() {
       <div className="kz-cases-scroller" data-reset-scroll="">
         <div className="kz-cases-row">
           <span className="kz-cases-lead" aria-hidden="true" />
-          {FEATURED_CASES.map((c) => (
+          {FEATURED_CASES.map((c, i) => (
             <div key={c.slug} className="kz-case-slide">
               <CaseTile
                 slug={c.slug}
+                delay={i * 90}
                 title={c.title}
                 image={c.image}
                 fill={c.fill}

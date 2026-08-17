@@ -2,8 +2,9 @@
 // заголовок в левом верхнем углу, ссылка в левом нижнем, синий квадрат со стрелкой
 // справа внизу, — но состояния наведения описаны классами, а не inline-стилями.
 //
-// Появления у плитки нет намеренно: ряд стоит на месте с первого кадра.
-// Анимированы только состояния наведения.
+// Плитка появляется со сдвигом по горизонтали, а не снизу: у ленты кейсов
+// включён overflow-y: hidden (иначе она получала лишнюю вертикальную
+// прокрутку), и подъём снизу там бы обрезало на полпути.
 
 import { Icon } from '../design-system/index.js';
 import CaseArt from './CaseArt.jsx';
@@ -24,6 +25,7 @@ export default function CaseTile({
   linkLabel = 'посмотреть кейс',
   href = '#',
   onClick,
+  delay = 0,
   className = '',
   ...rest
 }) {
@@ -35,7 +37,8 @@ export default function CaseTile({
       className={`kz-tile kz-tile--${size}${dark ? ' is-dark' : ''} ${className}`.trim()}
       href={href}
       onClick={onClick}
-      style={{ background: FILLS[fill] || FILLS.tint }}
+      data-reveal=""
+      style={{ background: FILLS[fill] || FILLS.tint, '--kz-delay': `${delay}ms` }}
       {...rest}
     >
       {image ? (

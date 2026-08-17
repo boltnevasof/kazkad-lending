@@ -54,9 +54,10 @@ export default function Hero({ onEnquiry }) {
             на весь список, по нижнему краю ряда. */}
         <div className="kz-hero-showcase">
           <div className="kz-hero-cases">
-            {HERO_CASES.map((c) => (
+            {HERO_CASES.map((c, i) => (
               <CaseTile
                 slug={c.slug}
+                delay={i * 90}
                 key={c.slug}
                 size="sm"
                 title={c.title}

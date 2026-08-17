@@ -723,10 +723,22 @@
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border: 1px solid var(--border-default);
-  /* Только состояния наведения: появления у плитки нет. */
   transition:
+    opacity var(--kz-reveal-dur) var(--ease-out) var(--kz-delay, 0ms),
+    translate var(--kz-reveal-dur) var(--ease-out) var(--kz-delay, 0ms),
     border-color var(--duration-fast) var(--ease-standard),
     transform var(--duration-base) var(--ease-out);
+}
+
+/* Плитки въезжают справа, друг за другом. Сдвиг горизонтальный: у ленты
+ * кейсов overflow-y скрыт, вертикальный подъём там бы обрезало. Появление
+ * едет на translate, наведение на transform — они не спорят. */
+.kz-tile[data-reveal] {
+  translate: 16px 0;
+}
+
+.kz-tile[data-reveal].is-in {
+  translate: none;
 }
 
 .kz-tile--sm {

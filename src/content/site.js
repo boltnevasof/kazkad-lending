@@ -5,7 +5,7 @@ export const CONTACTS = {
   telegram: 'https://t.me/kazakovtm',
   telegramHandle: '@kazakovtm',
   telegramLabel: 'написать в Telegram',
-  email: 'hello@kazkad.ru',
+  email: 'hello@kazkad.digital',
   phone: '+7 (917) 230-04-81',
   phoneHref: 'tel:+79172300481',
 };

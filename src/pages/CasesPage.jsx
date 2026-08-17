@@ -38,9 +38,10 @@ export default function CasesPage() {
           </div>
 
           <div className="kz-cases-grid">
-            {shown.map((c) => (
+            {shown.map((c, i) => (
               <CaseTile
                 slug={c.slug}
+                delay={i * 60}
                 key={c.slug}
                 title={c.title}
                 image={c.image}
