@@ -5,6 +5,7 @@ import SplitText from '../components/SplitText.jsx';
 import Footer from '../sections/Footer.jsx';
 import { CASES } from '../content/site.js';
 import { useNav } from '../lib/nav.js';
+import { revealWithin } from '../lib/reveal.js';
 
 const ALL = CASES.filters[0];
 
@@ -16,6 +17,12 @@ export default function CasesPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Смена фильтра монтирует новые плитки, которых наблюдатель не видел.
+  // Эффект идёт после отрисовки, поэтому показывает уже готовую разметку.
+  useEffect(() => {
+    revealWithin(document.querySelector('.kz-cases-grid'));
+  }, [tab]);
 
   return (
     <>
