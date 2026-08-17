@@ -50,6 +50,49 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* На широком экране плитка собрана абсолютными слоями, а графика начинается
+     с фиксированной доли высоты. На узкой плитке заголовок уходит в три и
+     четыре строки и наезжает на эту графику. Поэтому здесь плитка становится
+     сеткой из трёх строк, и схема занимает ровно то, что осталось под
+     заголовком, какой бы длины он ни был. */
+  .kz-tile {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: var(--kz-inset);
+  }
+
+  /* relative, а не static: z-index работает только у позиционированных, а без
+     него снимок кейса накрыл бы собой заголовок. */
+  .kz-tile__title,
+  .kz-tile__link {
+    position: relative;
+    inset: auto;
+  }
+
+  .kz-tile__title {
+    grid-row: 1;
+  }
+
+  /* Пропорция держит форму схемы на просторной плитке, а max-height прижимает
+     её к остатку строки, когда заголовок съел место. Прижата книзу, поэтому
+     стоит над подписью так же, как на широком экране. */
+  .kz-art--tile {
+    position: relative;
+    grid-row: 2;
+    align-self: end;
+    aspect-ratio: 16 / 9;
+    max-height: 100%;
+    min-height: 0;
+    padding: 0;
+  }
+
+  /* Стрелка осталась в правом нижнем углу, поэтому подпись под неё не лезет. */
+  .kz-tile__link {
+    grid-row: 3;
+    padding-right: 42px;
+  }
+
   .kz-case-cta {
     align-items: flex-start;
     gap: 28px;

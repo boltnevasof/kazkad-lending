@@ -128,13 +128,117 @@ function PhotoArt() {
   );
 }
 
+// MOOVE: участники сверху, под ними лента материалов. Синяя карточка —
+// профиль, который открыли из ленты и по которому ищут человека.
+function HubArt() {
+  return (
+    <div className="kz-art__inner">
+      <div className="kz-art__people">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <span key={i} className={i === 1 ? 'is-accent' : ''} />
+        ))}
+      </div>
+      <div className="kz-art__feed">
+        {[0, 1].map((i) => (
+          <span className="kz-art__post" key={i}>
+            <span className="kz-art__thumb" />
+            <span className="kz-art__post-lines">
+              <span />
+              <span />
+            </span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// EasyCrypto: переписка с ботом и кнопки, которые он подставляет под сообщение.
+// Свой пузырь прижат вправо, поэтому столбик читается диалогом, а не списком.
+function BotArt() {
+  return (
+    <div className="kz-art__inner">
+      <div className="kz-art__chat">
+        <span style={{ width: '66%' }} />
+        <span className="is-out is-accent" style={{ width: '40%' }} />
+        <span style={{ width: '54%' }} />
+      </div>
+      <div className="kz-art__keys">
+        <span className="is-accent" />
+        <span />
+      </div>
+    </div>
+  );
+}
+
+// DOT Game: экран с кнопкой и ряд карточек титанов под ним. Центральная синяя —
+// тот персонаж, которого открыли.
+function GameArt() {
+  return (
+    <div className="kz-art__inner">
+      <span className="kz-art__stage">
+        <span />
+      </span>
+      <div className="kz-art__heroes">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <span className={`kz-art__card${i === 2 ? ' is-accent' : ''}`} key={i}>
+            <span className="kz-art__thumb" />
+            <span className="kz-art__line" />
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Avrora: сама страница сверху вниз. Синяя полоса внизу — форма заявки,
+// ради которой лендинг и собран.
+function LandingArt() {
+  return (
+    <div className="kz-art__inner">
+      <span className="kz-art__band kz-art__band--hero">
+        <span />
+      </span>
+      <div className="kz-art__cols">
+        <span />
+        <span />
+      </div>
+      <span className="kz-art__band is-accent" />
+    </div>
+  );
+}
+
+// MainCoin: слева отдаёте рубли, справа получаете токен, под ними курс и
+// кнопка заявки. Синим помечена та сторона, ради которой человек и пришёл.
+function ExchangeArt() {
+  return (
+    <div className="kz-art__inner">
+      <div className="kz-art__pair">
+        <span className="kz-art__field">
+          <span />
+        </span>
+        <span className="kz-art__field is-accent">
+          <span />
+        </span>
+      </div>
+      <span className="kz-art__rate" />
+      <span className="kz-art__button" />
+    </div>
+  );
+}
+
 const ART = {
   akpack: CatalogArt,
   trendtrade: MarketArt,
   piligrim: LogisticsArt,
+  moove: HubArt,
   pinfin: LedgerArt,
   grids: GridArt,
   photodetstvo: PhotoArt,
+  easycrypto: BotArt,
+  dotgame: GameArt,
+  avrora: LandingArt,
+  maincoin: ExchangeArt,
 };
 
 export default function CaseArt({ slug, variant = 'tile' }) {

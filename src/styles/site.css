@@ -702,6 +702,231 @@ html {
   border: 1px solid var(--kz-art-line);
 }
 
+/* ---- медиахаб ---- */
+
+.kz-art__people {
+  display: flex;
+  gap: 6px;
+  height: 24%;
+  flex: none;
+}
+
+.kz-art__people span {
+  height: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--kz-art-line);
+  background: var(--kz-art-fill);
+}
+
+.kz-art__people span.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+.kz-art__feed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__post {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+  padding: 5px;
+  border: 1px solid var(--kz-art-line);
+}
+
+/* Превью статьи, а не карточки товара: узкое и во всю высоту строки. */
+.kz-art__post .kz-art__thumb {
+  width: 22%;
+  flex: none;
+  align-self: stretch;
+}
+
+.kz-art__post-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.kz-art__post-lines span {
+  height: 3px;
+  background: var(--kz-art-line);
+}
+
+.kz-art__post-lines span:last-child {
+  width: 55%;
+}
+
+/* ---- бот ---- */
+
+.kz-art__chat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__chat span {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--kz-art-line);
+  background: var(--kz-art-fill);
+}
+
+.kz-art__chat span.is-out {
+  align-self: flex-end;
+}
+
+.kz-art__chat span.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+/* Кнопки, которые бот подставляет под сообщение. */
+.kz-art__keys {
+  display: flex;
+  gap: 6px;
+  height: 20%;
+  flex: none;
+}
+
+.kz-art__keys span {
+  flex: 1;
+  border: 1px solid var(--kz-art-line);
+}
+
+.kz-art__keys span.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+/* ---- игра ---- */
+
+.kz-art__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26%;
+  flex: none;
+  border: 1px solid var(--kz-art-line);
+  background: var(--kz-art-fill);
+}
+
+.kz-art__stage span {
+  width: 34%;
+  height: 5px;
+  background: var(--kz-art-accent);
+}
+
+/* Карточки персонажей идут одной полосой, поэтому берут раскладку ряда,
+ * а не сетки каталога. */
+.kz-art__heroes {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__heroes .kz-art__card {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- лендинг ---- */
+
+/* Страница сверху вниз: экран с кнопкой, блоки покрытий, форма заявки. */
+.kz-art__band {
+  display: flex;
+  align-items: flex-end;
+  height: 16%;
+  flex: none;
+  border: 1px solid var(--kz-art-line);
+}
+
+.kz-art__band--hero {
+  height: 40%;
+  padding: 6px;
+  background: var(--kz-art-fill);
+}
+
+.kz-art__band--hero span {
+  width: 32%;
+  height: 5px;
+  background: var(--kz-art-line);
+}
+
+.kz-art__band.is-accent {
+  border-color: var(--kz-art-accent);
+  background: var(--kz-art-accent);
+}
+
+.kz-art__cols {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__cols span {
+  flex: 1;
+  border: 1px solid var(--kz-art-line);
+}
+
+/* ---- обменник ---- */
+
+/* Слева отдаёте, справа получаете, под ними курс и кнопка заявки. */
+.kz-art__pair {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+}
+
+.kz-art__field {
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid var(--kz-art-line);
+}
+
+.kz-art__field span {
+  width: 62%;
+  height: 5px;
+  background: var(--kz-art-line);
+}
+
+.kz-art__field.is-accent {
+  border-color: var(--kz-art-accent);
+}
+
+.kz-art__field.is-accent span {
+  background: var(--kz-art-accent);
+}
+
+.kz-art__rate {
+  width: 46%;
+  height: 3px;
+  flex: none;
+  background: var(--kz-art-line);
+}
+
+.kz-art__button {
+  height: 18%;
+  flex: none;
+  background: var(--kz-art-accent);
+}
+
 /* ---- Кейсы ---- */
 
 /* Счётчик стоит в строку с заголовком, а не подписью над ним — так требует
