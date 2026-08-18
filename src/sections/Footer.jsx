@@ -13,7 +13,6 @@ export default function Footer({ onNavigate }) {
       <div className="kz-container kz-footer-grid">
         <div style={{ maxWidth: 300 }} data-reveal="">
           <Logo height={26} />
-          <p style={{ font: 'var(--type-body-sm)', color: 'var(--text-muted)', marginTop: 16 }}>{FOOTER.about}</p>
         </div>
         <div className="kz-footer-col" data-reveal="" style={{ '--kz-delay': '90ms' }}>
           <span style={LABEL}>разделы</span>
@@ -54,9 +53,11 @@ export default function Footer({ onNavigate }) {
           </a>
         </div>
       </div>
+      {/* Строчка о студии закрывает страницу: последнее, что читают, это то,
+          чем мы занимаемся и за какой срок. */}
       <div className="kz-container kz-footer-bottom" data-reveal="" style={{ '--kz-delay': '240ms' }}>
+        <span>{FOOTER.about}</span>
         <span>{FOOTER.copyright}</span>
-        <span>{FOOTER.stack}</span>
       </div>
     </footer>
   );
