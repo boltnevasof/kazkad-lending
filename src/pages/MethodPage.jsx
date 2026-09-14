@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import ArrowButton from '../components/ArrowButton.jsx';
+import LinkedText from '../components/LinkedText.jsx';
 import SplitText from '../components/SplitText.jsx';
 import Contact from '../sections/Contact.jsx';
 import Footer from '../sections/Footer.jsx';
@@ -17,7 +17,9 @@ function Block({ block, delay = 0, children }) {
       <h2 className="kz-legal__title">{block.title}</h2>
       <div className="kz-method__body">
         {block.body.map((p) => (
-          <p key={p}>{p}</p>
+          <p key={p}>
+            <LinkedText text={p} link={block.link?.text} to={block.link?.to} />
+          </p>
         ))}
         {children}
       </div>
@@ -62,7 +64,7 @@ function Compare({ table }) {
 }
 
 export default function MethodPage() {
-  const { goSection, goPath } = useNav();
+  const { goSection } = useNav();
   const [what, agile] = METHOD_PAGE.intro;
   const [benefits, notFit] = METHOD_PAGE.outro;
 
@@ -100,18 +102,6 @@ export default function MethodPage() {
           <div className="kz-container">
             <Block block={benefits} />
             <Block block={notFit} delay={60} />
-            <div className="kz-method__cases" data-reveal="">
-              <ArrowButton
-                variant="ghost"
-                href="/cases"
-                onClick={(e) => {
-                  e.preventDefault();
-                  goPath('/cases');
-                }}
-              >
-                {METHOD_PAGE.casesLink}
-              </ArrowButton>
-            </div>
           </div>
         </section>
       </article>

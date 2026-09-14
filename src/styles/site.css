@@ -1190,10 +1190,20 @@ html {
 
 /* ---- Вопросы на главной ---- */
 
-/* Список стоит в правой колонке сетки, под заголовком секции. */
+/* Подпись и заголовок слева едут за прокруткой, пока справа идут вопросы.
+ * Липким сделан общий блок, чтобы подпись и заголовок двигались вместе.
+ * Работает, потому что у предков секции overflow-x: clip, а не hidden:
+ * clip не создаёт контейнер прокрутки и не ломает sticky. */
+.kz-faq__head {
+  position: sticky;
+  top: calc(var(--nav-height) + 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 48px;
+}
+
 .kz-faq {
-  grid-column: 2;
-  margin-top: 36px;
   border-top: 1px solid var(--border-hairline);
 }
 
@@ -1297,6 +1307,25 @@ html {
   color: var(--text-muted);
 }
 
+/* Ссылка внутри предложения: тонкая линия под словами вместо кнопки под
+ * абзацем. На наведении слова и линия синеют. Класс с :hover сильнее
+ * базового a:hover из дизайн-системы, поэтому цвет не перебивается. */
+.kz-inline-link {
+  color: var(--text-strong);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--border-default);
+  text-underline-offset: 3px;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+
+.kz-inline-link:hover {
+  color: var(--text-link);
+  text-decoration-color: currentColor;
+}
+
 .kz-method__body {
   display: flex;
   flex-direction: column;
@@ -1309,10 +1338,6 @@ html {
 .kz-method__body p {
   max-width: 640px;
   margin: 0;
-}
-
-.kz-method__cases {
-  padding-top: 40px;
 }
 
 /* Сравнение с Agile: таблица на волосяных линейках, без рамок и заливок.
