@@ -1,6 +1,8 @@
 import React from 'react';
 
-const BASE = () => (typeof window !== 'undefined' && window.KZ_ASSET_BASE) || './assets/';
+// Absolute by default: the prerendered HTML is built without window, and a relative
+// './assets/' would resolve to /cases/assets/ on nested pages such as /cases/moove.
+const BASE = () => (typeof window !== 'undefined' && window.KZ_ASSET_BASE) || '/assets/';
 
 /** The Kazkad logo. Bitmap crops of the supplied artwork — never redrawn. */
 export function Logo({ variant = 'wordmark', height = 28, style, ...rest }) {

@@ -44,7 +44,7 @@ export default function Conveyor() {
       </div>
 
       <figcaption className="kz-conveyor__caption">
-        <span className="kz-eyebrow">вход</span>
+        <span className="kz-eyebrow">вход</span>{' '}
         <span className="kz-eyebrow">запуск</span>
       </figcaption>
     </figure>

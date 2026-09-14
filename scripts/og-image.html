@@ -1,0 +1,110 @@
+<!doctype html>
+<!--
+  Картинка превью ссылки (og:image), 1200×630. Лежит готовой в public/og/kazkad.png,
+  этот файл нужен только чтобы перерисовать её после смены заголовка:
+
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+    --allow-file-access-from-files --hide-scrollbars --force-device-scale-factor=1 \
+    --window-size=1200,630 --virtual-time-budget=3000 \
+    --screenshot=public/og/kazkad.png "file://$PWD/scripts/og-image.html"
+-->
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kazkad og:image</title>
+    <style>
+      @font-face {
+        font-family: 'Manrope';
+        font-weight: 400 800;
+        src: url('../public/assets/fonts/manrope-cyrillic.woff2') format('woff2');
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: 'Manrope';
+        font-weight: 400 800;
+        src: url('../public/assets/fonts/manrope-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+2000-206F;
+      }
+
+      html,
+      body {
+        margin: 0;
+      }
+
+      body {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #ffffff;
+        color: #171717;
+        font-family: 'Manrope', 'Helvetica Neue', Helvetica, sans-serif;
+      }
+
+      /* Звезда за левым краем заголовка, как в герое сайта. */
+      .glow {
+        position: absolute;
+        top: -150px;
+        left: 150px;
+        width: 640px;
+        opacity: 0.55;
+      }
+
+      .frame {
+        position: absolute;
+        inset: 60px 72px 52px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo {
+        align-self: flex-start;
+        height: 40px;
+        width: auto;
+      }
+
+      h1 {
+        margin: auto 0 0;
+        font-size: 74px;
+        font-weight: 700;
+        line-height: 1.06;
+        letter-spacing: -0.03em;
+      }
+
+      h1 span {
+        display: block;
+      }
+
+      h1 .indent {
+        margin-left: 31%;
+        color: #1763e6;
+      }
+
+      .foot {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 44px;
+        padding-top: 18px;
+        border-top: 1px solid #e5e5e5;
+        font-size: 24px;
+        font-weight: 500;
+        color: #6f6f6f;
+      }
+    </style>
+  </head>
+  <body>
+    <img class="glow" src="../public/assets/star-glow.png" alt="" />
+    <div class="frame">
+      <img class="logo" src="../public/assets/logo-wordmark.png" alt="Kazkad" />
+      <h1>
+        <span>Запустим ваш продукт</span>
+        <span class="indent">за 3 недели</span>
+        <span>после подписания договора</span>
+      </h1>
+      <div class="foot">
+        <span>студия веб-разработки, Казань</span>
+        <span>kazkad.digital</span>
+      </div>
+    </div>
+  </body>
+</html>

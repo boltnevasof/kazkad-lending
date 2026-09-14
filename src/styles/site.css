@@ -935,7 +935,8 @@ html {
   font: var(--type-body-sm);
   font-weight: var(--weight-medium);
   color: var(--text-muted);
-  margin-left: 14px;
+  /* 10px поля плюс пробел в начале счётчика дают прежние 14px. */
+  margin-left: 10px;
   vertical-align: middle;
   white-space: nowrap;
 }

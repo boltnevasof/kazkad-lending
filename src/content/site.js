@@ -8,7 +8,14 @@ export const CONTACTS = {
   email: 'hello@kazkad.digital',
   phone: '+7 (917) 230-04-81',
   phoneHref: 'tel:+79172300481',
+  city: 'Казань',
+  street: 'ул. Спартаковская, 2А',
 };
+
+// Адрес хранится частями: в разметку schema.org город и улица уходят отдельными
+// полями, а на сайте показываются одной строкой со ссылкой на карту.
+CONTACTS.address = `${CONTACTS.city}, ${CONTACTS.street}`;
+CONTACTS.addressHref = `https://yandex.ru/maps/?text=${encodeURIComponent(CONTACTS.address)}`;
 
 export const NAV_LINKS = [
   { href: '#method', label: 'метод' },

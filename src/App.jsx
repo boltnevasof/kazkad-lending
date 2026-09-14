@@ -4,12 +4,15 @@ import Landing from './pages/Landing.jsx';
 import CasesPage from './pages/CasesPage.jsx';
 import CasePage from './pages/CasePage.jsx';
 import PrivacyPage from './pages/PrivacyPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
 import Preloader from './components/Preloader.jsx';
 import SiteNav from './components/SiteNav.jsx';
 import SlideCurtain from './components/SlideCurtain.jsx';
+import { applySeo } from './lib/head.js';
 import { initReveal, prefersReducedMotion, replayReveal } from './lib/reveal.js';
 import { NavContext } from './lib/nav.js';
 import { CONTACTS, HERO, NAV_LINKS } from './content/site.js';
+import { seoFor } from './content/seo.js';
 
 const SECTION_IDS = ['#top', '#method', '#stages', '#cases', '#contact'];
 
@@ -33,6 +36,12 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const onLanding = location.pathname === '/';
+
+  // Готовый HTML страницы уже несёт свои title и описание, но переход по
+  // ссылке внутри сайта страницу не перезагружает, поэтому меняем их сами.
+  useEffect(() => {
+    applySeo(seoFor(location.pathname));
+  }, [location.pathname]);
 
   // Пока идёт заставка, страница не скроллится и ничего не проявляется.
   useEffect(() => {
@@ -182,7 +191,7 @@ export default function App() {
           <Route path="/cases" element={<CasesPage />} />
           <Route path="/cases/:slug" element={<CasePage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="*" element={<Landing />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         <SlideCurtain phase={curtain} />

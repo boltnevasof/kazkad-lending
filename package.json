@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-seo.mjs && vite build",
+    "build": "node scripts/generate-seo.mjs && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
-    "seo": "node scripts/generate-seo.mjs"
+    "seo": "node scripts/generate-seo.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

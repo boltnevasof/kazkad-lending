@@ -32,16 +32,21 @@ export default function Footer({ onNavigate }) {
           ))}
         </div>
         <div className="kz-footer-col" data-reveal="" style={{ '--kz-delay': '180ms' }}>
-          <span style={LABEL}>связь</span>
+          {/* Пробелы между строками контактов не видны в колонке-флексе,
+              зато парсер HTML не склеивает телефон с адресом. */}
+          <span style={LABEL}>связь</span>{' '}
           <a className="kz-footer-link" href={CONTACTS.telegram} target="_blank" rel="noopener noreferrer">
             Telegram
-          </a>
+          </a>{' '}
           <a className="kz-footer-link" href={`mailto:${CONTACTS.email}`}>
             {CONTACTS.email}
-          </a>
+          </a>{' '}
           <a className="kz-footer-link" href={CONTACTS.phoneHref}>
             {CONTACTS.phone}
-          </a>
+          </a>{' '}
+          <a className="kz-footer-link" href={CONTACTS.addressHref} target="_blank" rel="noopener noreferrer">
+            {CONTACTS.address}
+          </a>{' '}
           <a
             className="kz-footer-link"
             href="/privacy"
@@ -55,7 +60,7 @@ export default function Footer({ onNavigate }) {
         </div>
       </div>
       <div className="kz-container kz-footer-bottom" data-reveal="" style={{ '--kz-delay': '240ms' }}>
-        <span>{FOOTER.copyright}</span>
+        <span>{FOOTER.copyright}</span>{' '}
         <span>{FOOTER.stack}</span>
       </div>
     </footer>

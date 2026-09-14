@@ -1,6 +1,7 @@
 import React from 'react';
 
-const BASE = () => (typeof window !== 'undefined' && window.KZ_ASSET_BASE) || './assets/';
+// Absolute by default, see Logo.jsx: the prerender has no window to read the base from.
+const BASE = () => (typeof window !== 'undefined' && window.KZ_ASSET_BASE) || '/assets/';
 
 /** The blurred blue star from the concept board, placed behind a section corner. */
 export function GlowBackdrop({ size = 720, position = 'top-right', opacity = 0.7, style, ...rest }) {
@@ -13,7 +14,7 @@ export function GlowBackdrop({ size = 720, position = 'top-right', opacity = 0.7
   };
   return (
     <img
-      src={BASE() + 'star-glow.png'} alt="" aria-hidden="true"
+      src={BASE() + 'star-glow.webp'} alt="" aria-hidden="true"
       {...rest}
       style={{
         position: 'absolute', width: size, height: 'auto', opacity,

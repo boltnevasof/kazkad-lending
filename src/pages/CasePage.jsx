@@ -118,16 +118,19 @@ export default function CasePage() {
 
           {/* Показываем только заполненные поля: пустой «срок запуска» хуже,
               чем его отсутствие. */}
+          {/* Пробелы между подписью и значением во флексе не видны, но без них
+              парсер HTML читал «направлениеплатформы» и «+37%вовлечённость».
+              Цифры кейсов ИИ цитирует охотнее всего, склеенными их не поймать. */}
           <div className="kz-case-meta" data-reveal="">
             {meta.map((m) => (
               <span key={m.label}>
-                <span className="kz-eyebrow">{m.label}</span>
-                <b>{m.value}</b>
+                <span className="kz-eyebrow">{m.label}</span>{' '}
+                <b>{m.value}</b>{' '}
               </span>
             ))}
             {item.url && (
               <span>
-                <span className="kz-eyebrow">сайт</span>
+                <span className="kz-eyebrow">сайт</span>{' '}
                 <a className="kz-case-link" href={item.url} target="_blank" rel="noopener noreferrer">
                   {hostOf(item.url)}
                   <Icon name="arrow-up-right" size={15} />
@@ -136,7 +139,7 @@ export default function CasePage() {
             )}
             {!item.url && item.nda && (
               <span>
-                <span className="kz-eyebrow">доступ</span>
+                <span className="kz-eyebrow">доступ</span>{' '}
                 <b>под NDA</b>
               </span>
             )}
@@ -155,7 +158,7 @@ export default function CasePage() {
             <div className="kz-case-metrics">
               {item.metrics.map((m, i) => (
                 <div key={m.caption} data-reveal="" style={{ '--kz-delay': `${i * 90}ms` }}>
-                  <b>{m.value}</b>
+                  <b>{m.value}</b>{' '}
                   <span>{m.caption}</span>
                 </div>
               ))}
@@ -184,8 +187,8 @@ export default function CasePage() {
                   goPath(`/cases/${n.item.slug}`);
                 }}
               >
-                <span className="kz-eyebrow">{n.label}</span>
-                <span className="kz-case-nav__title">{n.item.title}</span>
+                <span className="kz-eyebrow">{n.label}</span>{' '}
+                <span className="kz-case-nav__title">{n.item.title}</span>{' '}
               </a>
             ))}
           </nav>

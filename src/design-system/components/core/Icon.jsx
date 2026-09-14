@@ -1,6 +1,7 @@
 import React from 'react';
 
-const BASE = () => (typeof window !== 'undefined' && window.KZ_ICON_BASE) || './assets/icons/';
+// Absolute by default, see Logo.jsx: the prerender has no window to read the base from.
+const BASE = () => (typeof window !== 'undefined' && window.KZ_ICON_BASE) || '/assets/icons/';
 const CACHE = {};
 
 /** Monochrome Lucide glyph. The SVG file is inlined so it inherits currentColor. */

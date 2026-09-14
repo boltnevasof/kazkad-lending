@@ -20,10 +20,12 @@ export default function Hero({ onEnquiry }) {
           Обёртка повторяет ширину контейнера: в процентах от вьюпорта звезда
           уезжала влево от заголовка тем сильнее, чем шире монитор. */}
       <span className="kz-hero-glow-anchor" aria-hidden="true">
+        {/* Самый крупный элемент первого экрана, поэтому грузится в приоритете. */}
         <GlowBackdrop
           className="kz-hero-glow"
           size={460}
           opacity={0.55}
+          fetchpriority="high"
           style={{ top: -40, left: '13%', right: 'auto', bottom: 'auto' }}
         />
       </span>
@@ -33,9 +35,12 @@ export default function Hero({ onEnquiry }) {
             {HERO.aside}
           </span>
           <div>
+            {/* Пробелы между строками нужны тем, кто читает HTML без стилей.
+                Строки блочные, и в браузере пробел не виден, а без него
+                поисковик склеивал «продуктза» и «неделипосле». */}
             <h1 className="kz-display">
-              <SplitText text={HERO.headline[0]} className="kz-line" delay={LINE_DELAYS[0]} />
-              <SplitText text={HERO.headline[1]} className="kz-display-indent" delay={LINE_DELAYS[1]} />
+              <SplitText text={HERO.headline[0]} className="kz-line" delay={LINE_DELAYS[0]} />{' '}
+              <SplitText text={HERO.headline[1]} className="kz-display-indent" delay={LINE_DELAYS[1]} />{' '}
               <SplitText text={HERO.headline[2]} className="kz-line" delay={LINE_DELAYS[2]} />
             </h1>
             <div className="kz-hero-lead-row">

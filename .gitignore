@@ -221,6 +221,8 @@ __marimo__/
 node_modules/
 .vite/
 *.local
+# Серверная сборка для пререндера, удаляется в конце npm run build
+dist-ssr/
 
 # macOS
 .DS_Store

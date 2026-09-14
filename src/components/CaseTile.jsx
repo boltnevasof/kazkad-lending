@@ -48,7 +48,10 @@ export default function CaseTile({
       ) : (
         <CaseArt slug={slug} variant="tile" />
       )}
-      <span className="kz-tile__title">{title}</span>
+      {/* Пробел для тех, кто читает HTML без стилей: иначе последнее слово
+          заголовка склеивалось с «посмотреть». Слои позиционированы, в
+          раскладке плитки пробел не участвует. */}
+      <span className="kz-tile__title">{title}</span>{' '}
       <span className="kz-tile__link">{linkLabel}</span>
       <span className="kz-tile__arrow">
         <Icon name="arrow-right" size={size === 'sm' ? 13 : 15} />

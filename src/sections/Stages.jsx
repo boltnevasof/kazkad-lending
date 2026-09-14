@@ -40,8 +40,10 @@ export default function Stages() {
 
           {STAGES.items.map((s, i) => (
             <div className="kz-gantt__row" key={s.title} style={{ '--kz-i': i }}>
+              {/* Пробел не виден во флексе, но без него парсер HTML читал
+                  «дни 1–5Требования». */}
               <div className="kz-gantt__label">
-                <span className="kz-gantt__days">{s.days}</span>
+                <span className="kz-gantt__days">{s.days}</span>{' '}
                 <span className="kz-gantt__task">{s.title}</span>
               </div>
 

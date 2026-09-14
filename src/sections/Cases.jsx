@@ -15,8 +15,11 @@ export default function Cases() {
         <div className="kz-cases-head">
           <h2 className="kz-title">
             <SplitText text={CASES.title} />
+            {/* Пробел внутри счётчика, а не перед ним: так он набран мелким
+                кеглем счётчика и не раздвигает строку, а парсер HTML больше
+                не склеивает «запустили» с «кейсы». */}
             <span className="kz-cases-count" data-reveal="" style={{ '--kz-delay': '320ms' }}>
-              кейсы {CASES.items.length}
+              {' '}кейсы {CASES.items.length}
             </span>
           </h2>
           <span data-reveal="" style={{ '--kz-delay': '380ms' }}>

@@ -3,21 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kazkad — студия веб-разработки</title>
+    <!-- Блок между метками пререндер заменяет тегами своей страницы: title,
+         описание, canonical, превью ссылки и разметка schema.org
+         (scripts/prerender.mjs). Здесь значения по умолчанию для dev. -->
+    <!--kz-head-->
+    <title>Kazkad | Каскадная разработка сайтов и веб-сервисов за 3 недели</title>
     <meta
       name="description"
-      content="Запустим ваш продукт за 3 недели после подписания договора. Не успели по нашей вине — вернём половину суммы. Python и React."
+      content="Студия Kazkad из Казани запускает сайты, веб-платформы и Telegram-ботов за 3 недели после подписания договора. Работаем по каскадной модели, а если не успели по нашей вине, возвращаем половину суммы."
     />
+    <!--/kz-head-->
     <link rel="icon" href="/assets/logo-mark.png" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:title" content="Kazkad — студия веб-разработки" />
-    <meta
-      property="og:description"
-      content="Запустим ваш продукт за 3 недели после подписания договора. Не успели по нашей вине — вернём половину суммы."
-    />
-    <meta property="og:image" content="/assets/logo-wordmark.png" />
 
     <!-- Logo, glow and Lucide glyphs are resolved at runtime by the design system
          components; both bases point at public/assets. -->
@@ -25,9 +21,18 @@
       window.KZ_ICON_BASE = '/assets/icons/';
       window.KZ_ASSET_BASE = '/assets/';
     </script>
+
+    <!-- Без JavaScript проявление и заставка не запустятся, поэтому показываем всё сразу. -->
+    <noscript>
+      <style>
+        [data-reveal], .kz-word__in, .kz-tile { opacity: 1 !important; translate: none !important; }
+        .kz-word { overflow: visible !important; }
+        .kz-preloader, .kz-curtain { display: none !important; }
+      </style>
+    </noscript>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--kz-app--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
