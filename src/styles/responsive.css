@@ -46,6 +46,15 @@
     gap: 24px;
   }
 
+  /* Сетка схлопнулась в одну колонку: вопросы встают под заголовок во всю ширину. */
+  .kz-faq {
+    grid-column: auto;
+  }
+
+  .kz-faq__answer {
+    padding-right: 0;
+  }
+
   .kz-cases-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -315,6 +324,47 @@
 
   .kz-case-row {
     padding: 24px 0;
+  }
+
+  /* Сравнение с Agile на телефоне раскладывается строками: признак, под ним
+     оба варианта с подписью колонки. Три колонки в 360px не помещались, а
+     прокрутка вбок выглядела как обрезанная таблица. */
+  .kz-compare,
+  .kz-compare tbody,
+  .kz-compare caption {
+    display: block;
+    min-width: 0;
+  }
+
+  .kz-compare thead {
+    display: none;
+  }
+
+  .kz-compare tr {
+    display: grid;
+    gap: 10px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .kz-compare th,
+  .kz-compare td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .kz-compare tbody th {
+    width: auto;
+  }
+
+  .kz-compare td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font: var(--type-eyebrow);
+    letter-spacing: var(--tracking-micro);
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
   .kz-case-metrics {

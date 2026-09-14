@@ -4,6 +4,7 @@ import Hero from '../sections/Hero.jsx';
 import Method from '../sections/Method.jsx';
 import Stages from '../sections/Stages.jsx';
 import Cases from '../sections/Cases.jsx';
+import Faq from '../sections/Faq.jsx';
 import Contact from '../sections/Contact.jsx';
 import Footer from '../sections/Footer.jsx';
 import { useNav } from '../lib/nav.js';
@@ -28,6 +29,7 @@ export default function Landing() {
       <Method />
       <Stages />
       <Cases />
+      <Faq />
       <Contact />
       <Footer onNavigate={goSection} />
     </>

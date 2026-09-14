@@ -29,7 +29,17 @@ export default function Footer({ onNavigate }) {
             >
               {l.label}
             </a>
-          ))}
+          ))}{' '}
+          <a
+            className="kz-footer-link"
+            href="/kaskadnaya-razrabotka"
+            onClick={(e) => {
+              e.preventDefault();
+              goPath('/kaskadnaya-razrabotka');
+            }}
+          >
+            каскадная разработка
+          </a>
         </div>
         <div className="kz-footer-col" data-reveal="" style={{ '--kz-delay': '180ms' }}>
           {/* Пробелы между строками контактов не видны в колонке-флексе,

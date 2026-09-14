@@ -4,7 +4,8 @@
 // страницы, а при переходах внутри сайта App подменяет title и описание из
 // тех же функций, поэтому поисковик и посетитель видят одно и то же.
 
-import { CASES, CONTACTS, findCase } from './site.js';
+import { METHOD_PAGE } from './method.js';
+import { CASES, CONTACTS, FAQ, findCase } from './site.js';
 
 export const SITE_URL = 'https://kazkad.digital';
 
@@ -140,6 +141,65 @@ const NOT_FOUND = {
   jsonLd: null,
 };
 
+// Те же вопросы и ответы, что видны на главной, слово в слово.
+function homePage() {
+  return build({
+    ...HOME,
+    graph: [
+      {
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/#faq`,
+        mainEntity: FAQ.items.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: { '@type': 'Answer', text: item.answer },
+        })),
+      },
+    ],
+  });
+}
+
+function methodPage() {
+  const { path } = METHOD_PAGE;
+  const articleId = `${absolute(path)}#article`;
+
+  return build({
+    path,
+    title: 'Каскадная разработка сайтов и сервисов за 21 день | Kazkad',
+    description:
+      'Что такое каскадная модель разработки, чем она отличается от Agile и как студия Kazkad по ней запускает сайты, платформы и Telegram-ботов за 21 день с датой запуска в договоре.',
+    mainEntity: articleId,
+    graph: [
+      {
+        '@type': 'Article',
+        '@id': articleId,
+        headline: METHOD_PAGE.title,
+        description: METHOD_PAGE.lead,
+        inLanguage: 'ru-RU',
+        datePublished: METHOD_PAGE.updated,
+        dateModified: METHOD_PAGE.updated,
+        author: { '@id': ORG_ID },
+        publisher: { '@id': ORG_ID },
+        image: OG_IMAGE,
+        mainEntityOfPage: absolute(path),
+        about: {
+          '@type': 'Thing',
+          name: 'Каскадная модель разработки',
+          alternateName: 'Waterfall',
+          sameAs: [
+            'https://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%81%D0%BA%D0%B0%D0%B4%D0%BD%D0%B0%D1%8F_%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C',
+            'https://en.wikipedia.org/wiki/Waterfall_model',
+          ],
+        },
+      },
+      breadcrumbs([
+        { name: 'Главная', path: '/' },
+        { name: METHOD_PAGE.title, path },
+      ]),
+    ],
+  });
+}
+
 function casesPage() {
   return build({
     ...CASES_PAGE,
@@ -198,7 +258,8 @@ function casePage(item) {
 
 export function seoFor(pathname) {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
-  if (path === '/') return build(HOME);
+  if (path === '/') return homePage();
+  if (path === METHOD_PAGE.path) return methodPage();
   if (path === '/cases') return casesPage();
   if (path === '/privacy') return build(PRIVACY_PAGE);
 
@@ -211,7 +272,7 @@ export function seoFor(pathname) {
 
 // Адреса, которые собираются в готовый HTML и попадают в карту сайта.
 export function prerenderRoutes() {
-  return ['/', '/cases', ...CASES.items.map((c) => `/cases/${c.slug}`), '/privacy'];
+  return ['/', METHOD_PAGE.path, '/cases', ...CASES.items.map((c) => `/cases/${c.slug}`), '/privacy'];
 }
 
 const escapeAttr = (value) =>

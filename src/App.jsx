@@ -4,6 +4,7 @@ import Landing from './pages/Landing.jsx';
 import CasesPage from './pages/CasesPage.jsx';
 import CasePage from './pages/CasePage.jsx';
 import PrivacyPage from './pages/PrivacyPage.jsx';
+import MethodPage from './pages/MethodPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import Preloader from './components/Preloader.jsx';
 import SiteNav from './components/SiteNav.jsx';
@@ -190,6 +191,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/cases" element={<CasesPage />} />
           <Route path="/cases/:slug" element={<CasePage />} />
+          <Route path="/kaskadnaya-razrabotka" element={<MethodPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
