@@ -1,0 +1,279 @@
+/* Пресеты кадров для фотографий проектов.
+ *
+ * Кадр — это поле определённого цвета и правило, как в нём стоит снимок:
+ * с полями, под обрез, в углу, в окне браузера. Снимок всегда один и тот же
+ * <img>, меняется только оправа, поэтому одну и ту же фотографию можно
+ * поставить в любой из девяти пресетов и не резать её заново.
+ *
+ * Пропорция кадра задаётся переменной --kzp-ratio, по умолчанию квадрат:
+ * ряды кейсов на главной стоят на квадратах. Для обложки или ленты хватит
+ * style="--kzp-ratio: 16 / 9".
+ *
+ * Фиолетовый живёт только здесь. В токенах его нет и быть не должно: у бренда
+ * синий и тушь, а это оправа под чужие снимки. */
+
+:root {
+  --kzp-violet-050: #f1edff;
+  --kzp-violet-600: #5b3df0;
+  --kzp-violet-900: #241463;
+}
+
+.kzp {
+  --kzp-ratio: 1;
+  --kzp-bg: var(--ink-100);
+  --kzp-ink: var(--ink-900);
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: var(--kzp-ratio);
+  background: var(--kzp-bg);
+  color: var(--kzp-ink);
+  font: var(--weight-medium) 15px / 1.3 var(--font-core);
+  letter-spacing: -0.01em;
+}
+
+/* Снимок всегда перекрывает свою клетку целиком и обрезается по ней. Размер
+ * клетки каждый пресет задаёт процентами, а не инсетами со всех сторон:
+ * картинка — замещаемый элемент, при width: auto она берёт собственный
+ * размер и правый с нижним краем просто не срабатывают. */
+.kzp__photo {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.kzp__cap {
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------- синие */
+
+/* 01. Поле. Снимок висит в светлом поле с запасом со всех сторон, снизу
+ * остаётся место под подпись. Спокойный кадр для интерьеров и предметки. */
+.kzp--field {
+  --kzp-bg: var(--blue-050);
+}
+
+.kzp--field .kzp__photo {
+  top: 9%;
+  left: 9%;
+  width: 82%;
+  height: 70%;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+}
+
+.kzp--field .kzp__cap {
+  bottom: 8%;
+  left: 9%;
+  color: var(--ink-600);
+}
+
+/* 02. Подъём. Снимок прижат к нижнему краю и уходит за него, сверху остаётся
+ * синий воздух. Так ставят экраны приложения и длинные страницы. */
+.kzp--rise {
+  --kzp-bg: var(--blue-600);
+  --kzp-ink: var(--ink-000);
+}
+
+.kzp--rise .kzp__photo {
+  top: 27%;
+  left: 11%;
+  width: 78%;
+  height: 73%;
+  object-position: center top;
+}
+
+.kzp--rise .kzp__cap {
+  top: 10%;
+  left: 11%;
+}
+
+/* 03. Полоса. Снимок на весь кадр, снизу синяя полоса с подписью. Кадр для
+ * фотографии, которой нечего прятать. */
+.kzp--band .kzp__photo {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 78%;
+}
+
+.kzp--band .kzp__cap {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  height: 22%;
+  padding: 0 7%;
+  color: var(--ink-000);
+  background: var(--blue-600);
+}
+
+/* ----------------------------------------------------------- фиолетовые */
+
+/* 04. Разворот. Слева плашка с названием, справа снимок под обрез. Кадр для
+ * первого экрана кейса: сразу видно, чей проект. */
+.kzp--split {
+  --kzp-bg: var(--kzp-violet-600);
+  --kzp-ink: var(--ink-000);
+}
+
+.kzp--split .kzp__photo {
+  top: 0;
+  left: 36%;
+  width: 64%;
+  height: 100%;
+}
+
+.kzp--split .kzp__cap {
+  top: 9%;
+  left: 8%;
+  width: 22%;
+}
+
+/* 05. Окно. Снимок стоит в окне браузера: тонкая шапка с точками и строкой
+ * адреса. Кадр для сайтов и админок, где важно, что это экран. */
+.kzp--window {
+  --kzp-bg: var(--kzp-violet-050);
+}
+
+.kzp--window .kzp__frame {
+  position: absolute;
+  /* Снизу поля больше: там стоит подпись, и на 11% она подпирала окно. */
+  inset: 9% 9% 18%;
+  overflow: hidden;
+  background: var(--ink-000);
+  border: 1px solid rgba(23, 23, 23, 0.1);
+}
+
+.kzp--window .kzp__bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.1);
+}
+
+.kzp--window .kzp__dot {
+  width: 7px;
+  height: 7px;
+  background: rgba(23, 23, 23, 0.18);
+  border-radius: 50%;
+}
+
+.kzp--window .kzp__line {
+  flex: 1;
+  height: 7px;
+  margin-left: 8px;
+  background: rgba(23, 23, 23, 0.08);
+}
+
+.kzp--window .kzp__photo {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 26px);
+  object-position: center top;
+}
+
+.kzp--window .kzp__cap {
+  bottom: 6%;
+  left: 9%;
+  color: var(--kzp-violet-900);
+}
+
+/* 06. Угол. Снимок уходит за правый и нижний края, свободный угол забирает
+ * подпись. Кадр для деталей и крупных планов. */
+.kzp--corner {
+  --kzp-bg: var(--kzp-violet-900);
+  --kzp-ink: var(--ink-000);
+}
+
+.kzp--corner .kzp__photo {
+  top: 24%;
+  left: 24%;
+  width: 76%;
+  height: 76%;
+}
+
+.kzp--corner .kzp__cap {
+  top: 9%;
+  left: 8%;
+}
+
+/* ----------------------------------------------------------- нейтральные */
+
+/* 07. Бумага. Белое поле, снимок с полями и подпись под тонкой линией.
+ * Кадр для печатного и предметного. */
+.kzp--paper {
+  --kzp-bg: var(--ink-000);
+  box-shadow: inset 0 0 0 1px var(--ink-200);
+}
+
+.kzp--paper .kzp__photo {
+  top: 8%;
+  left: 8%;
+  width: 84%;
+  height: 72%;
+}
+
+.kzp--paper .kzp__cap {
+  right: 8%;
+  bottom: 8%;
+  left: 8%;
+  padding-top: 10px;
+  color: var(--ink-600);
+  border-top: 1px solid var(--ink-200);
+}
+
+/* 08. Тушь. Чёрное поле и снимок по центру в тонкой рамке. Кадр для тёмных
+ * интерфейсов и всего, что светится. */
+.kzp--ink {
+  --kzp-bg: var(--ink-900);
+  --kzp-ink: var(--ink-000);
+}
+
+.kzp--ink .kzp__photo {
+  top: 13%;
+  left: 13%;
+  width: 74%;
+  height: 74%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.kzp--ink .kzp__cap {
+  right: 13%;
+  bottom: 5%;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* 09. Сетка. Снимок лежит на миллиметровке и приподнят тенью. Кадр для схем,
+ * макетов и всего, что хочется показать как объект. */
+.kzp--grid {
+  --kzp-bg: var(--ink-100);
+  background-image:
+    linear-gradient(to right, rgba(23, 23, 23, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 23, 23, 0.06) 1px, transparent 1px);
+  background-size: 8.333% 8.333%;
+}
+
+.kzp--grid .kzp__photo {
+  top: 15%;
+  left: 15%;
+  width: 70%;
+  height: 70%;
+  box-shadow: 0 20px 44px rgba(23, 23, 23, 0.18);
+}
+
+.kzp--grid .kzp__cap {
+  bottom: 5.5%;
+  left: 15%;
+  color: var(--ink-600);
+}
