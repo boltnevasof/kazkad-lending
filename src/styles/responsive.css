@@ -412,7 +412,6 @@
     margin-bottom: 2px;
     font: var(--type-eyebrow);
     letter-spacing: var(--tracking-micro);
-    text-transform: uppercase;
     color: var(--text-muted);
   }
 

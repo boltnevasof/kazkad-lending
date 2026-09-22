@@ -34,8 +34,16 @@ html {
  * Переопределяем токен здесь, а не в src/design-system: та папка копируется
  * из скилла один в один и правится только перегенерацией. */
 :root {
-  --type-eyebrow: var(--weight-semibold) var(--size-micro) / 1.2 var(--font-core);
-  --tracking-micro: 0.09em;
+  --type-eyebrow: var(--weight-medium) var(--size-body-sm) / 1.4 var(--font-core);
+  --tracking-micro: 0;
+}
+
+/* Микроподписи набираем тем же шрифтом, что и остальной текст: без капса
+ * и разрядки. Класс приходит из дизайн-системы, поэтому перебиваем его здесь,
+ * в той папке правки делаются только перегенерацией. */
+.kz-eyebrow {
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 /* ---- Асимметричный грид: узкая левая колонка + контент ---- */
@@ -340,7 +348,6 @@ html {
 .kz-stages__hint {
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
   color: var(--text-muted);
 }
 
@@ -380,7 +387,6 @@ html {
 .kz-gantt__day {
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
   color: var(--text-muted);
 }
 
@@ -504,8 +510,8 @@ html {
   translate: -100% 0;
 }
 
-/* Стрелка от карточки к её отрезку. Синяя и с наконечником: серая линия
- * в один пиксель на светлом фоне почти не читалась. */
+/* Линия от карточки к её отрезку. Синяя и в два пикселя: серая в один
+ * пиксель на светлом фоне почти не читалась. */
 .kz-stage-card__leader {
   position: absolute;
   width: 2px;
@@ -513,34 +519,14 @@ html {
   background: var(--surface-accent);
 }
 
-.kz-stage-card__leader::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  border: 6px solid transparent;
-}
-
 .kz-stage-card.is-above .kz-stage-card__leader {
   top: 100%;
   height: calc(32px + var(--kz-scale) + var(--kz-row) * var(--kz-i, 0) + var(--kz-row) / 2);
 }
 
-.kz-stage-card.is-above .kz-stage-card__leader::after {
-  bottom: 0;
-  border-top-color: var(--surface-accent);
-  border-bottom-width: 0;
-}
-
 .kz-stage-card.is-below .kz-stage-card__leader {
   bottom: 100%;
   height: calc(32px + var(--kz-row) * (var(--kz-rows, 3) - 1 - var(--kz-i, 0)) + var(--kz-row) / 2);
-}
-
-.kz-stage-card.is-below .kz-stage-card__leader::after {
-  top: 0;
-  border-bottom-color: var(--surface-accent);
-  border-top-width: 0;
 }
 
 .kz-stage-card.is-start .kz-stage-card__leader {
@@ -565,7 +551,6 @@ html {
 .kz-stage-card__days {
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
   color: var(--text-accent);
 }
 
@@ -595,7 +580,6 @@ html {
   background: var(--surface-subtle);
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
   color: var(--text-strong);
 }
 
@@ -763,7 +747,6 @@ html {
   border: 1px solid var(--kz-art-line);
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
   color: var(--kz-art-line);
 }
 
@@ -1597,7 +1580,6 @@ html {
 .kz-compare thead th {
   font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
   color: var(--text-muted);
 }
 
