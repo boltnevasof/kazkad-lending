@@ -4,202 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e337b424-be49-46b4-befa-52a40c58b056" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/.thumbnail" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/SKILL.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/_adherence.oxlintrc.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/_ds_bundle.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/_ds_manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/case-mobile-app.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/fonts/manrope-cyrillic-ext.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/fonts/manrope-cyrillic.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/fonts/manrope-latin-ext.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/fonts/manrope-latin.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/fonts/martian-mono-cyrillic.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/fonts/martian-mono-latin.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/arrow-left.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/arrow-right.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/arrow-up-right.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/chevron-down.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/chevron-right.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/circle-alert.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/circle-check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/clock.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/code.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/external-link.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/file-text.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/info.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/layers.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/mail.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/menu.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/minus.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/phone.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/plus.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/rocket.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/send.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/shield-check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/sparkles.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/star.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/trending-up.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/users.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/x.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/icons/zap.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/logo-mark-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/logo-mark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/logo-wordmark-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/logo-wordmark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/photo-landscape.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/assets/star-glow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Badge.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Badge.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Badge.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Button.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Button.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Button.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Card.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Card.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Card.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Icon.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Icon.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Icon.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/IconButton.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/IconButton.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/IconButton.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Logo.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Logo.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Logo.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Tag.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Tag.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/Tag.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/core/core.card.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Dialog.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Dialog.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Dialog.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Toast.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Toast.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Toast.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Tooltip.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Tooltip.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/Tooltip.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/feedback/feedback.card.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Checkbox.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Checkbox.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Checkbox.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Field.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Field.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Field.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Input.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Input.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Input.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Radio.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Radio.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Radio.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Select.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Select.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Select.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Switch.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Switch.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Switch.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Textarea.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Textarea.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/Textarea.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/forms/forms.card.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/CaseCard.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/CaseCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/CaseCard.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/GlowBackdrop.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/GlowBackdrop.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/GlowBackdrop.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/GuaranteeCallout.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/GuaranteeCallout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/GuaranteeCallout.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/SectionHeading.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/SectionHeading.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/SectionHeading.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/StatCounter.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/StatCounter.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/StatCounter.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/StepItem.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/StepItem.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/StepItem.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/marketing/marketing.card.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/NavBar.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/NavBar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/NavBar.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/Tabs.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/Tabs.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/Tabs.prompt.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/components/navigation/navigation.card.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/brand-glow.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/brand-icons.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/brand-imagery.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/brand-logo.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/color-blue.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/color-dark.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/color-ink.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/color-navy.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/color-semantic.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/color-surfaces.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/elevation.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/motion.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/radius.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/spacing-layout.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/spacing-scale.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/type-body.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/type-display.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/type-headings.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/type-mono.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/guidelines/type-weights.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/concept-p1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/emb-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/emb-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/emb-3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/emb-4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/logo-on-ink.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/manrope.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/martian-mono.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/page-full.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/scraps/probe.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/styles.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/templates/landing/Landing.dc.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/templates/landing/ds-base.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/templates/landing/support.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/thumbnail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/base.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/colors.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/elevation.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/fonts.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/motion.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/radius.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/spacing.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/tokens/typography.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Cases.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Contact.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Hero.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Method.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Site.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/Stages.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/ui_kits/website/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/uploads/concept.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/uploads/draw-ac6700ce-846d-44cf-a937-a2ed105c2ace.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/uploads/draw-c9b3a92e-34d7-46ef-ab31-3ae5ef360f26.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/uploads/photo_2026-07-29_13-06-36.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/uploads/концепт 1 (5)-e9a97fc4.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kazkad Design System/uploads/концепт 1 (5).pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="e337b424-be49-46b4-befa-52a40c58b056" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="3" />
+    <option name="cachedIndexableFilesCount" value="383" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -209,36 +21,36 @@
     <commands />
     <urls />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3HV2mlATUhXUleabbQQrFRl0DV5" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/timofejkazakov/PycharmProjects/kazkad-lending",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/timofejkazakov/PycharmProjects/kazkad-lending&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -259,6 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1785939076578</updated>
       <workItem from="1785939077589" duration="2673000" />
+      <workItem from="1789748706804" duration="1205000" />
     </task>
     <servers />
   </component>

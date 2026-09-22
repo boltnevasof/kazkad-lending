@@ -117,13 +117,17 @@
  * собирается сверху вниз, как и идут этапы. translateY держит отрезок
  * по центру строки, поэтому он входит в ту же трансформацию, что и рост. */
 .kz-gantt__bar {
-  transform: translateY(-50%) scaleX(0);
+  transform: scaleX(0);
   transform-origin: left center;
-  transition: transform var(--duration-reveal) var(--ease-out) calc(160ms + var(--kz-i, 0) * 140ms);
+  /* Цвет меняется здесь же: перечисление свойств в transition перебивается
+     целиком, и правило из site.css потерялось бы. */
+  transition:
+    transform var(--duration-reveal) var(--ease-out) calc(160ms + var(--kz-i, 0) * 140ms),
+    background var(--duration-base) var(--ease-standard);
 }
 
 .kz-gantt.is-in .kz-gantt__bar {
-  transform: translateY(-50%) scaleX(1);
+  transform: scaleX(1);
 }
 
 /* --------------------------------------------------- текстовые ссылки */

@@ -291,117 +291,288 @@ html {
   margin-top: 16px;
 }
 
-/* ---- Этапы: диаграмма Ганта ---- */
+/* ---- Этапы: Гант, которым управляет прокрутка ---- */
 
-/* Таблица: слева колонка задач, справа сплошное поле с отрезками.
- * Ширина колонки задач вынесена в переменную, потому что её используют
- * и шапка, и строки, и адаптив. */
-.kz-gantt {
-  --kz-gantt-labels: 34%;
-  margin-top: 40px;
-  background: var(--surface-page);
-  border: 1px solid var(--border-default);
+.kz-stages {
+  position: relative;
+  background: var(--surface-subtle);
 }
 
-.kz-gantt__head,
+/* Высота секции задаёт длину прокрутки: по экрану на каждый этап. */
+.kz-stages--scroll {
+  min-height: calc(var(--kz-steps, 3) * 100vh);
+}
+
+.kz-stages--static {
+  padding: var(--section-y) 0;
+}
+
+/* svh, а не vh: на телефоне адресная строка то появляется, то уходит, и кадр
+ * прыгал бы вместе с ней. */
+.kz-stages__sticky {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--nav-height) + 36px) 0 48px;
+}
+
+.kz-stages__sticky > .kz-container {
+  width: 100%;
+}
+
+.kz-stages__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kz-stages__hint {
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.kz-stages__stage {
+  margin-top: 36px;
+}
+
+/* Место под карточку этапа. Карточки лежат в нём абсолютно и друг друга не
+ * двигают, поэтому смена этапа не дёргает раскладку, а слот держит высоту. */
+.kz-stages__cards {
+  position: relative;
+  min-height: 220px;
+  margin-top: 28px;
+}
+
+.kz-gantt {
+  --kz-gantt-labels: clamp(150px, 18%, 220px);
+  position: relative;
+}
+
+.kz-gantt__scale,
 .kz-gantt__row {
   display: grid;
   grid-template-columns: var(--kz-gantt-labels) minmax(0, 1fr);
   align-items: center;
 }
 
-.kz-gantt__head {
-  border-bottom: 1px solid var(--border-default);
+.kz-gantt__scale {
+  padding-bottom: 10px;
 }
 
-.kz-gantt__row + .kz-gantt__row {
+.kz-gantt__scale-label,
+.kz-gantt__day {
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Шкала и дорожки делят одну сетку из 21 колонки, поэтому число дня стоит
+ * ровно над своей клеткой. */
+.kz-gantt__ruler,
+.kz-gantt__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--kz-days, 21), minmax(0, 1fr));
+}
+
+.kz-gantt__day {
+  text-align: center;
+}
+
+/* Дни, которыми заканчиваются этапы, набраны основным цветом. */
+.kz-gantt__day.is-key {
+  color: var(--text-strong);
+}
+
+.kz-gantt__row {
   border-top: 1px solid var(--border-hairline);
 }
 
-.kz-gantt__label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 20px 12px 16px;
-  border-right: 1px solid var(--border-default);
-  align-self: stretch;
-  justify-content: center;
+.kz-gantt__row:last-child {
+  border-bottom: 1px solid var(--border-hairline);
 }
 
-/* Диапазон дней — главная величина в этой таблице, поэтому он ink и крупнее
- * обычной микроподписи. Название задачи под ним идёт вторым планом. */
-.kz-gantt__days {
-  font: var(--weight-bold) 15px / 1.2 var(--font-core);
+.kz-gantt__task {
+  padding-right: 20px;
+  font: var(--weight-medium) var(--size-body-sm) / 1.35 var(--font-core);
+  color: var(--text-muted);
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.kz-gantt__row.is-active .kz-gantt__task {
+  color: var(--text-strong);
+}
+
+.kz-gantt__track {
+  position: relative;
+  height: 54px;
+}
+
+.kz-gantt__grid {
+  position: absolute;
+  inset: 0;
+}
+
+.kz-gantt__grid span {
+  border-left: 1px solid var(--border-hairline);
+}
+
+/* Отрезок этапа. left и width приходят из данных в процентах от 21 дня. */
+.kz-gantt__bar {
+  position: absolute;
+  top: 50%;
+  height: 16px;
+  margin-top: -8px;
+  background: var(--ink-300);
+}
+
+.kz-gantt__row.is-active .kz-gantt__bar,
+.kz-stages--static .kz-gantt__bar {
+  background: var(--surface-accent);
+}
+
+/* ---- Карточка этапа ---- */
+
+/* Неактивная карточка не убрана из разметки, а размыта и погашена: её текст
+ * читают поисковики, а смена этапа выглядит как проявление из размытия. */
+.kz-stage-card {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: min(420px, 44%);
+  padding: 18px 20px 20px;
+  background: var(--surface-page);
+  border: 1px solid var(--border-default);
+  opacity: 0;
+  visibility: hidden;
+  filter: blur(16px);
+  transform: translateY(10px);
+  transition:
+    opacity 520ms var(--ease-out),
+    filter 520ms var(--ease-out),
+    transform 520ms var(--ease-out),
+    visibility 0s linear 520ms;
+}
+
+/* Уходящая карточка успевает размыться, поэтому приходящая ждёт свои 90ms. */
+.kz-stage-card.is-active {
+  opacity: 1;
+  visibility: visible;
+  filter: blur(0);
+  transform: none;
+  transition-delay: 90ms, 90ms, 90ms, 0s;
+}
+
+.kz-stage-card.is-start,
+.kz-stage-card.is-center,
+.kz-stage-card.is-end {
+  left: var(--kz-x, 0%);
+}
+
+/* translate, а не transform: transform занят анимацией появления. */
+.kz-stage-card.is-center {
+  translate: -50% 0;
+}
+
+.kz-stage-card.is-end {
+  translate: -100% 0;
+}
+
+/* Поводок от карточки вверх, к её отрезку на диаграмме. */
+.kz-stage-card__leader {
+  position: absolute;
+  bottom: 100%;
+  width: 1px;
+  height: 28px;
+  background: var(--border-default);
+}
+
+.kz-stage-card.is-start .kz-stage-card__leader {
+  left: 0;
+}
+
+.kz-stage-card.is-center .kz-stage-card__leader {
+  left: 50%;
+}
+
+.kz-stage-card.is-end .kz-stage-card__leader {
+  right: 0;
+}
+
+.kz-stage-card__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.kz-stage-card__days {
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+.kz-stage-card__count {
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-micro);
+  color: var(--text-muted);
+}
+
+.kz-stage-card__title {
+  margin: 12px 0 0;
+  font: var(--weight-semibold) var(--size-body-lg) / 1.3 var(--font-core);
+  letter-spacing: var(--tracking-heading);
+  color: var(--text-strong);
+}
+
+.kz-stage-card__text {
+  margin: 8px 0 0;
+  font: var(--weight-regular) var(--size-body-sm) / 1.5 var(--font-core);
+  color: var(--text-muted);
+}
+
+.kz-stage-card__milestone {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 6px 10px;
+  background: var(--surface-subtle);
+  font: var(--type-eyebrow);
   letter-spacing: var(--tracking-micro);
   text-transform: uppercase;
   color: var(--text-strong);
 }
 
-.kz-gantt__task {
-  font: var(--weight-regular) var(--size-body-sm) / 1.35 var(--font-core);
-  color: var(--text-muted);
+/* Спокойный вариант для страницы метода: карточки стоят рядом под диаграммой
+ * и видны все сразу. */
+.kz-stages--static .kz-stages__stage {
+  margin: 36px 0 0;
 }
 
-/* Шапка недель делится теми же линиями, что и поле, — колонки совпадают. */
-.kz-gantt__weeks {
+.kz-stages--static .kz-stages__cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.kz-gantt__weeks span {
-  padding: 10px 0 10px 12px;
-  border-right: 1px solid var(--border-hairline);
-}
-
-.kz-gantt__weeks span:last-child {
-  border-right: none;
-}
-
-.kz-gantt__track {
-  position: relative;
-  height: 46px;
-}
-
-.kz-gantt__weekgrid {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.kz-gantt__weekgrid span {
-  border-right: 1px solid var(--border-hairline);
-}
-
-.kz-gantt__weekgrid span:last-child {
-  border-right: none;
-}
-
-/* Отрезок задачи. left и width приходят из данных в процентах от 21 дня. */
-.kz-gantt__bar {
-  position: absolute;
-  top: 50%;
-  height: 18px;
-}
-
-/* Описания вынесены из строк: в самой таблице они распирали её по высоте.
- * Связь со строкой держит подпись с диапазоном дней. */
-.kz-gantt-notes {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
   margin-top: 28px;
 }
 
-.kz-gantt-notes > div {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.kz-stages--static .kz-stage-card {
+  position: static;
+  width: auto;
+  opacity: 1;
+  visibility: visible;
+  filter: none;
+  transform: none;
+  translate: none;
 }
 
-.kz-gantt-notes p {
-  font: var(--weight-regular) 15px / 1.5 var(--font-core);
-  color: var(--text-muted);
+.kz-stages--static .kz-stage-card__leader {
+  display: none;
 }
 
 /* ---- Графика кейсов ---- */

@@ -38,12 +38,37 @@
   /* Колонка задач шире, но таблица не складывается: Гант без поля справа
      перестаёт быть Гантом. */
   .kz-gantt {
-    --kz-gantt-labels: 42%;
+    --kz-gantt-labels: 38%;
   }
 
-  .kz-gantt-notes {
+  /* Планшет: карточка этапа встаёт под диаграмму. Сбоку места уже нет,
+     а сверху она перекрывала бы заголовок. */
+  .kz-stages__sticky {
+    padding-top: calc(var(--nav-height) + 24px);
+    padding-bottom: 32px;
+  }
+
+  .kz-stages__stage {
+    margin: 28px 0 0;
+  }
+
+  .kz-stages--scroll .kz-stages__cards {
+    min-height: 244px;
+    margin-top: 26px;
+  }
+
+  .kz-stages--scroll .kz-stage-card {
+    inset: 0 auto auto 0;
+    width: 100%;
+    translate: none;
+  }
+
+  .kz-stage-card__leader {
+    display: none;
+  }
+
+  .kz-stages--static .kz-stages__cards {
     grid-template-columns: 1fr;
-    gap: 24px;
   }
 
   /* Сетка схлопнулась в одну колонку: заголовок вопросов встаёт над списком
@@ -239,37 +264,51 @@
 
   /* ---- разделы ---- */
 
-  /* Гант складывается: задача над своей дорожкой. В две колонки на телефоне
-     под названия уходила почти половина ширины, а на 21 день оставалось
-     меньше 180px. Теперь дорожка занимает весь экран. */
-  .kz-gantt__head,
+  /* Гант складывается: название этапа встаёт над своей дорожкой. В две колонки
+     под названия уходила почти половина ширины, а на 21 день оставалось меньше
+     180px. Из шкалы остаются только дни, которыми заканчиваются этапы, но
+     клетки под остальные сохраняются, иначе сетка разъедется. */
+  .kz-gantt__scale,
   .kz-gantt__row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  /* В шапке левая ячейка пустая — в один столбец она давала бы пустую строку. */
-  .kz-gantt__head .kz-gantt__label {
+  .kz-gantt__scale-label {
     display: none;
   }
 
-  /* justify-content на десктопе центрует колонку по вертикали; в строке он
-     начал бы центровать по горизонтали, поэтому возвращаем к левому краю. */
-  .kz-gantt__label {
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: flex-start;
-    gap: 10px;
-    padding: 12px 14px;
-    border-right: none;
-    border-bottom: 1px solid var(--border-hairline);
+  .kz-gantt__day:not(.is-key) {
+    visibility: hidden;
+  }
+
+  .kz-gantt__row {
+    padding: 10px 0;
+  }
+
+  .kz-gantt__task {
+    padding: 0 0 8px;
   }
 
   .kz-gantt__track {
-    height: 40px;
+    height: 26px;
   }
 
-  .kz-gantt__weeks span {
-    padding-left: 12px;
+  .kz-gantt__bar {
+    height: 14px;
+    margin-top: -7px;
+  }
+
+  /* Карточке на телефоне отведено меньше места, поэтому текст мельче. */
+  .kz-stage-card {
+    padding: 16px;
+  }
+
+  .kz-stage-card__text {
+    font-size: 13px;
+  }
+
+  .kz-stages--scroll .kz-stages__cards {
+    min-height: 232px;
   }
 
   /* Схема конвейера на телефоне: коробки мельче, лента во всю ширину. */
@@ -434,6 +473,48 @@
   .kz-case-metrics {
     gap: 24px 32px;
   }
+
+  /* Маленький телефон: кадр должен уместить заголовок, диаграмму и карточку,
+     поэтому строки и сама карточка сжимаются. */
+  .kz-stages__stage {
+    margin-top: 22px;
+  }
+
+  .kz-stages--scroll .kz-stages__cards {
+    min-height: 208px;
+    margin-top: 18px;
+  }
+
+  .kz-gantt__row {
+    padding: 6px 0;
+  }
+
+  .kz-gantt__task {
+    padding-bottom: 6px;
+  }
+
+  .kz-gantt__track {
+    height: 20px;
+  }
+
+  .kz-gantt__bar {
+    height: 12px;
+    margin-top: -6px;
+  }
+
+  .kz-stage-card {
+    padding: 14px;
+  }
+
+  .kz-stage-card__title {
+    margin-top: 10px;
+    font-size: var(--size-body);
+  }
+
+  .kz-stage-card__milestone {
+    margin-top: 12px;
+    padding: 5px 8px;
+  }
 }
 
 /* --------------------------------------------------- невысокий экран в ландшафте */
@@ -447,5 +528,70 @@
 
   .kz-menu__links a {
     font-size: clamp(22px, 6vw, 30px);
+  }
+}
+
+/* --------------------------------------------------- невысокое окно: этапы */
+
+/* Ноутбук с низким окном: липкому кадру нужно уместить заголовок, диаграмму
+   и карточку, поэтому поля и строки поджимаются. */
+@media (max-height: 860px) and (min-width: 1001px) {
+  .kz-stages__sticky {
+    padding-top: calc(var(--nav-height) + 20px);
+    padding-bottom: 28px;
+  }
+
+  .kz-stages__stage {
+    margin-top: 26px;
+  }
+
+  .kz-gantt__track {
+    height: 42px;
+  }
+
+  .kz-stage-card {
+    padding: 16px 18px 18px;
+  }
+
+  .kz-stage-card__text {
+    font-size: 13px;
+  }
+
+  .kz-stages--scroll .kz-stages__cards {
+    min-height: 196px;
+    margin-top: 22px;
+  }
+}
+
+/* Низкое окно: кадр не удержит заголовок, диаграмму и карточку разом, поэтому
+   блок перестаёт залипать и показывает все три этапа подряд. Скрипт в такой
+   высоте номер этапа не считает, прокручивать внутри секции нечего. */
+@media (max-height: 700px) {
+  .kz-stages--scroll {
+    min-height: 0;
+  }
+
+  .kz-stages__sticky {
+    position: static;
+    min-height: 0;
+    padding: 72px 0;
+  }
+
+  .kz-stages--scroll .kz-stages__cards {
+    position: static;
+    display: grid;
+    gap: 14px;
+    min-height: 0;
+    margin-top: 24px;
+  }
+
+  .kz-stages--scroll .kz-stage-card {
+    position: static;
+    width: auto;
+    opacity: 1;
+    visibility: visible;
+    filter: none;
+    transform: none;
+    translate: none;
   }
 }

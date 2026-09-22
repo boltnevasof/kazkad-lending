@@ -28,6 +28,13 @@
         [data-reveal], .kz-word__in, .kz-tile { opacity: 1 !important; translate: none !important; }
         .kz-word { overflow: visible !important; }
         .kz-preloader, .kz-curtain { display: none !important; }
+        /* Этапами управляет прокрутка: без скриптов показываем все три карточки сразу. */
+        .kz-stages--scroll { min-height: 0 !important; }
+        .kz-stages__sticky { position: static !important; min-height: 0 !important; padding: 80px 0 !important; }
+        .kz-stages__cards { display: grid !important; gap: 16px !important; margin-top: 28px !important; }
+        .kz-stage-card { position: static !important; width: auto !important; opacity: 1 !important;
+          visibility: visible !important; filter: none !important; transform: none !important; }
+        .kz-stage-card__leader { display: none !important; }
       </style>
     </noscript>
   </head>

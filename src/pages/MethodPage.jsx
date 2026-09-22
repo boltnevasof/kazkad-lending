@@ -96,7 +96,9 @@ export default function MethodPage() {
           </div>
         </section>
 
-        <Stages />
+        {/* Внутри статьи блок стоит спокойно: липкий кадр на три экрана
+            прокрутки здесь перебивал бы чтение. */}
+        <Stages interactive={false} />
 
         <section className="kz-section">
           <div className="kz-container">
