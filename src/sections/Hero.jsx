@@ -2,6 +2,7 @@ import { GlowBackdrop } from '../design-system/index.js';
 import ArrowButton from '../components/ArrowButton.jsx';
 import SplitText, { splitDuration } from '../components/SplitText.jsx';
 import { HERO } from '../content/site.js';
+import { prefersReducedMotion } from '../lib/reveal.js';
 
 // Строки заголовка стартуют одна за другой: следующая ждёт, пока доедет предыдущая.
 const LINE_DELAYS = HERO.headline.reduce(
@@ -10,6 +11,14 @@ const LINE_DELAYS = HERO.headline.reduce(
 );
 
 export default function Hero({ onEnquiry }) {
+  // Кейсы лежат на этой же странице, поэтому шторку не зовём: экран должен
+  // именно проехать вниз, а не перелистнуться.
+  const toCases = () => {
+    const target = document.querySelector('#cases');
+    if (!target) return;
+    target.scrollIntoView({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  };
+
   return (
     <section id="top" className="kz-hero" style={{ position: 'relative', overflow: 'hidden', background: 'var(--surface-page)' }}>
       {/* Concept board places the star behind the headline's left edge, not in a corner.
@@ -48,6 +57,35 @@ export default function Hero({ onEnquiry }) {
               </span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Подсказка у нижнего края первого экрана: стрелка всё время клонится
+          вниз, показывая, что страница продолжается. Нажимать необязательно,
+          обычная прокрутка приводит туда же. */}
+      <div className="kz-hero-cue" data-reveal="" style={{ '--kz-delay': '900ms' }}>
+        <div className="kz-container">
+          <button type="button" className="kz-hero-scroll" onClick={toCases}>
+            <span className="kz-hero-scroll__label">{HERO.scrollCta}</span>{' '}
+            <span className="kz-hero-scroll__mark" aria-hidden="true">
+              {/* Стрелка нарисована здесь, а не взята иконкой: иконки
+                  подгружаются запросом, и на первом экране это заметно. */}
+              <svg
+                className="kz-hero-scroll__arrow"
+                width="15"
+                height="17"
+                viewBox="0 0 15 17"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M7.5 1.6v13" />
+                <path d="M2.1 9.2 7.5 14.6l5.4-5.4" />
+              </svg>
+            </span>
+          </button>
         </div>
       </div>
     </section>

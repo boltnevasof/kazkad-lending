@@ -944,6 +944,11 @@
     display: none;
   }
 
+  .kz-hero-scroll__arrow,
+  .kz-hero-scroll:hover .kz-hero-scroll__arrow {
+    animation: none;
+  }
+
   .kz-tile:hover,
   .kz-btn:active,
   .kz-nav__cta:active {

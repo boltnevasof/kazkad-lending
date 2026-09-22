@@ -295,6 +295,19 @@
     padding-bottom: 48px;
   }
 
+  .kz-hero-cue {
+    bottom: 28px;
+  }
+
+  .kz-hero-scroll {
+    gap: 12px;
+  }
+
+  .kz-hero-scroll__mark {
+    width: 40px;
+    height: 40px;
+  }
+
   /* Свечение задано inline-шириной в компоненте — перебиваем на узком экране,
      иначе звезда перекрывает весь заголовок. */
   .kz-hero-glow {
@@ -584,8 +597,21 @@
     padding-bottom: 32px;
   }
 
+  /* Подсказке тут стоять негде: она встала бы прямо на кнопку. */
+  .kz-hero-cue {
+    display: none;
+  }
+
   .kz-menu__links a {
     font-size: clamp(22px, 6vw, 30px);
+  }
+}
+
+/* Низкое окно на ноутбуке: герой ужимается до высоты экрана, и воздуха под
+   содержимым больше не остаётся. */
+@media (max-height: 680px) and (min-width: 1001px) {
+  .kz-hero-cue {
+    display: none;
   }
 }
 

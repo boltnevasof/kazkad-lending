@@ -145,6 +145,81 @@ html {
   margin-top: 40px;
 }
 
+/* Подсказка стоит у нижнего края экрана, а не в потоке героя: содержимое
+ * героя центрировано, и снизу как раз остаётся воздух. */
+.kz-hero-cue {
+  position: absolute;
+  right: 0;
+  bottom: 40px;
+  left: 0;
+}
+
+.kz-hero-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+  color: var(--text-muted);
+  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.kz-hero-scroll:hover {
+  color: var(--text-strong);
+}
+
+.kz-hero-scroll__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--text-accent);
+  border: 1px solid var(--border-default);
+  transition:
+    background var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.kz-hero-scroll:hover .kz-hero-scroll__mark {
+  color: var(--ink-000);
+  background: var(--surface-accent);
+  border-color: var(--surface-accent);
+}
+
+.kz-hero-scroll:focus-visible {
+  outline: 2px solid var(--text-accent);
+  outline-offset: 6px;
+}
+
+/* Стрелка сама по себе клонится вниз, показывая, куда поедет экран. Под
+ * курсором качание прекращается и она замирает в нижней точке: прятать её на
+ * время анимации нельзя, иначе квадрат остаётся пустым. */
+.kz-hero-scroll__arrow {
+  translate: 0 3px;
+  animation: kz-hero-cue 2.6s var(--ease-standard) infinite;
+  transition: translate var(--duration-base) var(--ease-out);
+}
+
+.kz-hero-scroll:hover .kz-hero-scroll__arrow {
+  animation: none;
+}
+
+@keyframes kz-hero-cue {
+  0%,
+  100% {
+    translate: 0 -2px;
+  }
+
+  50% {
+    translate: 0 4px;
+  }
+}
+
 .kz-hero-lead {
   flex: 0 1 420px;
   min-width: 0;
