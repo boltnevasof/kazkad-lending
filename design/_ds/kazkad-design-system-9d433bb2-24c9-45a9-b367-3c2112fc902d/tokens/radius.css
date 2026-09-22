@@ -1,0 +1,18 @@
+:root{
+  /* Nothing in the brand is rounded. The concept board draws only sharp rectangles:
+     34×34 nav square, 210×210 case tiles, 1px hairline borders. Radius tokens exist
+     so consumers can reference them, and they are all zero on purpose. */
+  --radius-xs:0;
+  --radius-sm:0;
+  --radius-md:0;
+  --radius-lg:0;
+  --radius-xl:0;
+  --radius-pill:0;
+
+  --radius-control:0;
+  --radius-card:0;
+  --radius-media:0;
+  --radius-chip:0;
+  --border-width:1px; /* @kind other */
+  --border-width-strong:1.5px; /* @kind other */
+}

@@ -1,9 +1,7 @@
-import { GlowBackdrop, Icon } from '../design-system/index.js';
+import { GlowBackdrop } from '../design-system/index.js';
 import ArrowButton from '../components/ArrowButton.jsx';
-import CaseTile from '../components/CaseTile.jsx';
 import SplitText, { splitDuration } from '../components/SplitText.jsx';
-import { CASES, HERO, HERO_CASES } from '../content/site.js';
-import { useNav } from '../lib/nav.js';
+import { HERO } from '../content/site.js';
 
 // Строки заголовка стартуют одна за другой: следующая ждёт, пока доедет предыдущая.
 const LINE_DELAYS = HERO.headline.reduce(
@@ -12,7 +10,6 @@ const LINE_DELAYS = HERO.headline.reduce(
 );
 
 export default function Hero({ onEnquiry }) {
-  const { goPath } = useNav();
 
   return (
     <section id="top" style={{ position: 'relative', overflow: 'hidden', background: 'var(--surface-page)' }}>
@@ -54,47 +51,6 @@ export default function Hero({ onEnquiry }) {
           </div>
         </div>
 
-        {/* The concept board sets three square case tiles directly under the hero, left-weighted.
-            Справа от плиток пустая треть контейнера — туда и уходит переход
-            на весь список, по нижнему краю ряда. */}
-        <div className="kz-hero-showcase">
-          <div className="kz-hero-cases">
-            {HERO_CASES.map((c, i) => (
-              <CaseTile
-                slug={c.slug}
-                delay={i * 90}
-                key={c.slug}
-                size="sm"
-                title={c.title}
-                image={c.image}
-                fill={c.fill}
-                href={`/cases/${c.slug}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goPath(`/cases/${c.slug}`);
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Вертикальный прямоугольник в рост плиток: замыкает ряд, но уже их
-              по ширине, поэтому за четвёртый кейс не читается. */}
-          <a
-            className="kz-hero-all"
-            href="/cases"
-            data-reveal=""
-            style={{ '--kz-delay': '180ms' }}
-            onClick={(e) => {
-              e.preventDefault();
-              goPath('/cases');
-            }}
-          >
-            <Icon name="arrow-up-right" size={20} className="kz-hero-all__arrow" />
-            {/* Подпись поставлена вертикально: в узкой полосе она иначе
-                не помещается, а строка снизу вверх ведёт взгляд к стрелке. */}
-            <span className="kz-hero-all__label">{CASES.allLabel}</span>
-          </a>
-        </div>
       </div>
     </section>
   );

@@ -142,163 +142,6 @@ html {
   color: var(--text-muted);
 }
 
-/* Плитки и переход к списку стоят в одну строку. Зазор тот же, что между
- * плитками, поэтому кнопка попадает в ритм ряда, а не висит отдельно. */
-.kz-hero-showcase {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  margin-top: 56px;
-}
-
-/* flex: 0 1 auto — ряд не растёт шире своих 210px на колонку, но сжимается,
- * когда места не хватает. С flex: none он не помещался на планшете, и полосу
- * «все проекты» срезал overflow героя. */
-/* Колонок ровно столько, сколько плиток: при двух кейсах фиксированные три
- * оставляли бы дыру перед полосой перехода. */
-.kz-hero-cases {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 210px);
-  gap: 12px;
-  flex: 0 1 auto;
-  min-width: 0;
-}
-
-/* Переход к списку кейсов: вертикальный прямоугольник в рост плиток.
- * align-self: stretch берёт высоту ряда, поэтому она всегда равна плиткам,
- * даже если те поменяют размер. Ширина меньше — квадрат в этом ряду
- * неизбежно читался бы как четвёртый кейс. */
-.kz-hero-all {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  width: 64px;
-  flex: none;
-  padding: 14px 0;
-  overflow: hidden;
-  border: 1px solid var(--border-default);
-  color: var(--text-strong);
-}
-
-.kz-hero-all__arrow {
-  position: relative;
-  flex: none;
-}
-
-/* Строка идёт снизу вверх: vertical-rl даёт вертикальный набор,
- * поворот на 180° разворачивает его в привычном направлении чтения. */
-.kz-hero-all__label {
-  position: relative;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: nowrap;
-  font: var(--weight-semibold) 15px / 1 var(--font-core);
-  letter-spacing: var(--tracking-heading);
-}
-
-
-
-/* ---- Метод: схема конвейера ---- */
-
-.kz-conveyor {
-  /* Шаг шашек на ленте: на столько же лента уезжает за цикл, поэтому стык
-   * не виден. Размер коробки вынесен сюда же — от него считается выезд. */
-  --kz-tread: 14px;
-  --kz-box: 44px;
-  margin: 0;
-  padding-right: 40px;
-}
-
-.kz-conveyor__machine {
-  position: relative;
-}
-
-/* Дорожка коробок над лентой. Всё, что выехало за края, обрезается —
- * коробка появляется из-за левого края и уходит за правый. */
-.kz-conveyor__lane {
-  position: relative;
-  height: calc(var(--kz-box) + 6px);
-  overflow: hidden;
-}
-
-/* Полоса во всю ширину ленты: сдвиг на 100% — это длина ленты,
- * а не ширина коробки, поэтому проценты считаются от нужной величины. */
-.kz-conveyor__rider {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: var(--kz-box);
-}
-
-.kz-conveyor__box {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: var(--kz-box);
-  height: var(--kz-box);
-  background: var(--surface-accent);
-}
-
-/* Полотно с торцевыми валами. Валы — бруски, а не круги: скруглений
- * в системе нет нигде. */
-.kz-conveyor__belt {
-  position: relative;
-  height: 22px;
-  /* Ряд шашек длиннее ленты и не переносится, поэтому его min-content не
-   * должен участвовать в расчёте ширины родителя. */
-  min-width: 0;
-  overflow: hidden;
-  background: var(--surface-subtle);
-  border-top: 2px solid var(--border-strong);
-  border-bottom: 1px solid var(--border-default);
-  border-left: 4px solid var(--border-strong);
-  border-right: 4px solid var(--border-strong);
-}
-
-/* Ряд шире ленты на один шаг: крайняя шашка занимает место ушедшей. */
-.kz-conveyor__treads {
-  display: flex;
-  gap: calc(var(--kz-tread) - 2px);
-  margin-left: calc(-1 * var(--kz-tread));
-  height: 100%;
-}
-
-.kz-conveyor__treads span {
-  width: 2px;
-  flex: none;
-  background: var(--ink-300);
-}
-
-.kz-conveyor__legs {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 12%;
-  height: 22px;
-}
-
-.kz-conveyor__legs span {
-  width: 3px;
-  flex: none;
-  background: var(--ink-300);
-}
-
-.kz-conveyor__floor {
-  display: block;
-  height: 1px;
-  background: var(--border-default);
-}
-
-.kz-conveyor__caption {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-}
-
 /* ---- Этапы: Гант, которым управляет прокрутка ---- */
 
 /* Высота строки диаграммы и место под карточку вынесены в переменные: низкое
@@ -1133,79 +976,6 @@ html {
   background: var(--kz-art-accent);
 }
 
-/* ---- Кейсы ---- */
-
-/* Счётчик стоит в строку с заголовком, а не подписью над ним — так требует
- * readme.md дизайн-системы (никаких eyebrow над заголовками). */
-.kz-cases-count {
-  font: var(--type-body-sm);
-  font-weight: var(--weight-medium);
-  color: var(--text-muted);
-  /* 10px поля плюс пробел в начале счётчика дают прежние 14px. */
-  margin-left: 10px;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-/* Лента занимает всю ширину экрана, а отступ до первой плитки задаёт распорка
- * внутри ряда. Если сдвигать саму ленту, её левая граница режет уезжающие
- * плитки посреди экрана вместо того, чтобы отпускать их за край. */
-.kz-cases-scroller {
-  margin-top: 34px;
-  overflow-x: auto;
-  /* Обязательно явным образом: при overflow-x: auto вторая ось по спецификации
-   * тоже вычисляется в auto, и ряд получал ненужную вертикальную прокрутку —
-   * плитка на ховере поднимается и вылезает за бокс. Подъёму даём место
-   * вертикальными полями, а не прокруткой. */
-  overflow-y: hidden;
-  padding-block: 6px;
-  -webkit-overflow-scrolling: touch;
-  /* scroll-snap здесь намеренно нет: при mandatory браузер пересчитывал точки
-   * привязки на каждой перерисовке плиток и уводил ряд к последней — первая
-   * плитка оказывалась обрезанной. */
-  /* Полосу прокрутки под рядом не показываем — обрезанная справа плитка
-   * сама говорит, что ряд едет дальше. */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.kz-cases-scroller::-webkit-scrollbar {
-  display: none;
-}
-
-.kz-cases-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-
-.kz-cases-row {
-  display: flex;
-  gap: 12px;
-  width: max-content;
-}
-
-.kz-case-slide {
-  flex: none;
-  width: 340px;
-}
-
-/* Отступы по краям ряда — отдельными элементами, а не padding: padding
- * в конце flex-контейнера с overflow не везде попадает в scrollWidth, и
- * последняя плитка упиралась в край экрана.
- * Из ширины вычитаем gap ряда, чтобы первая плитка встала ровно по колонке. */
-.kz-cases-lead {
-  flex: none;
-  width: calc(max(var(--container-gutter), (100vw - var(--container-max)) / 2 + var(--container-gutter)) - 12px);
-}
-
-.kz-cases-tail {
-  flex: none;
-  width: calc(var(--container-gutter) - 12px);
-}
-
 /* ---- Контакты ---- */
 
 .kz-contact-lines {
@@ -1587,6 +1357,265 @@ html {
   width: 24%;
   font-weight: var(--weight-semibold);
   color: var(--text-strong);
+}
+
+/* ---- Кейсы рядами ---- */
+
+/* Ряд шире остальных секций: справа помещаются три экрана проекта. */
+.kz-cases {
+  padding: 0 0 var(--section-y);
+}
+
+.kz-cases__wrap {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 var(--container-gutter);
+}
+
+.kz-cases__head,
+.kz-case-row {
+  display: grid;
+  grid-template-columns: 22% minmax(0, 1fr);
+  column-gap: 40px;
+}
+
+.kz-cases__head {
+  align-items: end;
+  padding-bottom: 40px;
+}
+
+.kz-cases__headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+}
+
+.kz-cases__count {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.kz-case-row {
+  align-items: stretch;
+  padding: 64px 0;
+  border-top: 1px solid var(--border-hairline);
+}
+
+.kz-case-row__side {
+  display: flex;
+  flex-direction: column;
+}
+
+.kz-case-row__title {
+  margin: 0;
+  font: var(--weight-bold) clamp(26px, 2.4vw, 34px) / 1.1 var(--font-core);
+  letter-spacing: -0.025em;
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+
+/* Заголовок — ссылка на кейс, но выглядит как заголовок: базовый a:hover
+ * из дизайн-системы иначе красит его в синий. */
+.kz-case-row__title a,
+.kz-case-row__title a:hover {
+  color: inherit;
+}
+
+.kz-case-row__text {
+  margin: 24px 0 0;
+  font: var(--weight-regular) 17px / 1.45 var(--font-core);
+  color: var(--text-body);
+  text-wrap: pretty;
+}
+
+/* Цифры прижаты к низу колонки, чтобы стоять на одной линии с нижним краем
+ * экранов справа. */
+.kz-case-row__stats {
+  display: flex;
+  gap: 40px;
+  margin-top: auto;
+  padding-top: 48px;
+}
+
+.kz-case-row__stats > span {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kz-case-row__stats b {
+  font: var(--weight-bold) 30px / 1 var(--font-core);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-strong);
+}
+
+.kz-case-row__stats > span > span {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.kz-case-row__screens {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.kz-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.kz-screen,
+.kz-screen:hover {
+  color: var(--text-body);
+}
+
+/* Подписи выровнены по нижнему краю: в ряду они встают на одну линию, даже
+ * когда одна занимает две строки. */
+.kz-screen__title {
+  display: flex;
+  align-items: flex-end;
+  min-height: 48px;
+  font: var(--weight-semibold) 19px / 1.25 var(--font-core);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.kz-screen__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  transition: border-color var(--duration-base) var(--ease-standard);
+}
+
+.kz-screen:hover .kz-screen__frame {
+  border-color: var(--border-strong);
+}
+
+.kz-cases__all {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-strong);
+}
+
+.kz-cases__total {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.kz-cases__total b {
+  font: var(--weight-black) clamp(48px, 4.5vw, 72px) / 0.9 var(--font-core);
+  letter-spacing: -0.05em;
+  color: var(--text-accent);
+}
+
+.kz-cases__total > span {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* ---- Каскадная модель: принципы ---- */
+
+.kz-method {
+  background: var(--ink-800);
+  padding: var(--section-y) 0;
+}
+
+/* Панели делят ряд: та, на которую навели, забирает себе место у соседних.
+ * Цвета берутся из .kz-dark, поэтому линии и подписи тут сами становятся
+ * светлыми. */
+.kz-principles {
+  display: flex;
+  height: 440px;
+  margin-top: 56px;
+  border-top: 1px solid var(--border-hairline);
+  border-left: 1px solid var(--border-hairline);
+}
+
+.kz-principle {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px 28px 28px 24px;
+  border-right: 1px solid var(--border-hairline);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    flex var(--duration-reveal) var(--ease-standard),
+    background var(--duration-reveal) var(--ease-standard);
+}
+
+.kz-principle.is-open {
+  flex: 2.6;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.kz-principle:focus-visible {
+  outline: 2px solid var(--text-accent);
+  outline-offset: -2px;
+}
+
+.kz-principle__num {
+  font: var(--weight-black) 72px / 0.9 var(--font-core);
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.18);
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.kz-principle.is-open .kz-principle__num {
+  color: var(--text-accent);
+}
+
+.kz-principle__title {
+  margin: 0;
+  font: var(--weight-semibold) 24px / 1.15 var(--font-core);
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
+  text-wrap: balance;
+}
+
+.kz-principle__text {
+  max-width: 520px;
+  margin: 12px 0 0;
+  font: var(--weight-regular) 15px / 1.5 var(--font-core);
+  color: var(--text-muted);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+  text-wrap: pretty;
+}
+
+.kz-principle.is-open .kz-principle__text {
+  opacity: 1;
+  transform: none;
+}
+
+.kz-method .kz-method-note {
+  margin-top: 32px;
+}
+
+.kz-method .kz-inline-link {
+  color: var(--text-strong);
+  text-decoration-color: var(--border-default);
+}
+
+.kz-method .kz-inline-link:hover {
+  color: var(--text-accent);
 }
 
 .kz-footer-grid {

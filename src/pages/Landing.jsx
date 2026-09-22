@@ -26,9 +26,9 @@ export default function Landing() {
   return (
     <>
       <Hero onEnquiry={openTelegram} />
+      <Cases />
       <Method />
       <Stages />
-      <Cases />
       <Faq />
       <Contact />
       <Footer onNavigate={goSection} />

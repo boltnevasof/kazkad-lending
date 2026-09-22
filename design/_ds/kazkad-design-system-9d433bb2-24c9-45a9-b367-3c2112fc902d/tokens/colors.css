@@ -1,0 +1,90 @@
+:root{
+  /* ---- Base palette. Sampled from the Kazkad logo and the Figma concept board. ---- */
+  /* Ink — the concept's text colour is #272727, not pure black. */
+  --ink-900:#171717;
+  --ink-800:#272727;
+  --ink-600:#5a5a5a;
+  --ink-500:#6f6f6f;
+  --ink-400:#9a9a9a;
+  --ink-300:#d9d9d9;
+  --ink-200:#ebebeb;
+  --ink-100:#f5f5f5;
+  --ink-000:#ffffff;
+
+  /* Blue — the spark. #1763e6 is the concept accent; #1964e1 is the logo star. */
+  --blue-700:#0f4bb8;
+  --blue-600:#1763e6;
+  --blue-500:#3d7ff0;
+  --blue-300:#8fb6f7;
+  --blue-100:#d6e4fb;
+  --blue-050:#ebf2fa;
+
+  /* Navy — the stepped squares of the mark. Used for depth, never for body text. */
+  --navy-900:#223a5c;
+  --navy-800:#1e4a9b;
+
+  /* Semantic accents. Kept deliberately few: the brand is blue + ink. */
+  --green-600:#0f9d63;
+  --green-050:#e7f6ef;
+  --amber-600:#c77a06;
+  --amber-050:#fdf3e2;
+  --red-600:#d93a34;
+  --red-050:#fdeceb;
+
+  /* ---- Semantic aliases: use these in components, not the base ramp. ---- */
+  --text-strong:var(--ink-900);
+  --text-body:var(--ink-800);
+  --text-muted:var(--ink-500);
+  --text-faint:var(--ink-400);
+  --text-inverse:var(--ink-000);
+  --text-accent:var(--blue-600);
+  --text-link:var(--blue-600);
+  --text-link-hover:var(--blue-700);
+
+  --surface-page:var(--ink-000);
+  --surface-subtle:var(--ink-100);
+  --surface-card:var(--ink-000);
+  --surface-tint:var(--blue-050);
+  --surface-accent:var(--blue-600);
+  --surface-inverse:var(--ink-800);
+  --surface-navy:var(--navy-900);
+
+  --border-hairline:var(--ink-200);
+  --border-default:var(--ink-300);
+  --border-strong:var(--ink-800);
+  --border-accent:var(--blue-600);
+  --border-inverse:rgba(255,255,255,.16);
+
+  --state-hover-tint:rgba(23,99,230,.08);
+  --state-press-tint:rgba(23,99,230,.16);
+  --focus-ring:rgba(23,99,230,.35);
+
+  --status-ok-text:var(--green-600);
+  --status-ok-surface:var(--green-050);
+  --status-warn-text:var(--amber-600);
+  --status-warn-surface:var(--amber-050);
+  --status-risk-text:var(--red-600);
+  --status-risk-surface:var(--red-050);
+
+  /* The brand glow: a blurred blue star sits behind hero and section corners. */
+  --glow-image:url("../assets/star-glow.png"); /* @kind other */
+}
+
+/* Dark sections (footer, CTA band, quote blocks). Apply as a class on a wrapper. */
+.kz-dark{
+  --text-strong:var(--ink-000);
+  --text-body:rgba(255,255,255,.88);
+  --text-muted:rgba(255,255,255,.6);
+  --text-faint:rgba(255,255,255,.55);
+  --text-accent:var(--blue-300);
+  --text-link:var(--blue-300);
+  --text-link-hover:var(--ink-000);
+  --surface-page:var(--ink-800);
+  --surface-card:rgba(255,255,255,.05);
+  --surface-subtle:rgba(255,255,255,.06);
+  --surface-tint:rgba(23,99,230,.16);
+  --border-hairline:rgba(255,255,255,.12);
+  --border-default:rgba(255,255,255,.2);
+  --border-strong:var(--ink-000);
+  color:var(--text-body);background:var(--surface-page);
+}

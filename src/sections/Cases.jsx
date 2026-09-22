@@ -1,66 +1,92 @@
 import ArrowButton from '../components/ArrowButton.jsx';
-import CaseTile from '../components/CaseTile.jsx';
+import CaseArt from '../components/CaseArt.jsx';
 import SplitText from '../components/SplitText.jsx';
 import { CASES, FEATURED_CASES } from '../content/site.js';
 import { useNav } from '../lib/nav.js';
 
-// Фильтры по направлениям живут на /cases — на главной ряд идёт одним потоком.
+// Кейсы рядами: слева название проекта, что мы сделали и цифры, справа экраны
+// этого проекта с подписями. Ряд занимает почти весь экран, поэтому на главной
+// их три, а весь список живёт на /cases.
+
+const FILLS = {
+  tint: 'var(--blue-050)',
+  blue: 'var(--surface-accent)',
+  grey: 'var(--ink-100)',
+  subtle: 'var(--surface-subtle)',
+};
 
 export default function Cases() {
   const { goPath } = useNav();
+  const open = (path) => (e) => {
+    e.preventDefault();
+    goPath(path);
+  };
 
   return (
-    <section id="cases" className="kz-section">
-      <div className="kz-container">
-        <div className="kz-cases-head">
-          <h2 className="kz-title">
-            <SplitText text={CASES.title} />
-            {/* Пробел внутри счётчика, а не перед ним: так он набран мелким
-                кеглем счётчика и не раздвигает строку, а парсер HTML больше
-                не склеивает «запустили» с «кейсы». */}
-            <span className="kz-cases-count" data-reveal="" style={{ '--kz-delay': '320ms' }}>
-              {' '}кейсы {CASES.items.length}
+    <section id="cases" className="kz-cases">
+      <div className="kz-cases__wrap">
+        <div className="kz-cases__head">
+          <span className="kz-aside kz-from-left" data-reveal="">
+            кейсы
+          </span>{' '}
+          <div className="kz-cases__headline">
+            <SplitText as="h2" text={CASES.title} className="kz-title" />{' '}
+            <span className="kz-cases__count" data-reveal="" style={{ '--kz-delay': '260ms' }}>
+              {FEATURED_CASES.length} из {CASES.items.length} проектов
             </span>
-          </h2>
-          <span data-reveal="" style={{ '--kz-delay': '380ms' }}>
-            <ArrowButton
-              variant="ghost"
-              href="/cases"
-              onClick={(e) => {
-                e.preventDefault();
-                goPath('/cases');
-              }}
-            >
-              {CASES.allLabel}
-            </ArrowButton>
-          </span>
+          </div>
         </div>
-      </div>
 
-      {/* Лента во всю ширину экрана: если сдвинуть её саму, плитки при прокрутке
-          обрезаются по левой границе контейнера. Отступ до первой плитки даёт
-          распорка внутри ряда, поэтому уезжающая плитка уходит за край экрана.
-          data-reset-scroll: при переходе на секцию ряд открывается с начала. */}
-      <div className="kz-cases-scroller" data-reset-scroll="">
-        <div className="kz-cases-row">
-          <span className="kz-cases-lead" aria-hidden="true" />
-          {FEATURED_CASES.map((c, i) => (
-            <div key={c.slug} className="kz-case-slide">
-              <CaseTile
-                slug={c.slug}
-                delay={i * 90}
-                title={c.title}
-                image={c.image}
-                fill={c.fill}
-                href={`/cases/${c.slug}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goPath(`/cases/${c.slug}`);
-                }}
-              />
-            </div>
-          ))}
-          <span className="kz-cases-tail" aria-hidden="true" />
+        {FEATURED_CASES.map((item, i) => {
+          const path = `/cases/${item.slug}`;
+          return (
+            <article className="kz-case-row" key={item.slug} data-reveal="" style={{ '--kz-delay': `${i * 60}ms` }}>
+              <div className="kz-case-row__side">
+                <h3 className="kz-case-row__title">
+                  <a href={path} onClick={open(path)}>
+                    {item.title}
+                  </a>
+                </h3>
+                <p className="kz-case-row__text">{item.summary}</p>
+                {item.metrics && item.metrics.length > 0 ? (
+                  <div className="kz-case-row__stats">
+                    {item.metrics.slice(0, 2).map((metric) => (
+                      <span key={metric.caption}>
+                        <b>{metric.value}</b>{' '}
+                        <span>{metric.caption}</span>
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Экраны проекта. В первом стоит наша схема кейса, остальные пока
+                  залиты цветом: снимки подставим, когда упакуем кейсы. */}
+              <div className="kz-case-row__screens">
+                {item.screens.map((screen, si) => (
+                  <a className="kz-screen" key={screen.title} href={path} onClick={open(path)}>
+                    <span className="kz-screen__title">{screen.title}</span>{' '}
+                    <span
+                      className={`kz-screen__frame${screen.fill === 'blue' ? ' is-dark' : ''}`}
+                      style={{ background: FILLS[screen.fill] || FILLS.tint }}
+                    >
+                      {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </article>
+          );
+        })}
+
+        <div className="kz-cases__all" data-reveal="">
+          <span className="kz-cases__total">
+            <b>{CASES.items.length}</b>{' '}
+            <span>проектов запущено</span>
+          </span>{' '}
+          <ArrowButton href="/cases" onClick={open('/cases')}>
+            {CASES.allLabel}
+          </ArrowButton>
         </div>
       </div>
     </section>

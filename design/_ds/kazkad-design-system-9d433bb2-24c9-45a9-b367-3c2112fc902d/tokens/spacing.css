@@ -1,0 +1,24 @@
+:root{
+  /* 4px base scale. The concept's real measurements land on 4/8/12/16/22/40/48/80. */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:22px;
+  --space-6:28px;
+  --space-7:40px;
+  --space-8:48px;
+  --space-9:64px;
+  --space-10:80px;
+  --space-11:120px;
+  --space-12:160px;
+
+  /* Layout */
+  --container-max:1280px;
+  --container-gutter:40px;
+  --grid-columns:12; /* @kind other */
+  --grid-gap:24px;
+  --section-y:120px;
+  --section-y-tight:80px;
+  --nav-height:88px;
+}

@@ -75,6 +75,95 @@
     grid-template-columns: 1fr;
   }
 
+  /* Кейсы: ряд складывается в колонку, экраны проекта едут лентой вбок. */
+  .kz-cases__head,
+  .kz-case-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kz-cases__head {
+    row-gap: 10px;
+    padding-bottom: 28px;
+  }
+
+  .kz-cases__headline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .kz-case-row {
+    row-gap: 28px;
+    padding: 40px 0 44px;
+  }
+
+  .kz-case-row__stats {
+    gap: 28px;
+    padding-top: 24px;
+  }
+
+  .kz-case-row__screens {
+    display: flex;
+    gap: 12px;
+    margin-inline: calc(-1 * var(--container-gutter));
+    padding-inline: var(--container-gutter);
+    padding-block: 2px;
+    overflow-x: auto;
+    /* Явно: при overflow-x: auto вторая ось тоже становится auto и лента
+       получает лишнюю вертикальную прокрутку. */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .kz-case-row__screens::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kz-screen {
+    flex: none;
+    width: 280px;
+    scroll-snap-align: start;
+  }
+
+  .kz-screen__title {
+    min-height: 40px;
+    font-size: var(--size-body);
+  }
+
+  /* Принципы идут столбиком и раскрыты все сразу: наводить на телефоне нечем. */
+  .kz-principles {
+    flex-direction: column;
+    height: auto;
+    margin-top: 32px;
+    border-left: 0;
+  }
+
+  .kz-principle,
+  .kz-principle.is-open {
+    flex: none;
+    padding: 22px 0 24px;
+    background: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--border-hairline);
+    cursor: default;
+  }
+
+  .kz-principle__num {
+    font-size: 40px;
+    color: var(--text-accent);
+  }
+
+  .kz-principle__body {
+    margin-top: 14px;
+  }
+
+  .kz-principle__text,
+  .kz-principle.is-open .kz-principle__text {
+    opacity: 1;
+    transform: none;
+  }
+
   /* Сетка схлопнулась в одну колонку: заголовок вопросов встаёт над списком
      и больше не едет за прокруткой, на узком экране он закрывал бы ответы. */
   .kz-faq__head {
@@ -214,59 +303,35 @@
     font-size: 17px;
   }
 
-  /* На телефоне лента занимает всю ширину, переход уходит под неё и
-     разворачивается в строку: вертикальный прямоугольник там не нужен. */
-  .kz-hero-showcase {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    margin-top: 26px;
-  }
-
-  .kz-hero-all {
-    flex-direction: row;
-    align-items: center;
-    width: auto;
-    min-height: 60px;
-    padding: 0 16px;
-  }
-
-  /* В строке подпись снова горизонтальная. */
-  .kz-hero-all__label {
-    writing-mode: horizontal-tb;
-    transform: none;
-  }
-
-  .kz-hero-all__arrow {
-    order: 1;
-  }
-
-  /* Три квадрата в столбик занимали три экрана. На телефоне это одна лента
-     в размер плитки из концепта (210px), подрезанная правым краем экрана. */
-  .kz-hero-cases {
-    display: flex;
-    gap: 12px;
-    margin-right: calc(-1 * var(--container-gutter));
-    padding-right: var(--container-gutter);
-    overflow-x: auto;
-    /* Явно: иначе вторая ось вычисляется в auto и ряд получает
-       вертикальную прокрутку. Подъёму плитки даём место полями. */
-    overflow-y: hidden;
-    padding-block: 6px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .kz-hero-cases::-webkit-scrollbar {
-    display: none;
-  }
-
   .kz-hero-cases > .kz-tile {
     flex: none;
     width: 200px;
   }
 
   /* ---- разделы ---- */
+
+  /* Кейсы на телефоне: заголовок и цифры мельче, лента экранов та же. */
+  .kz-case-row__title {
+    font-size: 26px;
+  }
+
+  .kz-case-row__text {
+    margin-top: 14px;
+    font-size: 15px;
+  }
+
+  .kz-case-row__stats b {
+    font-size: 24px;
+  }
+
+  .kz-cases__all {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .kz-principle__num {
+    font-size: 36px;
+  }
 
   /* Гант складывается: название этапа встаёт над своей дорожкой. В две колонки
      под названия уходила почти половина ширины, а на 21 день оставалось меньше
@@ -313,28 +378,6 @@
 
   .kz-stages--scroll .kz-stages__cards {
     min-height: 232px;
-  }
-
-  /* Схема конвейера на телефоне: коробки мельче, лента во всю ширину. */
-  .kz-conveyor {
-    --kz-box: 36px;
-    padding-right: 0;
-  }
-
-  .kz-conveyor__belt {
-    height: 18px;
-  }
-
-  .kz-conveyor__legs {
-    height: 16px;
-  }
-
-  .kz-cases-head {
-    gap: 20px;
-  }
-
-  .kz-case-slide {
-    width: min(78vw, 320px);
   }
 
   .kz-contact-lines {

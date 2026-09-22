@@ -26,11 +26,7 @@
  * Класс живёт один кадр, ровно на момент старта переходов. */
 .kz-no-stagger [data-reveal],
 .kz-no-stagger .kz-word__in,
-.kz-no-stagger .kz-gantt__bar,
-.kz-no-stagger .kz-conveyor__box,
-.kz-no-stagger .kz-conveyor__legs span,
-.kz-no-stagger .kz-conveyor__rollers span,
-.kz-no-stagger .kz-conveyor__floor {
+.kz-no-stagger .kz-gantt__bar {
   transition-delay: 0s !important;
 }
 
@@ -55,24 +51,6 @@
   translate: none;
 }
 
-/* Лента едет. Это единственная непрерывная анимация на сайте, и она здесь
- * не украшение: без движения схема читается как ряд коробок, а не как
- * конвейер. Сдвиг ровно на шаг шашки, linear, без пауз — цикл не виден.
- * Дизайн-система описывает моушен только как входы, так что это осознанное
- * отступление ради читаемости схемы. */
-@keyframes kz-belt {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(var(--kz-tread));
-  }
-}
-
-.kz-conveyor__treads {
-  animation: kz-belt 1.5s linear infinite;
-}
-
 /* Квадрат едет от левого края за правый. Стартует за кадром на свою ширину,
  * приезжает на 100% — то есть на всю длину ленты. */
 @keyframes kz-ride {
@@ -82,35 +60,6 @@
   to {
     transform: translateX(100%);
   }
-}
-
-/* Шесть квадратов на 12s — сдвиг фазы ровно 2s, поток идёт без разрывов. */
-.kz-conveyor__rider {
-  animation: kz-ride 12s linear infinite;
-  animation-delay: calc(var(--kz-i, 0) * -2s);
-}
-
-/* Опоры и пол проявляются вместе с машиной. */
-.kz-conveyor__legs span,
-.kz-conveyor__floor {
-  opacity: 0;
-  transition: opacity 420ms var(--ease-out) calc(200ms + var(--kz-i, 0) * 60ms);
-}
-
-.kz-conveyor.is-in .kz-conveyor__legs span,
-.kz-conveyor.is-in .kz-conveyor__floor {
-  opacity: 1;
-}
-
-/* Лента прочерчивается слева направо — коробки встают уже на неё. */
-.kz-conveyor__belt {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 620ms var(--ease-out);
-}
-
-.kz-conveyor.is-in .kz-conveyor__belt {
-  transform: scaleX(1);
 }
 
 /* Отрезки прочерчиваются слева направо, строка за строкой: лесенка
@@ -650,48 +599,6 @@
   display: block;
 }
 
-/* Переход к списку кейсов: заливка поднимается снизу, по вертикали блока.
- * Цвет продублирован в :hover, потому что это ссылка, а `a:hover` из базовых
- * стилей специфичнее одного класса. */
-.kz-hero-all {
-  transition:
-    border-color var(--duration-fast) var(--ease-standard),
-    color var(--duration-base) var(--ease-standard);
-}
-
-.kz-hero-all,
-.kz-hero-all:not(:hover) {
-  color: var(--text-strong);
-}
-
-.kz-hero-all::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--surface-accent);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 460ms var(--ease-out);
-}
-
-.kz-hero-all:hover::before {
-  transform: scaleY(1);
-}
-
-.kz-hero-all:hover {
-  color: var(--ink-000);
-  border-color: var(--surface-accent);
-}
-
-/* Стрелка уходит вправо вверх, туда же, куда ведёт подпись. */
-.kz-hero-all__arrow {
-  transition: transform var(--kz-arrow-dur) var(--ease-out);
-}
-
-.kz-hero-all:hover .kz-hero-all__arrow {
-  transform: translate(3px, -3px);
-}
-
 .kz-btn__arrow {
   position: relative;
   display: inline-flex;
@@ -760,7 +667,6 @@
 .kz-tile.is-dark:hover {
   color: var(--ink-000);
 }
-
 
 .kz-tile:hover {
   border-color: var(--border-strong);
@@ -1022,24 +928,6 @@
   .kz-curtain,
   .kz-preloader {
     display: none;
-  }
-
-  /* Конвейер останавливается. Квадраты при этом расставляются по ленте
-   * вручную — иначе все шесть остались бы за левым краем. */
-  .kz-conveyor__treads,
-  .kz-conveyor__rider {
-    animation: none;
-  }
-
-  .kz-conveyor__rider {
-    transform: translateX(calc(var(--kz-i, 0) * 17% + 4%));
-  }
-
-  .kz-conveyor__legs span,
-  .kz-conveyor__floor,
-  .kz-conveyor__belt {
-    opacity: 1 !important;
-    transform: none !important;
   }
 
   .kz-tile:hover,
