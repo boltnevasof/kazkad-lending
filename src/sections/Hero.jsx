@@ -10,9 +10,8 @@ const LINE_DELAYS = HERO.headline.reduce(
 );
 
 export default function Hero({ onEnquiry }) {
-
   return (
-    <section id="top" style={{ position: 'relative', overflow: 'hidden', background: 'var(--surface-page)' }}>
+    <section id="top" className="kz-hero" style={{ position: 'relative', overflow: 'hidden', background: 'var(--surface-page)' }}>
       {/* Concept board places the star behind the headline's left edge, not in a corner.
           Обёртка повторяет ширину контейнера: в процентах от вьюпорта звезда
           уезжала влево от заголовка тем сильнее, чем шире монитор. */}
@@ -50,7 +49,6 @@ export default function Hero({ onEnquiry }) {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

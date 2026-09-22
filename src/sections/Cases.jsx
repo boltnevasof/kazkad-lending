@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import ArrowButton from '../components/ArrowButton.jsx';
 import CaseArt from '../components/CaseArt.jsx';
 import SplitText from '../components/SplitText.jsx';
@@ -14,6 +15,61 @@ const FILLS = {
   grey: 'var(--ink-100)',
   subtle: 'var(--surface-subtle)',
 };
+
+// Экраны проекта. В первом стоит наша схема кейса, остальные пока залиты
+// цветом: снимки подставим, когда упакуем кейсы.
+//
+// Внутри ряда прячем родной курсор и ведём за мышью подпись «смотреть кейс».
+// Позицию пишем прямо в стиль узла, а не в состояние: перерисовывать дерево
+// на каждое движение мыши незачем.
+function Screens({ item, path, onOpen }) {
+  const zone = useRef(null);
+  const cursor = useRef(null);
+
+  const follow = (e) => {
+    const box = zone.current;
+    const label = cursor.current;
+    if (!box || !label) return;
+    const rect = box.getBoundingClientRect();
+    label.style.transform = `translate(${Math.round(e.clientX - rect.left)}px, ${Math.round(e.clientY - rect.top)}px)`;
+  };
+
+  const toggle = (on) => () => {
+    if (zone.current) zone.current.classList.toggle('is-hover', on);
+  };
+
+  return (
+    <div
+      className="kz-case-row__screens"
+      ref={zone}
+      onMouseMove={follow}
+      onMouseEnter={toggle(true)}
+      onMouseLeave={toggle(false)}
+    >
+      {item.screens.map((screen, si) => (
+        <a
+          className="kz-screen"
+          key={screen.title}
+          href={path}
+          onClick={onOpen}
+          data-reveal=""
+          style={{ '--kz-delay': `${120 + si * 90}ms` }}
+        >
+          <span className="kz-screen__title">{screen.title}</span>{' '}
+          <span
+            className={`kz-screen__frame${screen.fill === 'blue' ? ' is-dark' : ''}`}
+            style={{ background: FILLS[screen.fill] || FILLS.tint }}
+          >
+            {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
+          </span>
+        </a>
+      ))}
+      <span className="kz-screens__cursor" ref={cursor} aria-hidden="true">
+        смотреть кейс
+      </span>
+    </div>
+  );
+}
 
 export default function Cases() {
   const { goPath } = useNav();
@@ -60,21 +116,7 @@ export default function Cases() {
                 ) : null}
               </div>
 
-              {/* Экраны проекта. В первом стоит наша схема кейса, остальные пока
-                  залиты цветом: снимки подставим, когда упакуем кейсы. */}
-              <div className="kz-case-row__screens">
-                {item.screens.map((screen, si) => (
-                  <a className="kz-screen" key={screen.title} href={path} onClick={open(path)}>
-                    <span className="kz-screen__title">{screen.title}</span>{' '}
-                    <span
-                      className={`kz-screen__frame${screen.fill === 'blue' ? ' is-dark' : ''}`}
-                      style={{ background: FILLS[screen.fill] || FILLS.tint }}
-                    >
-                      {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
-                    </span>
-                  </a>
-                ))}
-              </div>
+              <Screens item={item} path={path} onOpen={open(path)} />
             </article>
           );
         })}

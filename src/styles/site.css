@@ -122,10 +122,20 @@ html {
 
 /* Шапка зафиксирована и не занимает места в потоке — её высоту герой
  * компенсирует собственным отступом. */
+/* Первый экран занимает всю высоту окна. svh, а не vh: на телефоне адресная
+ * строка то появляется, то уходит, и экран прыгал бы вместе с ней. */
+.kz-hero {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
 .kz-hero-body {
   position: relative;
-  padding-top: calc(var(--nav-height) + 110px);
-  padding-bottom: 88px;
+  width: 100%;
+  padding-top: calc(var(--nav-height) + 40px);
+  padding-bottom: 72px;
 }
 
 .kz-hero-lead-row {
@@ -1403,6 +1413,7 @@ html {
   border-top: 1px solid var(--border-hairline);
 }
 
+
 .kz-case-row__side {
   display: flex;
   flex-direction: column;
@@ -1496,7 +1507,61 @@ html {
 }
 
 .kz-screen:hover .kz-screen__frame {
-  border-color: var(--border-strong);
+  border-color: var(--surface-accent);
+}
+
+/* Содержимое кадра чуть наезжает на рамку: кадр обрезает, поэтому за край
+ * ничего не выходит. */
+.kz-screen__frame > * {
+  transition: transform 700ms var(--ease-out);
+}
+
+.kz-screen:hover .kz-screen__frame > * {
+  transform: scale(1.04);
+}
+
+/* Зона экранов со своим курсором. Родная стрелка прячется, вместо неё за
+ * мышью едет подпись, поэтому понятно, что кадр кликабельный. */
+.kz-case-row__screens {
+  position: relative;
+}
+
+.kz-screens__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 14px;
+  /* Тёмная плашка, а не синяя: подпись ходит и по синим экранам, и по
+   * светлым, и только чёрный читается на всех. */
+  background: var(--ink-900);
+  color: var(--ink-000);
+  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  /* Плавное отставание от курсора даёт эффект «тянется следом». */
+  transition:
+    transform 260ms var(--ease-out),
+    opacity 220ms var(--ease-standard),
+    scale 220ms var(--ease-out);
+  scale: 0.7;
+  transform-origin: left top;
+  margin: -17px 0 0 18px;
+}
+
+@media (hover: hover) {
+  .kz-case-row__screens.is-hover .kz-screens__cursor {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .kz-case-row__screens.is-hover .kz-screen {
+    cursor: none;
+  }
 }
 
 .kz-cases__all {
@@ -1540,6 +1605,7 @@ html {
   height: 440px;
   margin-top: 56px;
   border-top: 1px solid var(--border-hairline);
+  border-bottom: 1px solid var(--border-hairline);
   border-left: 1px solid var(--border-hairline);
 }
 
@@ -1579,30 +1645,41 @@ html {
   color: var(--text-accent);
 }
 
+/* Высота под две строки задана жёстко: без неё заголовок при раскрытии
+ * панели перескакивал с двух строк на одну и дёргал всё содержимое. */
 .kz-principle__title {
+  display: flex;
+  align-items: flex-end;
+  min-height: 2.3em;
   margin: 0;
   font: var(--weight-semibold) 24px / 1.15 var(--font-core);
   letter-spacing: -0.02em;
   color: var(--text-strong);
-  text-wrap: balance;
 }
 
 .kz-principle__text {
-  max-width: 520px;
+  width: 460px;
+  max-width: 100%;
+  /* Место под текст держим постоянным во всех четырёх панелях. Прозрачный
+   * абзац остаётся в потоке, поэтому без общей высоты заголовки стояли на
+   * разных уровнях и прыгали при переключении. */
+  height: 6em;
+  overflow: hidden;
   margin: 12px 0 0;
   font: var(--weight-regular) 15px / 1.5 var(--font-core);
   color: var(--text-muted);
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity var(--duration-base) var(--ease-standard),
-    transform var(--duration-base) var(--ease-standard);
+    opacity 260ms var(--ease-standard),
+    transform 260ms var(--ease-standard);
   text-wrap: pretty;
 }
 
 .kz-principle.is-open .kz-principle__text {
   opacity: 1;
   transform: none;
+  transition-delay: 260ms;
 }
 
 .kz-method .kz-method-note {
