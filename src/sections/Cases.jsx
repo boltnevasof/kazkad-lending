@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import ArrowButton from '../components/ArrowButton.jsx';
 import CaseArt from '../components/CaseArt.jsx';
 import SplitText from '../components/SplitText.jsx';
@@ -18,11 +19,51 @@ const FILLS = {
 // Экраны проекта. В первом стоит наша схема кейса, остальные пока залиты
 // цветом: снимки подставим, когда упакуем кейсы.
 //
-// Под курсором кадр целиком затемняется и в центре встаёт кнопка, поэтому
-// понятно, что снимок кликабельный.
+// Над всей областью со снимками, включая зазоры между ними, родная стрелка
+// прячется и вместо неё за мышью едет подпись. Позицию пишем прямо в стиль
+// узла, а не в состояние: перерисовывать дерево на каждое движение мыши
+// незачем.
 function Screens({ item, path, onOpen }) {
+  const zone = useRef(null);
+  const cursor = useRef(null);
+
+  const place = (e, instant) => {
+    const box = zone.current;
+    const label = cursor.current;
+    if (!box || !label) return;
+    const rect = box.getBoundingClientRect();
+    // На входе в зону подпись переносится без анимации: иначе она проезжала
+    // через весь блок с того места, где её оставили в прошлый раз.
+    if (instant) label.style.transition = 'none';
+    label.style.transform = `translate(${Math.round(e.clientX - rect.left)}px, ${Math.round(e.clientY - rect.top)}px)`;
+    if (instant) {
+      void label.offsetWidth;
+      label.style.transition = '';
+    }
+  };
+
+  const enter = (e) => {
+    place(e, true);
+    if (zone.current) zone.current.classList.add('is-hover');
+  };
+
+  const leave = () => {
+    if (zone.current) zone.current.classList.remove('is-hover');
+  };
+
   return (
-    <div className="kz-case-row__screens">
+    <div
+      className="kz-case-row__screens"
+      ref={zone}
+      onMouseEnter={enter}
+      onMouseMove={(e) => place(e, false)}
+      onMouseLeave={leave}
+      onClick={(e) => {
+        // Подпись обещает переход со всей площади, поэтому зазоры между
+        // кадрами тоже ведут в кейс. По самим кадрам отрабатывает ссылка.
+        if (!e.target.closest('.kz-screen')) onOpen(e);
+      }}
+    >
       {item.screens.map((screen, si) => (
         <a
           className="kz-screen"
@@ -38,12 +79,12 @@ function Screens({ item, path, onOpen }) {
             style={{ background: FILLS[screen.fill] || FILLS.tint }}
           >
             {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
-            <span className="kz-screen__veil">
-              <span className="kz-screen__cta">смотреть кейс</span>
-            </span>
           </span>
         </a>
       ))}
+      <span className="kz-screens__cursor" ref={cursor} aria-hidden="true">
+        смотреть кейс
+      </span>
     </div>
   );
 }
@@ -80,7 +121,15 @@ export default function Cases() {
                     {item.name}
                   </a>
                 </h3>
-                <p className="kz-case-row__text">{item.summary}</p>
+                <p className="kz-case-row__text">{item.summary}</p>{' '}
+                <ArrowButton
+                  className="kz-case-row__btn"
+                  variant="secondary"
+                  href={path}
+                  onClick={open(path)}
+                >
+                  смотреть кейс
+                </ArrowButton>
                 {item.metrics && item.metrics.length > 0 ? (
                   <div className="kz-case-row__stats">
                     {item.metrics.slice(0, 2).map((metric) => (

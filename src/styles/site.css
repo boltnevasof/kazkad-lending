@@ -1586,49 +1586,67 @@ html {
 }
 
 /* Содержимое кадра чуть наезжает на рамку: кадр обрезает, поэтому за край
- * ничего не выходит. Затемнение из этого движения исключено, иначе оно
- * поехало бы вместе со снимком и открыло край. */
-.kz-screen__frame > :not(.kz-screen__veil) {
+ * ничего не выходит. */
+.kz-screen__frame > * {
   transition: transform 700ms var(--ease-out);
 }
 
-.kz-screen:hover .kz-screen__frame > :not(.kz-screen__veil) {
+.kz-screen:hover .kz-screen__frame > * {
   transform: scale(1.04);
 }
 
-/* Под курсором кадр затемняется целиком и в центре встаёт кнопка. Она не
- * ссылка: кликается весь кадр, поэтому попасть можно куда угодно. */
-.kz-screen__veil {
+/* Область со снимками живёт со своим курсором. Родная стрелка прячется на
+ * всей площади блока, включая зазоры между кадрами и подписи над ними, а
+ * вместо неё за мышью едет подпись. */
+.kz-case-row__screens {
+  position: relative;
+}
+
+.kz-screens__cursor {
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(23, 23, 23, 0.5);
-  opacity: 0;
-  transition: opacity 320ms var(--ease-standard);
-}
-
-.kz-screen:hover .kz-screen__veil {
-  opacity: 1;
-}
-
-.kz-screen__cta {
+  top: 0;
+  left: 0;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
-  height: 46px;
-  padding: 0 24px;
-  color: var(--ink-900);
+  height: 40px;
+  padding: 0 18px;
+  /* Тёмная плашка, а не синяя: подпись ходит и по синим экранам, и по
+   * светлым, и только чёрный читается на всех. */
+  background: var(--ink-900);
+  color: var(--ink-000);
   font: var(--weight-medium) var(--size-body) / 1 var(--font-core);
   white-space: nowrap;
-  background: var(--ink-000);
-  translate: 0 10px;
-  transition: translate 320ms var(--ease-out);
+  pointer-events: none;
+  opacity: 0;
+  /* Плавное отставание от курсора даёт эффект «тянется следом». */
+  transition:
+    transform 260ms var(--ease-out),
+    opacity 220ms var(--ease-standard),
+    scale 220ms var(--ease-out);
+  scale: 0.7;
+  transform-origin: left top;
+  margin: -20px 0 0 20px;
 }
 
-.kz-screen:hover .kz-screen__cta {
-  translate: none;
+@media (hover: hover) {
+  .kz-case-row__screens.is-hover .kz-screens__cursor {
+    opacity: 1;
+    scale: 1;
+  }
+
+  /* Курсор гасится у всей области, а не только у кадров: в зазорах рядом с
+     подписью снова появлялась родная стрелка. */
+  .kz-case-row__screens.is-hover,
+  .kz-case-row__screens.is-hover .kz-screen {
+    cursor: none;
+  }
+}
+
+/* Кнопка стоит под описанием проекта, цифры остаются прижатыми к низу. */
+.kz-case-row__btn {
+  align-self: flex-start;
+  margin-top: 28px;
 }
 
 .kz-cases__all {
