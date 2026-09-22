@@ -356,7 +356,11 @@ const SCREENS = {
 // Заливки экранов идут по кругу, чтобы ряд не выглядел одинаковым.
 const SCREEN_FILLS = ['tint', 'blue', 'grey'];
 
+// Короткое имя проекта для рядов на главной: всё, что стоит до запятой в
+// заголовке. Полный заголовок остаётся в списке кейсов и в разметке для
+// поисковиков, там он и работает.
 CASES.items.forEach((item) => {
+  item.name = item.title.split(',')[0];
   item.screens = (SCREENS[item.slug] || []).map((title, i) => ({
     title,
     fill: SCREEN_FILLS[i % SCREEN_FILLS.length],

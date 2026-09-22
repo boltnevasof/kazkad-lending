@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import ArrowButton from '../components/ArrowButton.jsx';
 import CaseArt from '../components/CaseArt.jsx';
 import SplitText from '../components/SplitText.jsx';
@@ -19,33 +18,11 @@ const FILLS = {
 // Экраны проекта. В первом стоит наша схема кейса, остальные пока залиты
 // цветом: снимки подставим, когда упакуем кейсы.
 //
-// Внутри ряда прячем родной курсор и ведём за мышью подпись «смотреть кейс».
-// Позицию пишем прямо в стиль узла, а не в состояние: перерисовывать дерево
-// на каждое движение мыши незачем.
+// Под курсором кадр целиком затемняется и в центре встаёт кнопка, поэтому
+// понятно, что снимок кликабельный.
 function Screens({ item, path, onOpen }) {
-  const zone = useRef(null);
-  const cursor = useRef(null);
-
-  const follow = (e) => {
-    const box = zone.current;
-    const label = cursor.current;
-    if (!box || !label) return;
-    const rect = box.getBoundingClientRect();
-    label.style.transform = `translate(${Math.round(e.clientX - rect.left)}px, ${Math.round(e.clientY - rect.top)}px)`;
-  };
-
-  const toggle = (on) => () => {
-    if (zone.current) zone.current.classList.toggle('is-hover', on);
-  };
-
   return (
-    <div
-      className="kz-case-row__screens"
-      ref={zone}
-      onMouseMove={follow}
-      onMouseEnter={toggle(true)}
-      onMouseLeave={toggle(false)}
-    >
+    <div className="kz-case-row__screens">
       {item.screens.map((screen, si) => (
         <a
           className="kz-screen"
@@ -61,12 +38,12 @@ function Screens({ item, path, onOpen }) {
             style={{ background: FILLS[screen.fill] || FILLS.tint }}
           >
             {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
+            <span className="kz-screen__veil">
+              <span className="kz-screen__cta">смотреть кейс</span>
+            </span>
           </span>
         </a>
       ))}
-      <span className="kz-screens__cursor" ref={cursor} aria-hidden="true">
-        смотреть кейс
-      </span>
     </div>
   );
 }
@@ -100,7 +77,7 @@ export default function Cases() {
               <div className="kz-case-row__side">
                 <h3 className="kz-case-row__title">
                   <a href={path} onClick={open(path)}>
-                    {item.title}
+                    {item.name}
                   </a>
                 </h3>
                 <p className="kz-case-row__text">{item.summary}</p>

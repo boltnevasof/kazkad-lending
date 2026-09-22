@@ -1586,57 +1586,49 @@ html {
 }
 
 /* Содержимое кадра чуть наезжает на рамку: кадр обрезает, поэтому за край
- * ничего не выходит. */
-.kz-screen__frame > * {
+ * ничего не выходит. Затемнение из этого движения исключено, иначе оно
+ * поехало бы вместе со снимком и открыло край. */
+.kz-screen__frame > :not(.kz-screen__veil) {
   transition: transform 700ms var(--ease-out);
 }
 
-.kz-screen:hover .kz-screen__frame > * {
+.kz-screen:hover .kz-screen__frame > :not(.kz-screen__veil) {
   transform: scale(1.04);
 }
 
-/* Зона экранов со своим курсором. Родная стрелка прячется, вместо неё за
- * мышью едет подпись, поэтому понятно, что кадр кликабельный. */
-.kz-case-row__screens {
-  position: relative;
+/* Под курсором кадр затемняется целиком и в центре встаёт кнопка. Она не
+ * ссылка: кликается весь кадр, поэтому попасть можно куда угодно. */
+.kz-screen__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 23, 23, 0.5);
+  opacity: 0;
+  transition: opacity 320ms var(--ease-standard);
 }
 
-.kz-screens__cursor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 3;
+.kz-screen:hover .kz-screen__veil {
+  opacity: 1;
+}
+
+.kz-screen__cta {
   display: inline-flex;
   align-items: center;
-  height: 34px;
-  padding: 0 14px;
-  /* Тёмная плашка, а не синяя: подпись ходит и по синим экранам, и по
-   * светлым, и только чёрный читается на всех. */
-  background: var(--ink-900);
-  color: var(--ink-000);
-  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
+  height: 46px;
+  padding: 0 24px;
+  color: var(--ink-900);
+  font: var(--weight-medium) var(--size-body) / 1 var(--font-core);
   white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  /* Плавное отставание от курсора даёт эффект «тянется следом». */
-  transition:
-    transform 260ms var(--ease-out),
-    opacity 220ms var(--ease-standard),
-    scale 220ms var(--ease-out);
-  scale: 0.7;
-  transform-origin: left top;
-  margin: -17px 0 0 18px;
+  background: var(--ink-000);
+  translate: 0 10px;
+  transition: translate 320ms var(--ease-out);
 }
 
-@media (hover: hover) {
-  .kz-case-row__screens.is-hover .kz-screens__cursor {
-    opacity: 1;
-    scale: 1;
-  }
-
-  .kz-case-row__screens.is-hover .kz-screen {
-    cursor: none;
-  }
+.kz-screen:hover .kz-screen__cta {
+  translate: none;
 }
 
 .kz-cases__all {
