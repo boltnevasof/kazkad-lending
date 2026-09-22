@@ -1,13 +1,20 @@
-/* Пресеты кадров для фотографий проектов.
+/* Кадры для снимков проектов.
  *
- * Кадр — это поле определённого цвета и правило, как в нём стоит снимок:
- * с полями, под обрез, в углу, в окне браузера. Снимок всегда один и тот же
- * <img>, меняется только оправа, поэтому одну и ту же фотографию можно
- * поставить в любой из девяти пресетов и не резать её заново.
+ * Снимок никогда не лежит в пустом квадрате. Он или вставлен в устройство
+ * (телефон, ноутбук, окно браузера) с корпусом и тенью, или обложен крупными
+ * фигурами, как это делают в айдентике клиента. Разметка у всех девяти одна:
  *
- * Пропорция кадра задаётся переменной --kzp-ratio, по умолчанию квадрат:
- * ряды кейсов на главной стоят на квадратах. Для обложки или ленты хватит
- * style="--kzp-ratio: 16 / 9".
+ *   .kzp > .kzp__shape* + .kzp__device > .kzp__screen > img.kzp__photo
+ *
+ * Корпус и фигуры задаются процентами, а не пикселями, поэтому кадр можно
+ * поставить хоть на 300, хоть на 900 точек и ничего не поедет. Радиусы
+ * пишутся через дробь (9% / 4.5%), иначе на вытянутом корпусе телефона углы
+ * получаются овальными.
+ *
+ * Цвет фигур берётся из --kzp-shape. Если у проекта свой фирменный цвет,
+ * он подставляется прямо в кадр:
+ *
+ *   <Shot preset="arcs" style={{ '--kzp-shape': '#e2231a' }} />
  *
  * Фиолетовый живёт только здесь. В токенах его нет и быть не должно: у бренда
  * синий и тушь, а это оправа под чужие снимки. */
@@ -22,258 +29,421 @@
   --kzp-ratio: 1;
   --kzp-bg: var(--ink-100);
   --kzp-ink: var(--ink-900);
+  --kzp-shape: var(--blue-600);
   position: relative;
   display: block;
   overflow: hidden;
   aspect-ratio: var(--kzp-ratio);
+  margin: 0;
   background: var(--kzp-bg);
   color: var(--kzp-ink);
   font: var(--weight-medium) 15px / 1.3 var(--font-core);
   letter-spacing: -0.01em;
 }
 
-/* Снимок всегда перекрывает свою клетку целиком и обрезается по ней. Размер
- * клетки каждый пресет задаёт процентами, а не инсетами со всех сторон:
- * картинка — замещаемый элемент, при width: auto она берёт собственный
- * размер и правый с нижним краем просто не срабатывают. */
-.kzp__photo {
+/* Корпус устройства. У кадров с фигурами он же работает простой карточкой:
+ * белое поле с тенью, в котором лежит снимок. */
+.kzp__device {
   position: absolute;
+  z-index: 1;
+}
+
+.kzp__device--card {
+  padding: 1.6%;
+  background: var(--ink-000);
+  box-shadow: 0 18px 44px rgba(23, 23, 23, 0.16);
+}
+
+/* Экран вырезает снимок по себе, поэтому скруглённые углы корпуса не
+ * приходится повторять на самой картинке. */
+.kzp__screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.kzp__device--card .kzp__screen {
+  inset: 1.6%;
+}
+
+.kzp__photo {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
 }
 
 .kzp__cap {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   margin: 0;
 }
 
-/* ---------------------------------------------------------------- синие */
+.kzp__shape {
+  position: absolute;
+  z-index: 0;
+}
 
-/* 01. Поле. Снимок висит в светлом поле с запасом со всех сторон, снизу
- * остаётся место под подпись. Спокойный кадр для интерьеров и предметки. */
-.kzp--field {
+/* ---- части устройств ---- */
+
+/* Островок над экраном: без него корпус читается как просто чёрная рамка. */
+.kzp__notch {
+  position: absolute;
+  top: 2.4%;
+  left: 50%;
+  z-index: 2;
+  width: 26%;
+  height: 2.6%;
+  background: var(--ink-900);
+  border-radius: 999px;
+  translate: -50% 0;
+}
+
+.kzp__bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1.4%;
+  height: 9%;
+  padding: 0 2.6%;
+  background: var(--ink-000);
+  border-bottom: 1px solid rgba(23, 23, 23, 0.1);
+}
+
+.kzp__dot {
+  width: 2.2%;
+  aspect-ratio: 1;
+  background: rgba(23, 23, 23, 0.2);
+  border-radius: 50%;
+}
+
+.kzp__line {
+  flex: 1;
+  height: 26%;
+  margin-left: 2.4%;
+  background: rgba(23, 23, 23, 0.08);
+}
+
+/* Подставка ноутбука: планка шире экрана, снизу скруглена, в середине выемка
+ * под палец. Выемка нарисована градиентом, отдельного узла на неё нет. */
+.kzp__base {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 116%;
+  height: 5.5%;
+  background:
+    radial-gradient(ellipse 7% 130% at 50% 0, rgba(255, 255, 255, 0.22) 99%, transparent 100%),
+    linear-gradient(var(--ink-600), var(--ink-800));
+  border-radius: 0 0 4% 4% / 0 0 100% 100%;
+  translate: -50% 0;
+}
+
+/* ================================================================ синие */
+
+/* 01. Телефон. Корпус целиком стоит в светлом поле, снизу остаётся место
+ * под подпись. Кадр по умолчанию для всего мобильного. */
+.kzp--phone {
   --kzp-bg: var(--blue-050);
 }
 
-.kzp--field .kzp__photo {
-  top: 9%;
-  left: 9%;
-  width: 82%;
-  height: 70%;
-  border: 1px solid rgba(23, 23, 23, 0.08);
+.kzp--phone .kzp__device {
+  top: 7%;
+  left: 50%;
+  width: 42%;
+  height: 74%;
+  padding: 2%;
+  background: var(--ink-900);
+  border-radius: 11% / 6.2%;
+  box-shadow: 0 26px 54px rgba(23, 23, 23, 0.3);
+  translate: -50% 0;
 }
 
-.kzp--field .kzp__cap {
-  bottom: 8%;
-  left: 9%;
+.kzp--phone .kzp__screen {
+  inset: 2%;
+  border-radius: 9% / 5%;
+}
+
+.kzp--phone .kzp__cap {
+  bottom: 7%;
+  left: 50%;
   color: var(--ink-600);
+  translate: -50% 0;
 }
 
-/* 02. Подъём. Снимок прижат к нижнему краю и уходит за него, сверху остаётся
- * синий воздух. Так ставят экраны приложения и длинные страницы. */
-.kzp--rise {
+/* 02. Браузер. Белое окно висит в синем поле, подпись стоит над ним. Кадр
+ * для сайтов и админок. */
+.kzp--browser {
   --kzp-bg: var(--blue-600);
   --kzp-ink: var(--ink-000);
 }
 
-.kzp--rise .kzp__photo {
-  top: 27%;
-  left: 11%;
-  width: 78%;
-  height: 73%;
-  object-position: center top;
+.kzp--browser .kzp__device {
+  top: 24%;
+  left: 8%;
+  width: 84%;
+  height: 68%;
+  background: var(--ink-000);
+  box-shadow: 0 24px 50px rgba(9, 38, 88, 0.35);
 }
 
-.kzp--rise .kzp__cap {
+.kzp--browser .kzp__screen {
+  inset: 9% 0 0;
+}
+
+.kzp--browser .kzp__cap {
   top: 10%;
-  left: 11%;
+  left: 8%;
 }
 
-/* 03. Полоса. Снимок на весь кадр, снизу синяя полоса с подписью. Кадр для
- * фотографии, которой нечего прятать. */
-.kzp--band .kzp__photo {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 78%;
+/* 03. Дуги. Две толстые дуги по диагонали, снимок карточкой между ними.
+ * Кадр под проект с сильной айдентикой. */
+.kzp--arcs {
+  --kzp-bg: var(--blue-050);
 }
 
-.kzp--band .kzp__cap {
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  height: 22%;
-  padding: 0 7%;
-  color: var(--ink-000);
-  background: var(--blue-600);
+.kzp--arcs .kzp__shape {
+  width: 58%;
+  aspect-ratio: 1;
 }
 
-/* ----------------------------------------------------------- фиолетовые */
+.kzp--arcs .kzp__shape--1 {
+  top: -12%;
+  left: -10%;
+  background: radial-gradient(circle at 100% 100%, transparent 64%, var(--kzp-shape) 64% 79%, transparent 79%);
+}
 
-/* 04. Разворот. Слева плашка с названием, справа снимок под обрез. Кадр для
- * первого экрана кейса: сразу видно, чей проект. */
-.kzp--split {
+.kzp--arcs .kzp__shape--2 {
+  right: -10%;
+  bottom: -12%;
+  background: radial-gradient(circle at 0 0, transparent 64%, var(--kzp-shape) 64% 79%, transparent 79%);
+}
+
+.kzp--arcs .kzp__device {
+  top: 21%;
+  left: 13%;
+  width: 74%;
+  height: 50%;
+}
+
+.kzp--arcs .kzp__cap {
+  bottom: 12%;
+  left: 13%;
+  color: var(--ink-600);
+}
+
+/* ============================================================ фиолетовые */
+
+/* 04. Телефон крупно. Корпус срезан нижним краем, свободный верх забирает
+ * подпись. Кадр для одного экрана, который надо разглядеть. */
+.kzp--phone-crop {
   --kzp-bg: var(--kzp-violet-600);
   --kzp-ink: var(--ink-000);
 }
 
-.kzp--split .kzp__photo {
-  top: 0;
-  left: 36%;
-  width: 64%;
-  height: 100%;
+.kzp--phone-crop .kzp__device {
+  top: 26%;
+  left: 21%;
+  width: 58%;
+  height: 92%;
+  padding: 1.6%;
+  background: var(--ink-900);
+  border-radius: 9% / 5.6%;
+  box-shadow: 0 -8px 60px rgba(17, 6, 54, 0.45);
 }
 
-.kzp--split .kzp__cap {
-  top: 9%;
+.kzp--phone-crop .kzp__screen {
+  inset: 1.6%;
+  border-radius: 7.4% / 4.6%;
+}
+
+.kzp--phone-crop .kzp__notch {
+  top: 3.2%;
+}
+
+.kzp--phone-crop .kzp__cap {
+  top: 10%;
   left: 8%;
-  width: 22%;
 }
 
-/* 05. Окно. Снимок стоит в окне браузера: тонкая шапка с точками и строкой
- * адреса. Кадр для сайтов и админок, где важно, что это экран. */
-.kzp--window {
+/* 05. Круг. Снимок лежит поперёк большого круга и выходит за него с двух
+ * сторон. Кадр для широких экранов и разворотов. */
+.kzp--circle {
   --kzp-bg: var(--kzp-violet-050);
+  --kzp-shape: var(--kzp-violet-600);
 }
 
-.kzp--window .kzp__frame {
-  position: absolute;
-  /* Снизу поля больше: там стоит подпись, и на 11% она подпирала окно. */
-  inset: 9% 9% 18%;
-  overflow: hidden;
-  background: var(--ink-000);
-  border: 1px solid rgba(23, 23, 23, 0.1);
-}
-
-.kzp--window .kzp__bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 26px;
-  padding: 0 10px;
-  border-bottom: 1px solid rgba(23, 23, 23, 0.1);
-}
-
-.kzp--window .kzp__dot {
-  width: 7px;
-  height: 7px;
-  background: rgba(23, 23, 23, 0.18);
+.kzp--circle .kzp__shape--1 {
+  top: 11%;
+  left: 13%;
+  width: 74%;
+  aspect-ratio: 1;
+  background: var(--kzp-shape);
   border-radius: 50%;
 }
 
-.kzp--window .kzp__line {
-  flex: 1;
-  height: 7px;
-  margin-left: 8px;
-  background: rgba(23, 23, 23, 0.08);
+/* Снимок уже круга, поэтому круг виден и сверху, и снизу, и по бокам. */
+.kzp--circle .kzp__device {
+  top: 31%;
+  left: 15%;
+  width: 70%;
+  height: 38%;
 }
 
-.kzp--window .kzp__photo {
-  position: absolute;
-  top: 26px;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 26px);
-  object-position: center top;
-}
-
-.kzp--window .kzp__cap {
-  bottom: 6%;
-  left: 9%;
+.kzp--circle .kzp__cap {
+  bottom: 9%;
+  left: 15%;
   color: var(--kzp-violet-900);
 }
 
-/* 06. Угол. Снимок уходит за правый и нижний края, свободный угол забирает
- * подпись. Кадр для деталей и крупных планов. */
-.kzp--corner {
-  --kzp-bg: var(--kzp-violet-900);
-  --kzp-ink: var(--ink-000);
-}
-
-.kzp--corner .kzp__photo {
-  top: 24%;
-  left: 24%;
-  width: 76%;
-  height: 76%;
-}
-
-.kzp--corner .kzp__cap {
-  top: 9%;
-  left: 8%;
-}
-
-/* ----------------------------------------------------------- нейтральные */
-
-/* 07. Бумага. Белое поле, снимок с полями и подпись под тонкой линией.
- * Кадр для печатного и предметного. */
-.kzp--paper {
+/* 06. Скобки. Два угла держат снимок сверху слева и снизу справа. Кадр,
+ * когда дуги слишком громкие, а пустое поле слишком тихое. */
+.kzp--brackets {
   --kzp-bg: var(--ink-000);
-  box-shadow: inset 0 0 0 1px var(--ink-200);
+  --kzp-shape: var(--kzp-violet-600);
 }
 
-.kzp--paper .kzp__photo {
+.kzp--brackets .kzp__shape {
+  width: 30%;
+  aspect-ratio: 1;
+}
+
+.kzp--brackets .kzp__shape--1 {
   top: 8%;
   left: 8%;
-  width: 84%;
-  height: 72%;
+  background:
+    linear-gradient(to right, var(--kzp-shape) 0 13%, transparent 13%),
+    linear-gradient(to bottom, var(--kzp-shape) 0 13%, transparent 13%);
 }
 
-.kzp--paper .kzp__cap {
+.kzp--brackets .kzp__shape--2 {
   right: 8%;
+  bottom: 22%;
+  background:
+    linear-gradient(to left, var(--kzp-shape) 0 13%, transparent 13%),
+    linear-gradient(to top, var(--kzp-shape) 0 13%, transparent 13%);
+}
+
+.kzp--brackets .kzp__device {
+  top: 19%;
+  left: 19%;
+  width: 62%;
+  height: 50%;
+}
+
+.kzp--brackets .kzp__cap {
   bottom: 8%;
   left: 8%;
-  padding-top: 10px;
-  color: var(--ink-600);
-  border-top: 1px solid var(--ink-200);
+  color: var(--kzp-violet-900);
 }
 
-/* 08. Тушь. Чёрное поле и снимок по центру в тонкой рамке. Кадр для тёмных
- * интерфейсов и всего, что светится. */
-.kzp--ink {
+/* ============================================================ нейтральные */
+
+/* 07. Ноутбук. Корпус с подставкой на сером поле. Кадр для десктопных
+ * интерфейсов, где важна ширина экрана. */
+.kzp--laptop {
+  --kzp-bg: var(--ink-100);
+}
+
+.kzp--laptop .kzp__device {
+  top: 22%;
+  left: 11%;
+  width: 78%;
+  height: 48%;
+  padding: 1.3%;
+  background: var(--ink-900);
+  border-radius: 1.6% / 2.6%;
+  box-shadow: 0 22px 44px rgba(23, 23, 23, 0.22);
+}
+
+.kzp--laptop .kzp__screen {
+  inset: 1.3%;
+}
+
+.kzp--laptop .kzp__cap {
+  bottom: 12%;
+  left: 11%;
+  color: var(--ink-600);
+}
+
+/* 08. Полосы. Снимок стоит на фирменной штриховке и держится белым полем
+ * вокруг. Кадр для мелких экранов, которые теряются на пустом фоне. */
+.kzp--stripes {
+  --kzp-bg: var(--ink-000);
+  --kzp-shape: var(--ink-300);
+}
+
+/* Полосы широкие и светлые, и заканчиваются выше подписи: на частой чёрной
+ * штриховке снимок терялся, а подпись на ней не читалась вовсе. */
+.kzp--stripes .kzp__shape--1 {
+  top: 8%;
+  right: 0;
+  bottom: 24%;
+  left: 0;
+  background: repeating-linear-gradient(90deg, var(--kzp-shape) 0 5%, transparent 5% 12%);
+}
+
+/* Карточка уже штриховки и сдвинута вправо: по бокам должно остаться поле,
+ * иначе полос не видно вовсе и кадр превращается в белый лист. */
+.kzp--stripes .kzp__device {
+  top: 17%;
+  left: 24%;
+  width: 62%;
+  height: 46%;
+  padding: 3%;
+}
+
+.kzp--stripes .kzp__device--card .kzp__screen {
+  inset: 3%;
+}
+
+.kzp--stripes .kzp__cap {
+  bottom: 12%;
+  left: 8%;
+  color: var(--ink-600);
+}
+
+/* 09. Сцена. Тёмное поле, светлый круг и телефон поверх. Самый громкий кадр,
+ * для обложки кейса. */
+.kzp--stage {
   --kzp-bg: var(--ink-900);
   --kzp-ink: var(--ink-000);
+  --kzp-shape: var(--ink-000);
 }
 
-.kzp--ink .kzp__photo {
-  top: 13%;
-  left: 13%;
-  width: 74%;
-  height: 74%;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+.kzp--stage .kzp__shape--1 {
+  right: -6%;
+  bottom: -18%;
+  width: 78%;
+  aspect-ratio: 1;
+  background: var(--kzp-shape);
+  border-radius: 50%;
+  opacity: 0.1;
 }
 
-.kzp--ink .kzp__cap {
-  right: 13%;
-  bottom: 5%;
-  color: rgba(255, 255, 255, 0.62);
+.kzp--stage .kzp__device {
+  top: 20%;
+  left: 52%;
+  width: 40%;
+  height: 86%;
+  padding: 1.9%;
+  background: #000;
+  border-radius: 10% / 5.4%;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  translate: -50% 0;
 }
 
-/* 09. Сетка. Снимок лежит на миллиметровке и приподнят тенью. Кадр для схем,
- * макетов и всего, что хочется показать как объект. */
-.kzp--grid {
-  --kzp-bg: var(--ink-100);
-  background-image:
-    linear-gradient(to right, rgba(23, 23, 23, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(23, 23, 23, 0.06) 1px, transparent 1px);
-  background-size: 8.333% 8.333%;
+.kzp--stage .kzp__screen {
+  inset: 1.9%;
+  border-radius: 8.4% / 4.4%;
 }
 
-.kzp--grid .kzp__photo {
-  top: 15%;
-  left: 15%;
-  width: 70%;
-  height: 70%;
-  box-shadow: 0 20px 44px rgba(23, 23, 23, 0.18);
-}
-
-.kzp--grid .kzp__cap {
-  bottom: 5.5%;
-  left: 15%;
-  color: var(--ink-600);
+.kzp--stage .kzp__cap {
+  top: 9%;
+  left: 8%;
 }
