@@ -52,7 +52,11 @@
     margin: 28px 0 0;
   }
 
+  /* Карточка возвращается в поток под диаграмму: ни сверху, ни сбоку места
+     для неё здесь уже нет. */
   .kz-stages--scroll .kz-stages__cards {
+    position: relative;
+    inset: auto;
     min-height: 244px;
     margin-top: 26px;
   }
@@ -535,31 +539,27 @@
 
 /* Ноутбук с низким окном: липкому кадру нужно уместить заголовок, диаграмму
    и карточку, поэтому поля и строки поджимаются. */
-@media (max-height: 860px) and (min-width: 1001px) {
+@media (max-height: 880px) and (min-width: 1001px) {
+  .kz-stages {
+    --kz-card-slot: 176px;
+    --kz-row: 46px;
+  }
+
   .kz-stages__sticky {
-    padding-top: calc(var(--nav-height) + 20px);
-    padding-bottom: 28px;
-  }
-
-  .kz-stages__stage {
-    margin-top: 26px;
-  }
-
-  .kz-gantt__track {
-    height: 42px;
+    padding-top: calc(var(--nav-height) + 14px);
+    padding-bottom: 20px;
   }
 
   .kz-stage-card {
-    padding: 16px 18px 18px;
+    padding: 15px 18px 17px;
   }
 
   .kz-stage-card__text {
     font-size: 13px;
   }
 
-  .kz-stages--scroll .kz-stages__cards {
-    min-height: 196px;
-    margin-top: 22px;
+  .kz-stage-card__milestone {
+    margin-top: 12px;
   }
 }
 

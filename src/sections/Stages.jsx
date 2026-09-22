@@ -19,10 +19,15 @@ const KEY_DAYS = new Set([1, ...STAGES.items.map((item) => item.to)]);
 const percent = (days) => `${((days / TOTAL) * 100).toFixed(4)}%`;
 const pad = (n) => String(n).padStart(2, '0');
 
-// К какому дню привязана карточка. Первая опирается на начало своего отрезка,
-// вторая на середину, третья на конец, поэтому поводок от карточки всегда
-// указывает внутрь отрезка, а сама она при смене этапа едет вбок.
-const ALIGN = ['start', 'center', 'end'];
+// Где показывается карточка и к какому дню она привязана. Первая и третья
+// встают над диаграммой, вторая под ней, поэтому диаграмма оказывается ровно
+// посередине кадра. По горизонтали первая опирается на начало своего отрезка,
+// вторая на середину, третья на конец, и стрелка всегда указывает в отрезок.
+const PLACEMENT = [
+  { side: 'above', align: 'start' },
+  { side: 'below', align: 'center' },
+  { side: 'above', align: 'end' },
+];
 
 function anchor(item, align) {
   if (align === 'start') return percent(item.from - 1);
@@ -129,12 +134,12 @@ export default function Stages({ interactive = true }) {
   );
 
   const cards = STAGES.items.map((item, i) => {
-    const align = ALIGN[i] || ALIGN[0];
+    const place = PLACEMENT[i] || PLACEMENT[0];
     return (
       <article
         key={item.title}
-        className={`kz-stage-card is-${align}${i === active ? ' is-active' : ''}`}
-        style={{ '--kz-x': anchor(item, align) }}
+        className={`kz-stage-card is-${place.side} is-${place.align}${i === active ? ' is-active' : ''}`}
+        style={{ '--kz-x': anchor(item, place.align), '--kz-i': i }}
         aria-hidden={interactive && i !== active ? 'true' : undefined}
       >
         <span className="kz-stage-card__leader" aria-hidden="true" />
@@ -156,7 +161,9 @@ export default function Stages({ interactive = true }) {
       {header}
       <div className="kz-stages__stage">
         {chart}
-        <div className="kz-stages__cards">{cards}</div>
+        <div className="kz-stages__cards" style={{ '--kz-rows': STAGES.items.length }}>
+          {cards}
+        </div>
       </div>
     </div>
   );

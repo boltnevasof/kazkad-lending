@@ -293,7 +293,15 @@ html {
 
 /* ---- Этапы: Гант, которым управляет прокрутка ---- */
 
+/* Высота строки диаграммы и место под карточку вынесены в переменные: низкое
+ * окно и телефон меняют только их. */
 .kz-stages {
+  --kz-card-slot: 200px;
+  --kz-row: 60px;
+  --kz-scale: 26px;
+  /* Ширина колонки названий нужна и диаграмме, и карточкам: они отмеряют свой
+   * день от начала дорожки, а не от края блока. */
+  --kz-gantt-labels: clamp(170px, 19%, 240px);
   position: relative;
   background: var(--surface-subtle);
 }
@@ -316,7 +324,7 @@ html {
   align-items: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding: calc(var(--nav-height) + 36px) 0 48px;
+  padding: calc(var(--nav-height) + 18px) 0 24px;
 }
 
 .kz-stages__sticky > .kz-container {
@@ -336,20 +344,23 @@ html {
   color: var(--text-muted);
 }
 
+/* Поля сверху и снизу — место для карточки. Первая и третья встают над
+ * диаграммой, вторая под ней, поэтому слот нужен с обеих сторон, а сама
+ * диаграмма оказывается ровно посередине кадра. */
 .kz-stages__stage {
-  margin-top: 36px;
+  position: relative;
+  margin: calc(var(--kz-card-slot) + 32px) 0;
 }
 
-/* Место под карточку этапа. Карточки лежат в нём абсолютно и друг друга не
- * двигают, поэтому смена этапа не дёргает раскладку, а слот держит высоту. */
+/* Коробка карточек повторяет дорожки диаграммы, без колонки названий: от неё
+ * карточки отмеряют и свой день по горизонтали, и 32px вверх или вниз. Друг
+ * друга они не двигают, поэтому смена этапа не дёргает раскладку. */
 .kz-stages__cards {
-  position: relative;
-  min-height: 220px;
-  margin-top: 28px;
+  position: absolute;
+  inset: 0 0 0 var(--kz-gantt-labels);
 }
 
 .kz-gantt {
-  --kz-gantt-labels: clamp(150px, 18%, 220px);
   position: relative;
 }
 
@@ -361,7 +372,8 @@ html {
 }
 
 .kz-gantt__scale {
-  padding-bottom: 10px;
+  height: var(--kz-scale);
+  align-items: start;
 }
 
 .kz-gantt__scale-label,
@@ -382,6 +394,7 @@ html {
 
 .kz-gantt__day {
   text-align: center;
+  font-size: 13px;
 }
 
 /* Дни, которыми заканчиваются этапы, набраны основным цветом. */
@@ -399,7 +412,7 @@ html {
 
 .kz-gantt__task {
   padding-right: 20px;
-  font: var(--weight-medium) var(--size-body-sm) / 1.35 var(--font-core);
+  font: var(--weight-medium) var(--size-body) / 1.35 var(--font-core);
   color: var(--text-muted);
   transition: color var(--duration-base) var(--ease-standard);
 }
@@ -410,7 +423,7 @@ html {
 
 .kz-gantt__track {
   position: relative;
-  height: 54px;
+  height: var(--kz-row);
 }
 
 .kz-gantt__grid {
@@ -426,8 +439,8 @@ html {
 .kz-gantt__bar {
   position: absolute;
   top: 50%;
-  height: 16px;
-  margin-top: -8px;
+  height: 24px;
+  margin-top: -12px;
   background: var(--ink-300);
 }
 
@@ -442,10 +455,9 @@ html {
  * читают поисковики, а смена этапа выглядит как проявление из размытия. */
 .kz-stage-card {
   position: absolute;
-  top: 0;
   z-index: 1;
-  width: min(420px, 44%);
-  padding: 18px 20px 20px;
+  width: min(520px, 52%);
+  padding: 16px 18px 18px;
   background: var(--surface-page);
   border: 1px solid var(--border-default);
   opacity: 0;
@@ -468,6 +480,15 @@ html {
   transition-delay: 90ms, 90ms, 90ms, 0s;
 }
 
+/* Первый этап показывается над диаграммой, второй под ней, третий снова над. */
+.kz-stage-card.is-above {
+  bottom: calc(100% + 32px);
+}
+
+.kz-stage-card.is-below {
+  top: calc(100% + 32px);
+}
+
 .kz-stage-card.is-start,
 .kz-stage-card.is-center,
 .kz-stage-card.is-end {
@@ -483,13 +504,43 @@ html {
   translate: -100% 0;
 }
 
-/* Поводок от карточки вверх, к её отрезку на диаграмме. */
+/* Стрелка от карточки к её отрезку. Синяя и с наконечником: серая линия
+ * в один пиксель на светлом фоне почти не читалась. */
 .kz-stage-card__leader {
   position: absolute;
+  width: 2px;
+  height: 32px;
+  background: var(--surface-accent);
+}
+
+.kz-stage-card__leader::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  border: 6px solid transparent;
+}
+
+.kz-stage-card.is-above .kz-stage-card__leader {
+  top: 100%;
+  height: calc(32px + var(--kz-scale) + var(--kz-row) * var(--kz-i, 0) + var(--kz-row) / 2);
+}
+
+.kz-stage-card.is-above .kz-stage-card__leader::after {
+  bottom: 0;
+  border-top-color: var(--surface-accent);
+  border-bottom-width: 0;
+}
+
+.kz-stage-card.is-below .kz-stage-card__leader {
   bottom: 100%;
-  width: 1px;
-  height: 28px;
-  background: var(--border-default);
+  height: calc(32px + var(--kz-row) * (var(--kz-rows, 3) - 1 - var(--kz-i, 0)) + var(--kz-row) / 2);
+}
+
+.kz-stage-card.is-below .kz-stage-card__leader::after {
+  top: 0;
+  border-bottom-color: var(--surface-accent);
+  border-top-width: 0;
 }
 
 .kz-stage-card.is-start .kz-stage-card__leader {
@@ -525,21 +576,21 @@ html {
 }
 
 .kz-stage-card__title {
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   font: var(--weight-semibold) var(--size-body-lg) / 1.3 var(--font-core);
   letter-spacing: var(--tracking-heading);
   color: var(--text-strong);
 }
 
 .kz-stage-card__text {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   font: var(--weight-regular) var(--size-body-sm) / 1.5 var(--font-core);
   color: var(--text-muted);
 }
 
 .kz-stage-card__milestone {
   display: inline-block;
-  margin-top: 16px;
+  margin-top: 12px;
   padding: 6px 10px;
   background: var(--surface-subtle);
   font: var(--type-eyebrow);
@@ -555,6 +606,7 @@ html {
 }
 
 .kz-stages--static .kz-stages__cards {
+  position: static;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
