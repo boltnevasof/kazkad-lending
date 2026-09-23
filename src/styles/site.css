@@ -1554,7 +1554,7 @@ html {
 .kz-cases__head,
 .kz-case-row {
   display: grid;
-  grid-template-columns: 22% minmax(0, 1fr);
+  grid-template-columns: 25% minmax(0, 1fr);
   column-gap: 40px;
 }
 
@@ -1612,12 +1612,13 @@ html {
 
 /* Цифры прижаты к низу колонки, чтобы стоять на одной линии с нижним краем
  * экранов справа. */
-/* Цифры проекта идут сразу за описанием, а не прижимаются к низу колонки:
- * это главное, что нужно прочитать о проекте после его названия. */
+/* Цифры проекта стоят у нижнего края колонки, на одной линии с нижним краем
+ * снимков. */
 .kz-case-row__stats {
   display: flex;
   gap: 40px;
-  padding-top: 26px;
+  margin-top: auto;
+  padding-top: 40px;
 }
 
 .kz-case-row__stats > span {
@@ -1740,11 +1741,12 @@ html {
 
 /* Кнопка и адрес проекта стоят под описанием, цифры остаются прижатыми
  * к низу колонки. */
+/* Кнопка и адрес проекта стоят в одну строку. Адрес не переносится: у
+ * длинных доменов он уезжал под кнопку и строка разваливалась. */
 .kz-case-row__actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 14px 24px;
+  gap: 16px;
   margin-top: 28px;
 }
 
@@ -1752,8 +1754,10 @@ html {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
   color: var(--text-muted);
-  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
+  font: var(--weight-medium) 13px / 1 var(--font-core);
+  white-space: nowrap;
   transition: color var(--duration-base) var(--ease-standard);
 }
 
