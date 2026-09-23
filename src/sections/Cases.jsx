@@ -141,6 +141,16 @@ export default function Cases() {
                   </a>
                 </h3>
                 <p className="kz-case-row__text">{item.summary}</p>{' '}
+                {item.metrics && item.metrics.length > 0 ? (
+                  <div className="kz-case-row__stats">
+                    {item.metrics.slice(0, 2).map((metric) => (
+                      <span key={metric.caption}>
+                        <b>{metric.value}</b>{' '}
+                        <span>{metric.caption}</span>
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <span className="kz-case-row__actions">
                   <ArrowButton variant="secondary" size="sm" href={path} onClick={open(path)}>
                     смотреть кейс
@@ -158,16 +168,6 @@ export default function Cases() {
                   ) : null}
                 </span>
 
-                {item.metrics && item.metrics.length > 0 ? (
-                  <div className="kz-case-row__stats">
-                    {item.metrics.slice(0, 2).map((metric) => (
-                      <span key={metric.caption}>
-                        <b>{metric.value}</b>{' '}
-                        <span>{metric.caption}</span>
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
               </div>
 
               <Screens item={item} path={path} onOpen={open(path)} />

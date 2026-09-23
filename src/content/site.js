@@ -223,6 +223,34 @@ export const CASES = {
       metrics: [{ value: '2 недели', caption: 'на сайт с каталогом и товарами' }],
     },
     {
+      slug: 'sellerflow-ru',
+      title: 'SellerFlow.ru, реальная прибыль по каждому товару на маркетплейсе',
+      client: 'SellerFlow.ru',
+      group: 'сайты',
+      year: 2026,
+      launch: 'неделя',
+      url: 'https://sellerflow.ru/',
+      fill: 'blue',
+      // Гамма снята с продукта: #0484c6 — кнопки, #0e1b30 — тёмные блоки.
+      media: {
+        preset: 'browser',
+        src: '/assets/cases/sellerflow-ru/home.webp',
+        frame: { '--kzp-bg': '#0e1b30' },
+      },
+      summary:
+        'Лендинг сервиса, который считает прибыль продавца по каждому товару. Автоматический расчёт комиссий, логистики, рекламы и себестоимости без Excel и ручных сводок.',
+      task:
+        'Сервису нужна была страница, которая объясняет продавцу, откуда берётся его настоящая прибыль, и живая поддержка, потому что обращения копились и отвечать на них было некому.',
+      solution:
+        'Собрали лендинг целиком за неделю. Первый экран с финансовым отчётом, восемь инструментов сервиса, подключение в три шага, тарифы и ответы на вопросы. Следом настроили техническую поддержку, разобрали накопившиеся обращения и ведём её дальше.',
+      result:
+        'Лендинг вышел через неделю после старта, а поддержка работает по сей день.',
+      metrics: [
+        { value: 'неделя', caption: 'на лендинг целиком' },
+        { value: 'по сей день', caption: 'ведём техподдержку' },
+      ],
+    },
+    {
       slug: 'piligrim',
       title: 'Piligrim, отслеживание грузов из Китая',
       client: 'Piligrim',
@@ -384,6 +412,29 @@ export const CASES = {
 // снимки подставим, когда будем упаковывать кейсы. Подписи взяты из самих
 // кейсов, ничего нового не придумано.
 const SCREENS = {
+  // SellerFlow.ru в синем: первый экран в ноутбуке на светлом поле,
+  // инструменты в окне на тёмно-синем, подключение среди скобок.
+  'sellerflow-ru': [
+    {
+      title: 'Первый экран',
+      shot: '/assets/cases/sellerflow-ru/home.webp',
+      preset: 'laptop',
+      // Поля экрана красим фоном самой страницы, а не тёмного блока на ней.
+      frame: { '--kzp-bg': '#dceefb', '--kzd-screen': '#eff7fe' },
+    },
+    {
+      title: 'Инструменты сервиса',
+      shot: '/assets/cases/sellerflow-ru/tools.webp',
+      preset: 'browser',
+      frame: { '--kzp-bg': '#0e1b30' },
+    },
+    {
+      title: 'Подключение за три шага',
+      shot: '/assets/cases/sellerflow-ru/steps.webp',
+      preset: 'brackets',
+      frame: { '--kzp-bg': '#eff7fe', '--kzp-shape': '#0484c6' },
+    },
+  ],
   // SellerFlow в синем: лендинг в окне на фирменном синем, вход среди дуг
   // на светлом поле, кабинет в ноутбуке.
   sellerflow: [
@@ -486,9 +537,8 @@ CASES.items = CASES.items.filter((c) => !c.hidden);
 // Вкладки собираются из самих кейсов: пустых направлений в фильтре не будет.
 CASES.filters = ['все', ...Array.from(new Set(CASES.items.map((c) => c.group)))];
 
-// На главной три кейса подряд, остальные на /cases. Ряд занимает целый
-// экран на кейс, больше трёх туда не ставится.
-export const FEATURED_CASES = CASES.items.slice(0, 3);
+// На главной четыре кейса подряд, остальные на /cases.
+export const FEATURED_CASES = CASES.items.slice(0, 4);
 
 export function findCase(slug) {
   return CASES.items.find((c) => c.slug === slug) || null;

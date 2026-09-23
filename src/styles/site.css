@@ -1612,13 +1612,12 @@ html {
 
 /* Цифры прижаты к низу колонки, чтобы стоять на одной линии с нижним краем
  * экранов справа. */
-/* Цифры проекта стоят у нижнего края колонки, на одной линии с нижним краем
- * снимков. */
+/* Цифры идут сразу за описанием, кнопка с адресом уходит к нижнему краю
+ * колонки, на одну линию с нижним краем снимков. */
 .kz-case-row__stats {
   display: flex;
   gap: 40px;
-  margin-top: auto;
-  padding-top: 40px;
+  padding-top: 26px;
 }
 
 .kz-case-row__stats > span {
@@ -1747,7 +1746,8 @@ html {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-top: 28px;
+  margin-top: auto;
+  padding-top: 36px;
 }
 
 .kz-case-row__site {
