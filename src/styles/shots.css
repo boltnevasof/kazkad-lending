@@ -176,9 +176,9 @@
 }
 
 .kzp--circle .kzp__shape--1 {
-  top: 11%;
-  left: 13%;
-  width: 74%;
+  top: 4%;
+  left: 4%;
+  width: 92%;
   aspect-ratio: 1;
   background: var(--kzp-shape);
   border-radius: 50%;
@@ -187,8 +187,8 @@
 /* Снимок уже круга, поэтому круг виден и сверху, и снизу, и по бокам. */
 .kzp--circle .kzp__device {
   top: 50%;
-  left: 15%;
-  width: 70%;
+  left: 8%;
+  width: 84%;
   translate: 0 -50%;
 }
 
