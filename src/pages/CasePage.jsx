@@ -48,6 +48,7 @@ export default function CasePage() {
   const item = findCase(slug);
   const { prev, next } = neighbourCases(slug);
   const meta = item ? metaOf(item) : [];
+  const shots = item ? (item.screens || []).filter((s) => s.shot) : [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -112,7 +113,13 @@ export default function CasePage() {
           {item.media ? (
             /* Настоящий снимок проекта в кадре на широком поле. */
             <div className="kz-case-media is-shot" data-reveal="">
-              <Shot preset={item.media.preset} src={item.media.src} phone={item.media.phone} style={item.media.frame} />
+              <Shot
+                preset={item.media.preset}
+                src={item.media.src}
+                phone={item.media.phone}
+                ratio={item.media.ratio}
+                style={item.media.frame}
+              />
             </div>
           ) : (
             <div
@@ -161,6 +168,19 @@ export default function CasePage() {
               </p>
             </div>
           ))}
+
+          {/* Развеска кадров: крупный кадр слева, второй ниже и правее.
+              Так страница кейса перестаёт быть колонкой текста. */}
+          {shots.length > 0 && (
+            <div className="kz-case-shots">
+              {shots.map((shot, i) => (
+                <figure className="kz-case-shots__item" key={shot.title} data-reveal="" style={{ '--kz-delay': `${i * 90}ms` }}>
+                  <Shot preset={shot.preset} src={shot.shot} ratio={shot.ratio} style={shot.frame} />
+                  <figcaption>{shot.title}</figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
 
           {item.metrics && item.metrics.length > 0 && (
             <div className="kz-case-metrics">

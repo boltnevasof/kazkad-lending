@@ -1209,6 +1209,8 @@ html {
   border: 0;
 }
 
+/* Пропорция обложки по умолчанию широкая, но кейс может задать свою: у
+ * высокого снимка окно не помещалось и обрезалось нижним краем. */
 .kz-case-media.is-shot .kzp {
   --kzp-ratio: 1.9;
 }
@@ -1218,6 +1220,39 @@ html {
   left: 7%;
   width: 86%;
   translate: 0 -50%;
+}
+
+/* Развеска кадров внутри кейса: крупный кадр слева, второй ниже и правее,
+ * третий, если он есть, по центру под ними. Сетка в двенадцать колонок, как
+ * у обложки. */
+.kz-case-shots {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px 24px;
+  margin-top: 64px;
+}
+
+.kz-case-shots__item {
+  margin: 0;
+}
+
+.kz-case-shots__item:nth-child(1) {
+  grid-column: 1 / 8;
+}
+
+.kz-case-shots__item:nth-child(2) {
+  grid-column: 8 / 13;
+  margin-top: 72px;
+}
+
+.kz-case-shots__item:nth-child(3) {
+  grid-column: 3 / 11;
+}
+
+.kz-case-shots__item figcaption {
+  margin-top: 14px;
+  color: var(--text-muted);
+  font: var(--type-body-sm);
 }
 
 .kz-case-meta {
