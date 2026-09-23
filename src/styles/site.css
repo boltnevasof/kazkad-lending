@@ -572,6 +572,12 @@ html {
   justify-content: center;
 }
 
+/* В карточке списка кейсов заголовок стоит под квадратом, поэтому поля
+ * ровные со всех сторон. */
+.kz-art--square {
+  padding: 15% 13%;
+}
+
 .kz-art__inner {
   display: flex;
   flex-direction: column;
@@ -840,15 +846,18 @@ html {
 
 /* ---- медиахаб ---- */
 
+/* Размер участников считается от ширины, а не от высоты: в квадратном кадре
+ * списка кейсов пять квадратов по 24% высоты в ширину уже не помещались. */
 .kz-art__people {
   display: flex;
   gap: 6px;
-  height: 24%;
   flex: none;
 }
 
 .kz-art__people span {
-  height: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 44px;
   aspect-ratio: 1;
   border: 1px solid var(--kz-art-line);
   background: var(--kz-art-fill);
@@ -1097,8 +1106,67 @@ html {
 .kz-cases-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 40px 24px;
   margin-top: 40px;
+}
+
+/* Карточка проекта: квадрат, под ним название и ссылка. */
+.kz-case-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.kz-case-card,
+.kz-case-card:hover {
+  color: var(--text-body);
+}
+
+.kz-case-card__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--border-hairline);
+  transition: border-color var(--duration-base) var(--ease-standard);
+}
+
+.kz-case-card:hover .kz-case-card__frame {
+  border-color: var(--surface-accent);
+}
+
+/* Кадр занимает квадрат целиком и чуть подрастает под курсором. Поле кадра
+ * растёт вместе со снимком, поэтому по краям ничего не проглядывает. */
+.kz-case-card__frame > * {
+  width: 100%;
+  height: 100%;
+  transition: transform 700ms var(--ease-out);
+}
+
+.kz-case-card:hover .kz-case-card__frame > * {
+  transform: scale(1.04);
+}
+
+.kz-case-card__title {
+  margin-top: 18px;
+  font: var(--weight-semibold) 19px / 1.25 var(--font-core);
+  letter-spacing: -0.015em;
+  color: var(--text-strong);
+  text-wrap: balance;
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.kz-case-card:hover .kz-case-card__title {
+  color: var(--text-accent);
+}
+
+.kz-case-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--text-muted);
+  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
 }
 
 .kz-back {

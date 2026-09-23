@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Tabs } from '../design-system/index.js';
-import CaseTile from '../components/CaseTile.jsx';
+import CaseCard from '../components/CaseCard.jsx';
 import SplitText from '../components/SplitText.jsx';
 import Footer from '../sections/Footer.jsx';
 import { CASES } from '../content/site.js';
@@ -46,15 +46,10 @@ export default function CasesPage() {
 
           <div className="kz-cases-grid">
             {shown.map((c, i) => (
-              <CaseTile
-                slug={c.slug}
+              <CaseCard
+                item={c}
                 delay={i * 60}
                 key={c.slug}
-                title={c.title}
-                image={c.image}
-                imagePos={c.imagePos}
-                scrim={c.scrim}
-                fill={c.fill}
                 href={`/cases/${c.slug}`}
                 onClick={(e) => {
                   e.preventDefault();
