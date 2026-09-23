@@ -46,17 +46,20 @@ export default function Shot({ preset = 'phone', src, phone, shots, alt = '', ra
       ))}
 
       {cfg.trio ? (
-        (shots || []).slice(0, 3).map((shot, i) =>
-          cfg.trio === 'phone' ? (
-            <Iphone17Pro className={`kzp__trio kzp__trio--${i + 1}`} src={shot} alt="" key={shot} />
+        (shots || []).slice(0, 3).map((shot, i) => {
+          // Снимок задаётся строкой или объектом со своей пропорцией кадра.
+          const url = typeof shot === 'string' ? shot : shot.src;
+          const fit = typeof shot === 'string' ? null : { '--kzp-shot': shot.ratio };
+          return cfg.trio === 'phone' ? (
+            <Iphone17Pro className={`kzp__trio kzp__trio--${i + 1}`} src={url} alt="" key={url} />
           ) : (
-            <span className={`kzp__trio kzp__trio--${i + 1} kzp__device--card`} key={shot}>
+            <span className={`kzp__trio kzp__trio--${i + 1} kzp__device--card`} key={url} style={fit}>
               <span className="kzp__screen">
-                <img className="kzp__photo" src={shot} alt="" loading="lazy" />
+                <img className="kzp__photo" src={url} alt="" loading="lazy" />
               </span>
             </span>
-          ),
-        )
+          );
+        })
       ) : Device ? (
         <Device className="kzp__device" src={src} alt={alt} />
       ) : (
