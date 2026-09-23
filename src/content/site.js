@@ -371,6 +371,18 @@ export const CASES = {
       client: 'EasyCrypto',
       group: 'боты',
       fill: 'grey',
+      // Обложка: три экрана мини-приложения рядом. Поле тёмно-зелёное, под
+      // кислотный лайм самого бота, #c9f54e у него фон.
+      media: {
+        preset: 'trio-phone',
+        shots: [
+          '/assets/cases/easycrypto/menu.webp',
+          '/assets/cases/easycrypto/offers.webp',
+          '/assets/cases/easycrypto/wallet.webp',
+        ],
+        ratio: '1.6',
+        frame: { '--kzp-bg': '#1c2b0c' },
+      },
       summary:
         'Бот с мини-приложением, где люди покупают и продают криптовалюту напрямую друг у друга.',
       task:
@@ -578,7 +590,14 @@ const SCREENS = {
       frame: { '--kzp-bg': '#1b1420' },
     },
   ],
-  easycrypto: ['Объявления на обмен', 'Сделка и оплата', 'Мини-приложение'],
+  easycrypto: [
+    {
+      title: 'Объявления на обмен',
+      shot: '/assets/cases/easycrypto/offers.webp',
+      preset: 'phone',
+      frame: { '--kzp-bg': '#1c2b0c' },
+    },
+  ],
   dotgame: ['Первый экран', 'Титаны', 'Токен и карта развития'],
   avrora: ['Первый экран', 'Виды покрытий', 'Форма заявки'],
   maincoin: ['Покупка токена', 'Курс и заявка', 'Лента мероприятий'],
