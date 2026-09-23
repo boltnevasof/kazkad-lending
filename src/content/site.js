@@ -360,19 +360,19 @@ const SCREENS = {
       title: 'Главная страница',
       shot: '/assets/cases/akpack/home.webp',
       preset: 'laptop',
-      frame: { '--kzd-pos': '10% top' },
+      // Экран ноутбука чуть выше снимка, поля закрашены фоном сайта АкПак.
+      frame: { '--kzd-screen': '#0c1e25' },
     },
     {
       title: 'Каталог оборудования',
       shot: '/assets/cases/akpack/catalog.webp',
       preset: 'browser',
-      frame: { '--kzp-bg': 'var(--ink-900)', '--kzd-pos': 'left top' },
+      frame: { '--kzp-bg': 'var(--ink-900)' },
     },
     {
       title: 'Карточка товара',
       shot: '/assets/cases/akpack/product.webp',
       preset: 'stripes',
-      frame: { '--kzd-pos': '72% top' },
     },
   ],
   trendtrade: ['Экран торгов', 'Приём оплаты', 'Админка биржи'],

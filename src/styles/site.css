@@ -1146,10 +1146,10 @@ html {
 }
 
 .kz-case-media.is-shot .kzp .kzp__device {
-  top: 7%;
-  left: 9%;
-  width: 82%;
-  height: 86%;
+  top: 50%;
+  left: 11%;
+  width: 78%;
+  translate: 0 -50%;
 }
 
 .kz-case-meta {

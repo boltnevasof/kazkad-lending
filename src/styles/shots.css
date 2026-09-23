@@ -49,14 +49,14 @@
   box-shadow: 0 18px 44px rgba(23, 23, 23, 0.16);
 }
 
+/* Экран держит пропорцию самого снимка, поэтому снимок виден целиком и
+ * ничего не режется. Пропорцию задаёт --kzp-shot, по умолчанию это
+ * десктопный скрин 2000 x 1047. Высота окна складывается сама: шапка
+ * плюс экран. */
 .kzp__screen {
-  position: absolute;
-  inset: 0;
+  position: relative;
   overflow: hidden;
-}
-
-.kzp__device--card .kzp__screen {
-  inset: 1.6%;
+  aspect-ratio: var(--kzp-shot, 2000 / 1047);
 }
 
 .kzp__photo {
@@ -64,7 +64,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: var(--kzd-pos, center top);
+  object-position: center;
 }
 
 .kzp__shape {
@@ -72,17 +72,13 @@
   z-index: 0;
 }
 
-/* Шапка окна браузера: три точки и строка адреса. */
+/* Шапка окна браузера: три точки и строка адреса. Высота тоже пропорцией,
+ * чтобы окно оставалось окном при любой ширине. */
 .kzp__bar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 2;
   display: flex;
   align-items: center;
   gap: 1.4%;
-  height: 9%;
+  aspect-ratio: 1000 / 58;
   padding: 0 2.6%;
   background: var(--ink-000);
   border-bottom: 1px solid rgba(23, 23, 23, 0.1);
@@ -122,16 +118,12 @@
 }
 
 .kzp--browser .kzp__device {
-  top: 16%;
+  top: 50%;
   left: 8%;
   width: 84%;
-  height: 68%;
   background: var(--ink-000);
   box-shadow: 0 24px 50px rgba(9, 38, 88, 0.35);
-}
-
-.kzp--browser .kzp__screen {
-  inset: 9% 0 0;
+  translate: 0 -50%;
 }
 
 /* 03. Дуги. Две толстые дуги по диагонали, снимок карточкой между ними. */
@@ -157,10 +149,10 @@
 }
 
 .kzp--arcs .kzp__device {
-  top: 25%;
+  top: 50%;
   left: 13%;
   width: 74%;
-  height: 50%;
+  translate: 0 -50%;
 }
 
 /* ============================================================ фиолетовые */
@@ -194,10 +186,10 @@
 
 /* Снимок уже круга, поэтому круг виден и сверху, и снизу, и по бокам. */
 .kzp--circle .kzp__device {
-  top: 31%;
+  top: 50%;
   left: 15%;
   width: 70%;
-  height: 38%;
+  translate: 0 -50%;
 }
 
 /* 06. Скобки. Два угла держат снимок сверху слева и снизу справа. */
@@ -228,10 +220,10 @@
 }
 
 .kzp--brackets .kzp__device {
-  top: 22%;
+  top: 50%;
   left: 19%;
   width: 62%;
-  height: 56%;
+  translate: 0 -50%;
 }
 
 /* ============================================================ нейтральные */
@@ -253,26 +245,23 @@
   --kzp-shape: var(--ink-300);
 }
 
+/* Штриховка тонкая и во всю высоту кадра. */
 .kzp--stripes .kzp__shape--1 {
-  top: 10%;
+  top: 0;
   right: 0;
-  bottom: 10%;
+  bottom: 0;
   left: 0;
-  background: repeating-linear-gradient(90deg, var(--kzp-shape) 0 5%, transparent 5% 12%);
+  background: repeating-linear-gradient(90deg, var(--kzp-shape) 0 1.8%, transparent 1.8% 7.6%);
 }
 
-/* Карточка уже штриховки и сдвинута вправо: по бокам должно остаться поле,
- * иначе полос не видно вовсе и кадр превращается в белый лист. */
+/* Карточка уже штриховки: по бокам должно остаться поле, иначе полос не
+ * видно вовсе и кадр превращается в белый лист. */
 .kzp--stripes .kzp__device {
-  top: 22%;
-  left: 24%;
-  width: 62%;
-  height: 56%;
-  padding: 3%;
-}
-
-.kzp--stripes .kzp__device--card .kzp__screen {
-  inset: 3%;
+  top: 50%;
+  left: 17%;
+  width: 66%;
+  padding: 2.4%;
+  translate: 0 -50%;
 }
 
 /* 09. Сцена. Тёмное поле, светлый круг и телефон поверх. */

@@ -173,7 +173,7 @@
 .kzd-macbook {
   position: relative;
   display: block;
-  aspect-ratio: 312.6 / 236.7;
+  aspect-ratio: 312.6 / 231.4;
   container-type: inline-size;
 }
 
@@ -183,9 +183,9 @@
   right: 0;
   left: 0;
   height: 70.76cqw;
-  background: #0c0c0d;
-  border-radius: 2.24cqw 2.24cqw 0.9cqw 0.9cqw;
-  filter: var(--kzd-shadow, drop-shadow(0 1.6cqw 3.2cqw rgba(23, 23, 23, 0.3)));
+  background: #101012;
+  border-radius: 2.24cqw 2.24cqw 1.1cqw 1.1cqw;
+  filter: var(--kzd-shadow, drop-shadow(0 2.6cqw 5cqw rgba(23, 23, 23, 0.28)));
 }
 
 /* Тот же алюминиевый кант, что у телефона. */
@@ -206,12 +206,16 @@
   mask-composite: exclude;
 }
 
+/* Рамка вокруг экрана тонкая и почти равномерная, как на витринных
+ * рендерах Apple. Снимок ложится целиком, без обрезки: если его пропорция
+ * не совпадает с экраном, поля закрашиваются цветом --kzd-screen, обычно
+ * это фон самого сайта, и стыка не видно. */
 .kzd-macbook__screen {
   position: absolute;
-  inset: 1.63cqw 1.63cqw 6.3cqw;
+  inset: 1.63cqw 1.63cqw 2.4cqw;
   overflow: hidden;
   border-radius: 1.2cqw 1.2cqw 0 0;
-  background: #000;
+  background: var(--kzd-screen, #000);
 }
 
 .kzd-macbook__screen::after {
@@ -228,10 +232,8 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  /* Снимок обычно шире экрана. Какую часть показывать, решает кадр:
-   * --kzd-pos приходит из данных кейса. */
-  object-position: var(--kzd-pos, center top);
+  object-fit: contain;
+  object-position: var(--kzd-pos, center);
 }
 
 .kzd-macbook__notch {
@@ -246,19 +248,22 @@
   translate: -50% 0;
 }
 
-/* Планка корпуса: серебро, сверху тёмная щель под крышкой и выемка под
- * палец по центру, снизу скруглена. */
+/* Планка корпуса: тонкое серебро с мягкими бликами по краям, выемка под
+ * палец по центру едва обозначена тенью, снизу скруглённые торцы. */
 .kzd-macbook__base {
   position: absolute;
-  top: 70.6cqw;
+  top: 70.66cqw;
   left: 50%;
-  width: 103cqw;
-  height: 4.96cqw;
+  width: 112cqw;
+  height: 3.2cqw;
   background:
-    radial-gradient(ellipse 8cqw 130% at 50% 0, rgba(0, 0, 0, 0.32) 97%, transparent 100%),
-    linear-gradient(#f2f3f4, #c7c8cb 42%, #85868a);
-  border-radius: 0 0 1.8cqw 1.8cqw / 0 0 90% 90%;
-  box-shadow: 0 1.6cqw 3.6cqw rgba(23, 23, 23, 0.28);
+    radial-gradient(ellipse 9cqw 120% at 50% 0, rgba(0, 0, 0, 0.2) 96%, transparent 100%),
+    linear-gradient(to right, #9d9ea3, #eceded 5%, #d9dadd 50%, #eceded 95%, #8f9095),
+    linear-gradient(#f0f1f2, #c2c3c6);
+  border-radius: 0 0 2.4cqw 2.4cqw / 0 0 100% 100%;
+  box-shadow:
+    0 1.2cqw 2.2cqw rgba(23, 23, 23, 0.22),
+    0 5cqw 10cqw rgba(23, 23, 23, 0.14);
   translate: -50% 0;
 }
 
@@ -267,8 +272,8 @@
   content: '';
   position: absolute;
   top: 0;
-  right: 1.5cqw;
-  left: 1.5cqw;
-  height: max(1px, 0.22cqw);
-  background: rgba(23, 23, 23, 0.35);
+  right: 5cqw;
+  left: 5cqw;
+  height: max(1px, 0.18cqw);
+  background: rgba(23, 23, 23, 0.3);
 }
