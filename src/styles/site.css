@@ -1215,8 +1215,8 @@ html {
 
 .kz-case-media.is-shot .kzp .kzp__device {
   top: 50%;
-  left: 11%;
-  width: 78%;
+  left: 7%;
+  width: 86%;
   translate: 0 -50%;
 }
 
@@ -1588,6 +1588,10 @@ html {
   flex-direction: column;
 }
 
+.kz-case-row__title:hover {
+  color: var(--text-accent);
+}
+
 .kz-case-row__title {
   margin: 0;
   font: var(--weight-bold) clamp(26px, 2.4vw, 34px) / 1.1 var(--font-core);
@@ -1690,10 +1694,10 @@ html {
   transform: scale(1.04);
 }
 
-/* Область со снимками живёт со своим курсором. Родная стрелка прячется на
- * всей площади блока, включая зазоры между кадрами и подписи над ними, а
- * вместо неё за мышью едет подпись. */
-.kz-case-row__screens {
+/* Подпись за мышью живёт на уровне ряда: она всплывает и над снимками, и
+ * над названием проекта. Родная стрелка прячется только в этих двух местах,
+ * у описания и цифр курсор обычный. */
+.kz-case-row {
   position: relative;
 }
 
@@ -1725,15 +1729,17 @@ html {
 }
 
 @media (hover: hover) {
-  .kz-case-row__screens.is-hover .kz-screens__cursor {
+  .kz-case-row.is-hover .kz-screens__cursor {
     opacity: 1;
     scale: 1;
   }
 
-  /* Курсор гасится у всей области, а не только у кадров: в зазорах рядом с
-     подписью снова появлялась родная стрелка. */
-  .kz-case-row__screens.is-hover,
-  .kz-case-row__screens.is-hover .kz-screen {
+  /* Курсор гасится у всей области со снимками, а не только у кадров: в
+     зазорах рядом с подписью снова появлялась родная стрелка. */
+  .kz-case-row.is-hover .kz-case-row__screens,
+  .kz-case-row.is-hover .kz-case-row__screens .kz-screen,
+  .kz-case-row.is-hover .kz-case-row__title,
+  .kz-case-row.is-hover .kz-case-row__title a {
     cursor: none;
   }
 }

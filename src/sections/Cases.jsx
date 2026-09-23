@@ -30,46 +30,12 @@ const FILLS = {
 
 // Экраны проекта. В первом стоит наша схема кейса, остальные пока залиты
 // цветом: снимки подставим, когда упакуем кейсы.
-//
-// Над всей областью со снимками, включая зазоры между ними, родная стрелка
-// прячется и вместо неё за мышью едет подпись. Позицию пишем прямо в стиль
-// узла, а не в состояние: перерисовывать дерево на каждое движение мыши
-// незачем.
-function Screens({ item, path, onOpen }) {
-  const zone = useRef(null);
-  const cursor = useRef(null);
-
-  const place = (e, instant) => {
-    const box = zone.current;
-    const label = cursor.current;
-    if (!box || !label) return;
-    const rect = box.getBoundingClientRect();
-    // На входе в зону подпись переносится без анимации: иначе она проезжала
-    // через весь блок с того места, где её оставили в прошлый раз.
-    if (instant) label.style.transition = 'none';
-    label.style.transform = `translate(${Math.round(e.clientX - rect.left)}px, ${Math.round(e.clientY - rect.top)}px)`;
-    if (instant) {
-      void label.offsetWidth;
-      label.style.transition = '';
-    }
-  };
-
-  const enter = (e) => {
-    place(e, true);
-    if (zone.current) zone.current.classList.add('is-hover');
-  };
-
-  const leave = () => {
-    if (zone.current) zone.current.classList.remove('is-hover');
-  };
-
+function Screens({ item, path, onOpen, onEnter, onLeave }) {
   return (
     <div
       className="kz-case-row__screens"
-      ref={zone}
-      onMouseEnter={enter}
-      onMouseMove={(e) => place(e, false)}
-      onMouseLeave={leave}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
       onClick={(e) => {
         // Подпись обещает переход со всей площади, поэтому зазоры между
         // кадрами тоже ведут в кейс. По самим кадрам отрабатывает ссылка.
@@ -101,10 +67,87 @@ function Screens({ item, path, onOpen }) {
           )}
         </a>
       ))}
+    </div>
+  );
+}
+
+// Ряд кейса. Над снимками и над названием проекта родная стрелка прячется,
+// вместо неё за мышью едет подпись «смотреть кейс». Она живёт на уровне ряда,
+// а не внутри снимков: иначе над названием её было бы не показать. Позицию
+// пишем прямо в стиль узла, а не в состояние: перерисовывать дерево на каждое
+// движение мыши незачем.
+function Row({ item, path, onOpen, delay }) {
+  const row = useRef(null);
+  const cursor = useRef(null);
+
+  const place = (e, instant) => {
+    const box = row.current;
+    const label = cursor.current;
+    if (!box || !label) return;
+    const rect = box.getBoundingClientRect();
+    // На входе подпись переносится без анимации: иначе она проезжала через
+    // весь ряд с того места, где её оставили в прошлый раз.
+    if (instant) label.style.transition = 'none';
+    label.style.transform = `translate(${Math.round(e.clientX - rect.left)}px, ${Math.round(e.clientY - rect.top)}px)`;
+    if (instant) {
+      void label.offsetWidth;
+      label.style.transition = '';
+    }
+  };
+
+  const enter = (e) => {
+    place(e, true);
+    if (row.current) row.current.classList.add('is-hover');
+  };
+
+  const leave = () => {
+    if (row.current) row.current.classList.remove('is-hover');
+  };
+
+  return (
+    <article
+      className="kz-case-row"
+      ref={row}
+      data-reveal=""
+      style={{ '--kz-delay': `${delay}ms` }}
+      onMouseMove={(e) => place(e, false)}
+    >
+      <div className="kz-case-row__side">
+        <h3 className="kz-case-row__title" onMouseEnter={enter} onMouseLeave={leave}>
+          <a href={path} onClick={onOpen}>
+            {item.name}
+          </a>
+        </h3>
+        <p className="kz-case-row__text">{item.summary}</p>{' '}
+        {item.metrics && item.metrics.length > 0 ? (
+          <div className="kz-case-row__stats">
+            {item.metrics.slice(0, 2).map((metric) => (
+              <span key={metric.caption}>
+                <b>{metric.value}</b>{' '}
+                <span>{metric.caption}</span>
+              </span>
+            ))}
+          </div>
+        ) : null}
+        <span className="kz-case-row__actions">
+          <ArrowButton variant="secondary" size="sm" href={path} onClick={onOpen}>
+            смотреть кейс
+          </ArrowButton>{' '}
+          {item.url ? (
+            <a className="kz-case-row__site" href={item.url} target="_blank" rel="noopener noreferrer">
+              {hostOf(item.url)}
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+          ) : null}
+        </span>
+      </div>
+
+      <Screens item={item} path={path} onOpen={onOpen} onEnter={enter} onLeave={leave} />
+
       <span className="kz-screens__cursor" ref={cursor} aria-hidden="true">
         смотреть кейс
       </span>
-    </div>
+    </article>
   );
 }
 
@@ -132,47 +175,7 @@ export default function Cases() {
 
         {FEATURED_CASES.map((item, i) => {
           const path = `/cases/${item.slug}`;
-          return (
-            <article className="kz-case-row" key={item.slug} data-reveal="" style={{ '--kz-delay': `${i * 60}ms` }}>
-              <div className="kz-case-row__side">
-                <h3 className="kz-case-row__title">
-                  <a href={path} onClick={open(path)}>
-                    {item.name}
-                  </a>
-                </h3>
-                <p className="kz-case-row__text">{item.summary}</p>{' '}
-                {item.metrics && item.metrics.length > 0 ? (
-                  <div className="kz-case-row__stats">
-                    {item.metrics.slice(0, 2).map((metric) => (
-                      <span key={metric.caption}>
-                        <b>{metric.value}</b>{' '}
-                        <span>{metric.caption}</span>
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                <span className="kz-case-row__actions">
-                  <ArrowButton variant="secondary" size="sm" href={path} onClick={open(path)}>
-                    смотреть кейс
-                  </ArrowButton>{' '}
-                  {item.url ? (
-                    <a
-                      className="kz-case-row__site"
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {hostOf(item.url)}
-                      <Icon name="arrow-up-right" size={14} />
-                    </a>
-                  ) : null}
-                </span>
-
-              </div>
-
-              <Screens item={item} path={path} onOpen={open(path)} />
-            </article>
-          );
+          return <Row item={item} path={path} onOpen={open(path)} delay={i * 60} key={item.slug} />;
         })}
 
         <div className="kz-cases__all" data-reveal="">

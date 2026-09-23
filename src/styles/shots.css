@@ -119,8 +119,8 @@
 
 .kzp--browser .kzp__device {
   top: 50%;
-  left: 8%;
-  width: 84%;
+  left: 5%;
+  width: 90%;
   background: var(--ink-000);
   box-shadow: 0 24px 50px rgba(9, 38, 88, 0.35);
   translate: 0 -50%;
@@ -150,8 +150,8 @@
 
 .kzp--arcs .kzp__device {
   top: 50%;
-  left: 13%;
-  width: 74%;
+  left: 7%;
+  width: 86%;
   translate: 0 -50%;
 }
 
@@ -176,9 +176,9 @@
 }
 
 .kzp--circle .kzp__shape--1 {
-  top: 4%;
-  left: 4%;
-  width: 92%;
+  top: 2%;
+  left: 2%;
+  width: 96%;
   aspect-ratio: 1;
   background: var(--kzp-shape);
   border-radius: 50%;
@@ -187,8 +187,8 @@
 /* Снимок уже круга, поэтому круг виден и сверху, и снизу, и по бокам. */
 .kzp--circle .kzp__device {
   top: 50%;
-  left: 8%;
-  width: 84%;
+  left: 5%;
+  width: 90%;
   translate: 0 -50%;
 }
 
@@ -199,21 +199,21 @@
 }
 
 .kzp--brackets .kzp__shape {
-  width: 30%;
+  width: 34%;
   aspect-ratio: 1;
 }
 
 .kzp--brackets .kzp__shape--1 {
-  top: 10%;
-  left: 10%;
+  top: 5%;
+  left: 5%;
   background:
     linear-gradient(to right, var(--kzp-shape) 0 13%, transparent 13%),
     linear-gradient(to bottom, var(--kzp-shape) 0 13%, transparent 13%);
 }
 
 .kzp--brackets .kzp__shape--2 {
-  right: 10%;
-  bottom: 10%;
+  right: 5%;
+  bottom: 5%;
   background:
     linear-gradient(to left, var(--kzp-shape) 0 13%, transparent 13%),
     linear-gradient(to top, var(--kzp-shape) 0 13%, transparent 13%);
@@ -221,8 +221,8 @@
 
 .kzp--brackets .kzp__device {
   top: 50%;
-  left: 19%;
-  width: 62%;
+  left: 12%;
+  width: 76%;
   translate: 0 -50%;
 }
 
@@ -234,9 +234,10 @@
 }
 
 .kzp--laptop .kzp__device {
-  top: 21%;
-  left: 11%;
-  width: 78%;
+  top: 50%;
+  left: 7%;
+  width: 86%;
+  translate: 0 -50%;
 }
 
 /* 08. Полосы. Снимок стоит на фирменной штриховке. */
@@ -258,9 +259,9 @@
  * видно вовсе и кадр превращается в белый лист. */
 .kzp--stripes .kzp__device {
   top: 50%;
-  left: 8%;
-  width: 84%;
-  padding: 2%;
+  left: 5%;
+  width: 90%;
+  padding: 1.8%;
   translate: 0 -50%;
 }
 

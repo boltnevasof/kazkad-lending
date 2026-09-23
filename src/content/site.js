@@ -149,8 +149,8 @@ export const CASES = {
   items: [
     {
       slug: 'sellerflow',
-      title: 'SellerFlow, сервис оцифровки и аналитики продаж на Uzum',
-      client: 'SellerFlow',
+      title: 'SellerFlow.uz, сервис оцифровки и аналитики продаж на Uzum',
+      client: 'SellerFlow.uz',
       group: 'платформы',
       year: 2026,
       launch: '3 недели',
