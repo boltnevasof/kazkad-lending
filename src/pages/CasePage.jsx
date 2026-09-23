@@ -48,7 +48,9 @@ export default function CasePage() {
   const item = findCase(slug);
   const { prev, next } = neighbourCases(slug);
   const meta = item ? metaOf(item) : [];
-  const shots = item ? (item.screens || []).filter((s) => s.shot) : [];
+  // Развеска под текстом живёт в отдельном поле: обложка и она берут разные
+  // снимки, иначе одно и то же показывалось дважды.
+  const shots = item ? item.gallery || [] : [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -117,6 +119,7 @@ export default function CasePage() {
                 preset={item.media.preset}
                 src={item.media.src}
                 phone={item.media.phone}
+                shots={item.media.shots}
                 ratio={item.media.ratio}
                 style={item.media.frame}
               />

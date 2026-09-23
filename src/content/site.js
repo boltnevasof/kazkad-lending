@@ -298,6 +298,18 @@ export const CASES = {
       client: 'MOOVE × МТС × Сколково',
       group: 'платформы',
       fill: 'blue',
+      // Обложка: три экрана приложения рядом. Тёмное поле под стать самому
+      // продукту, интерфейс у него чёрный с малиновыми акцентами.
+      media: {
+        preset: 'trio-phone',
+        shots: [
+          '/assets/cases/moove/article.webp',
+          '/assets/cases/moove/hub.webp',
+          '/assets/cases/moove/profile.webp',
+        ],
+        ratio: '1.6',
+        frame: { '--kzp-bg': '#1b1420' },
+      },
       summary:
         'Платформа образовательной программы, где участники находят друг друга, читают материалы курса и публикуют свои.',
       task:
@@ -316,9 +328,13 @@ export const CASES = {
       fill: 'grey',
       // Обложка кейса: рабочий стол бухгалтера в окне на тёмно-синем поле.
       media: {
-        preset: 'browser',
-        src: '/assets/cases/pinfin/dashboard.webp',
-        ratio: '1.4',
+        preset: 'trio',
+        shots: [
+          '/assets/cases/pinfin/reports.webp',
+          '/assets/cases/pinfin/dashboard.webp',
+          '/assets/cases/pinfin/password.webp',
+        ],
+        ratio: '2.4',
         frame: { '--kzp-bg': '#101a33' },
       },
       summary:
@@ -437,17 +453,7 @@ const SCREENS = {
       title: 'Отчёт по клиенту',
       shot: '/assets/cases/pinfin/reports.webp',
       preset: 'corner',
-      // Кадр чуть выше пропорции снимка: иначе поле по краям не остаётся
-      // и уход за правый край читается как случайная обрезка.
-      ratio: '5 / 4',
       frame: { '--kzp-bg': '#eef3ff' },
-    },
-    {
-      title: 'Смена пароля',
-      shot: '/assets/cases/pinfin/password.webp',
-      preset: 'ring',
-      ratio: '1',
-      frame: { '--kzp-bg': '#ffffff', '--kzp-shape': '#3067f0' },
     },
   ],
   // Фото Детство в голубом: первый экран в окне на фирменном голубом,
@@ -564,7 +570,14 @@ const SCREENS = {
     },
   ],
   piligrim: ['Заявки на погрузку', 'Карточка груза', 'Документы по отгрузке'],
-  moove: ['Лента материалов', 'Карточка участника', 'Редактор статьи'],
+  moove: [
+    {
+      title: 'Медиахаб программы',
+      shot: '/assets/cases/moove/hub.webp',
+      preset: 'phone',
+      frame: { '--kzp-bg': '#1b1420' },
+    },
+  ],
   easycrypto: ['Объявления на обмен', 'Сделка и оплата', 'Мини-приложение'],
   dotgame: ['Первый экран', 'Титаны', 'Токен и карта развития'],
   avrora: ['Первый экран', 'Виды покрытий', 'Форма заявки'],

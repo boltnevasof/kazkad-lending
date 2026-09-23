@@ -6,6 +6,7 @@
 //   <Shot preset="arcs" src="…" style={{ '--kzp-shape': '#e2231a' }} />
 //   <Shot preset="browser" src="…" ratio="16 / 9" />
 //   <Shot preset="duo" src="…десктоп" phone="…мобильный" ratio="1.9" />
+//   <Shot preset="trio" shots=[…три снимка] ratio="2.4" />
 //
 // Корпуса лежат в components/devices, фигуры описаны в src/styles/shots.css.
 
@@ -27,9 +28,12 @@ const PRESETS = {
   // Связка: окно браузера и телефон рядом. Берёт два снимка, десктопный в
   // src и мобильный в phone.
   duo: { bar: true, withPhone: true },
+  // Трио: три снимка одного проекта рядом, приходят массивом в shots.
+  trio: { trio: 'card' },
+  'trio-phone': { trio: 'phone' },
 };
 
-export default function Shot({ preset = 'phone', src, phone, alt = '', ratio, className = '', style, ...rest }) {
+export default function Shot({ preset = 'phone', src, phone, shots, alt = '', ratio, className = '', style, ...rest }) {
   const kind = PRESETS[preset] ? preset : 'phone';
   const cfg = PRESETS[kind];
   const box = { ...(ratio ? { '--kzp-ratio': ratio } : null), ...style };
@@ -41,7 +45,19 @@ export default function Shot({ preset = 'phone', src, phone, alt = '', ratio, cl
         <span className={`kzp__shape kzp__shape--${i + 1}`} key={i} aria-hidden="true" />
       ))}
 
-      {Device ? (
+      {cfg.trio ? (
+        (shots || []).slice(0, 3).map((shot, i) =>
+          cfg.trio === 'phone' ? (
+            <Iphone17Pro className={`kzp__trio kzp__trio--${i + 1}`} src={shot} alt="" key={shot} />
+          ) : (
+            <span className={`kzp__trio kzp__trio--${i + 1} kzp__device--card`} key={shot}>
+              <span className="kzp__screen">
+                <img className="kzp__photo" src={shot} alt="" loading="lazy" />
+              </span>
+            </span>
+          ),
+        )
+      ) : Device ? (
         <Device className="kzp__device" src={src} alt={alt} />
       ) : (
         <span className={`kzp__device${cfg.card ? ' kzp__device--card' : ''}`}>
