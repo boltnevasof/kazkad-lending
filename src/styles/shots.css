@@ -258,9 +258,9 @@
  * видно вовсе и кадр превращается в белый лист. */
 .kzp--stripes .kzp__device {
   top: 50%;
-  left: 17%;
-  width: 66%;
-  padding: 2.4%;
+  left: 8%;
+  width: 84%;
+  padding: 2%;
   translate: 0 -50%;
 }
 
