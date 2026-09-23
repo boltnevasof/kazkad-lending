@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import ArrowButton from '../components/ArrowButton.jsx';
 import CaseArt from '../components/CaseArt.jsx';
+import Shot from '../components/Shot.jsx';
 import SplitText from '../components/SplitText.jsx';
 import { CASES, FEATURED_CASES } from '../content/site.js';
 import { useNav } from '../lib/nav.js';
@@ -74,12 +75,19 @@ function Screens({ item, path, onOpen }) {
           style={{ '--kz-delay': `${120 + si * 90}ms` }}
         >
           <span className="kz-screen__title">{screen.title}</span>{' '}
-          <span
-            className={`kz-screen__frame${screen.fill === 'blue' ? ' is-dark' : ''}`}
-            style={{ background: FILLS[screen.fill] || FILLS.tint }}
-          >
-            {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
-          </span>
+          {screen.shot ? (
+            /* Настоящий снимок в кадре. Кадр квадратный, как и клетка. */
+            <span className="kz-screen__frame">
+              <Shot preset={screen.preset} src={screen.shot} style={screen.frame} />
+            </span>
+          ) : (
+            <span
+              className={`kz-screen__frame${screen.fill === 'blue' ? ' is-dark' : ''}`}
+              style={{ background: FILLS[screen.fill] || FILLS.tint }}
+            >
+              {si === 0 ? <CaseArt slug={item.slug} variant="wide" /> : null}
+            </span>
+          )}
         </a>
       ))}
       <span className="kz-screens__cursor" ref={cursor} aria-hidden="true">

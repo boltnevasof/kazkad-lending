@@ -20,6 +20,7 @@ export default function CaseTile({
   slug,
   title,
   image,
+  imagePos,
   fill = 'tint',
   size = 'md',
   linkLabel = 'посмотреть кейс',
@@ -43,7 +44,10 @@ export default function CaseTile({
     >
       {image ? (
         <span className="kz-tile__media">
-          <img src={image} alt="" />
+          {/* Какую часть снимка показывать, решают данные кейса: на снимках
+              сайтов есть свои крупные надписи, и под заголовком плитки им
+              делать нечего. */}
+          <img src={image} alt="" style={imagePos ? { objectPosition: imagePos } : undefined} />
         </span>
       ) : (
         <CaseArt slug={slug} variant="tile" />

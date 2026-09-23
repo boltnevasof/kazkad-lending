@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Icon } from '../design-system/index.js';
 import ArrowButton from '../components/ArrowButton.jsx';
 import CaseArt from '../components/CaseArt.jsx';
+import Shot from '../components/Shot.jsx';
 import SplitText from '../components/SplitText.jsx';
 import Footer from '../sections/Footer.jsx';
 import { CONTACTS, findCase, neighbourCases } from '../content/site.js';
@@ -108,13 +109,20 @@ export default function CasePage() {
             </div>
           </div>
 
-          <div
-            className={`kz-case-media${item.fill === 'blue' || item.fill === 'grey' ? ' is-dark' : ''}`}
-            data-reveal=""
-            style={{ background: FILLS[item.fill] || FILLS.tint }}
-          >
-            {item.image ? <img src={item.image} alt="" /> : <CaseArt slug={item.slug} variant="wide" />}
-          </div>
+          {item.media ? (
+            /* Настоящий снимок проекта в кадре на широком поле. */
+            <div className="kz-case-media is-shot" data-reveal="">
+              <Shot preset={item.media.preset} src={item.media.src} style={item.media.frame} />
+            </div>
+          ) : (
+            <div
+              className={`kz-case-media${item.fill === 'blue' || item.fill === 'grey' ? ' is-dark' : ''}`}
+              data-reveal=""
+              style={{ background: FILLS[item.fill] || FILLS.tint }}
+            >
+              {item.image ? <img src={item.image} alt="" /> : <CaseArt slug={item.slug} variant="wide" />}
+            </div>
+          )}
 
           {/* Показываем только заполненные поля: пустой «срок запуска» хуже,
               чем его отсутствие. */}

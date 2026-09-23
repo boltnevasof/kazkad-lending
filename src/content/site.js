@@ -154,6 +154,17 @@ export const CASES = {
       group: 'сайты',
       url: 'https://akpack.ru/',
       fill: 'tint',
+      // Плитка в списке кейсов: снимок главной на весь квадрат. Показана
+      // правая часть, слева на снимке крупный заголовок сайта, и под
+      // заголовком плитки он превращался в кашу.
+      image: '/assets/cases/akpack/home.webp',
+      imagePos: '82% center',
+      // Кадр на странице кейса: главная в окне браузера на чёрном поле.
+      media: {
+        preset: 'browser',
+        src: '/assets/cases/akpack/home.webp',
+        frame: { '--kzp-bg': 'var(--ink-900)' },
+      },
       summary:
         'Сайт поставщика упаковочных материалов и оборудования с каталогом, который компания наполняет сама.',
       task:
@@ -341,7 +352,29 @@ export const CASES = {
 // снимки подставим, когда будем упаковывать кейсы. Подписи взяты из самих
 // кейсов, ничего нового не придумано.
 const SCREENS = {
-  akpack: ['Каталог упаковки', 'Карточка товара', 'Админка каталога'],
+  // У АкПак настоящие снимки: экран описывается объектом с кадром.
+  // Оформление чёрно-серое, под стиль самого проекта: ноутбук на сером,
+  // белое окно на чёрном, карточка на штриховке.
+  akpack: [
+    {
+      title: 'Главная страница',
+      shot: '/assets/cases/akpack/home.webp',
+      preset: 'laptop',
+      frame: { '--kzd-pos': '10% top' },
+    },
+    {
+      title: 'Каталог оборудования',
+      shot: '/assets/cases/akpack/catalog.webp',
+      preset: 'browser',
+      frame: { '--kzp-bg': 'var(--ink-900)', '--kzd-pos': 'left top' },
+    },
+    {
+      title: 'Карточка товара',
+      shot: '/assets/cases/akpack/product.webp',
+      preset: 'stripes',
+      frame: { '--kzd-pos': '72% top' },
+    },
+  ],
   trendtrade: ['Экран торгов', 'Приём оплаты', 'Админка биржи'],
   piligrim: ['Заявки на погрузку', 'Карточка груза', 'Документы по отгрузке'],
   moove: ['Лента материалов', 'Карточка участника', 'Редактор статьи'],
@@ -361,10 +394,11 @@ const SCREEN_FILLS = ['tint', 'blue', 'grey'];
 // поисковиков, там он и работает.
 CASES.items.forEach((item) => {
   item.name = item.title.split(',')[0];
-  item.screens = (SCREENS[item.slug] || []).map((title, i) => ({
-    title,
-    fill: SCREEN_FILLS[i % SCREEN_FILLS.length],
-  }));
+  // Экран задан строкой, пока у проекта нет настоящих снимков, и объектом
+  // с кадром, когда они появились.
+  item.screens = (SCREENS[item.slug] || []).map((screen, i) =>
+    typeof screen === 'string' ? { title: screen, fill: SCREEN_FILLS[i % SCREEN_FILLS.length] } : screen,
+  );
 });
 
 // Снятые кейсы отсекаются один раз здесь, поэтому дальше их не видит никто.

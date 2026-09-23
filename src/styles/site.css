@@ -1128,6 +1128,30 @@ html {
   object-position: center;
 }
 
+/* Кадр со снимком внутри клетки экрана занимает её целиком. */
+.kz-screen__frame > .kzp {
+  width: 100%;
+  height: 100%;
+}
+
+/* Страница кейса со снимком: рамку и высоту отдаёт сам кадр. Поле широкое,
+ * окно почти во всю ширину, чтобы снимок был виден без обрезки. */
+.kz-case-media.is-shot {
+  height: auto;
+  border: 0;
+}
+
+.kz-case-media.is-shot .kzp {
+  --kzp-ratio: 1.9;
+}
+
+.kz-case-media.is-shot .kzp .kzp__device {
+  top: 7%;
+  left: 9%;
+  width: 82%;
+  height: 86%;
+}
+
 .kz-case-meta {
   display: flex;
   flex-wrap: wrap;
