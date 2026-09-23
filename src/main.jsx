@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './design-system/styles.css';
 import './styles/site.css';
 import './styles/motion.css';
+import './styles/devices.css';
 import './styles/shots.css';
 // Последним: медиазапросы не добавляют специфичности и должны идти
 // в каскаде после базовых правил, иначе не перебьют их.

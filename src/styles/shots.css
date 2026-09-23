@@ -1,18 +1,17 @@
-/* Кадры для снимков проектов.
+/* Пресеты кадров для снимков проектов.
  *
- * Снимок никогда не лежит в пустом квадрате. Он или вставлен в устройство
- * (телефон, ноутбук, окно браузера) с корпусом и тенью, или обложен крупными
- * фигурами, как это делают в айдентике клиента. Разметка у всех девяти одна:
+ * Снимок никогда не лежит в пустом квадрате. Он или вставлен в корпус
+ * устройства, который свёрстан отдельно в devices.css, или обложен крупными
+ * фигурами, как это делают в айдентике клиента. Надписей на кадрах нет.
  *
- *   .kzp > .kzp__shape* + .kzp__device > .kzp__screen > img.kzp__photo
+ * Кадры с устройством:
+ *   .kzp > .kzd-iphone | .kzd-macbook (класс .kzp__device задаёт место)
+ * Кадры с фигурами:
+ *   .kzp > .kzp__shape* + .kzp__device--card > .kzp__screen > img
  *
- * Корпус и фигуры задаются процентами, а не пикселями, поэтому кадр можно
- * поставить хоть на 300, хоть на 900 точек и ничего не поедет. Радиусы
- * пишутся через дробь (9% / 4.5%), иначе на вытянутом корпусе телефона углы
- * получаются овальными.
- *
- * Цвет фигур берётся из --kzp-shape. Если у проекта свой фирменный цвет,
- * он подставляется прямо в кадр:
+ * Позиции и размеры заданы процентами кадра, поэтому пресет держится и на
+ * 300, и на 900 точках. Цвет фигур берётся из --kzp-shape, если у проекта
+ * свой фирменный цвет, он подставляется прямо в кадр:
  *
  *   <Shot preset="arcs" style={{ '--kzp-shape': '#e2231a' }} />
  *
@@ -28,7 +27,6 @@
 .kzp {
   --kzp-ratio: 1;
   --kzp-bg: var(--ink-100);
-  --kzp-ink: var(--ink-900);
   --kzp-shape: var(--blue-600);
   position: relative;
   display: block;
@@ -36,26 +34,21 @@
   aspect-ratio: var(--kzp-ratio);
   margin: 0;
   background: var(--kzp-bg);
-  color: var(--kzp-ink);
-  font: var(--weight-medium) 15px / 1.3 var(--font-core);
-  letter-spacing: -0.01em;
 }
 
-/* Корпус устройства. У кадров с фигурами он же работает простой карточкой:
- * белое поле с тенью, в котором лежит снимок. */
 .kzp__device {
   position: absolute;
   z-index: 1;
 }
 
+/* У кадров с фигурами вместо корпуса простая карточка: белое поле с тенью,
+ * в котором лежит снимок. */
 .kzp__device--card {
   padding: 1.6%;
   background: var(--ink-000);
   box-shadow: 0 18px 44px rgba(23, 23, 23, 0.16);
 }
 
-/* Экран вырезает снимок по себе, поэтому скруглённые углы корпуса не
- * приходится повторять на самой картинке. */
 .kzp__screen {
   position: absolute;
   inset: 0;
@@ -74,40 +67,12 @@
   object-position: center top;
 }
 
-.kzp__cap {
-  position: absolute;
-  z-index: 3;
-  margin: 0;
-}
-
 .kzp__shape {
   position: absolute;
   z-index: 0;
 }
 
-/* ---- части устройств ----
- *
- * Корпуса собраны по размерам Apple, а не на глаз. iPhone 17 Pro: корпус
- * 71,9 x 150 мм, экран 2622 x 1206 при 460 ppi, то есть 66,59 x 144,78 мм,
- * значит рамка ровно 2,65 мм со всех сторон — это 3,69% ширины корпуса.
- * Радиус экрана 55 pt = 9,11 мм, радиус корпуса на рамку больше. Остров
- * 20,76 мм шириной, это 31,2% ширины экрана.
- *
- * MacBook Pro 14: крышка 312,6 x 221,2 мм, экран 3024 x 1964 при 254 ppi,
- * то есть 302,4 x 196,4 мм. Боковые рамки 5,1 мм, снизу подбородок 19,7 мм.
- * Вырез 370 x 64 точки, это 12,24% ширины экрана.
- *
- * Проценты паддинга всегда считаются от ширины, поэтому одинаковое число
- * со всех сторон даёт одинаковую рамку и в миллиметрах. */
-
-/* Вырез лежит внутри экрана, поэтому его проценты — это проценты экрана,
- * а не всего корпуса. */
-.kzp__notch {
-  position: absolute;
-  z-index: 2;
-  background: #000;
-}
-
+/* Шапка окна браузера: три точки и строка адреса. */
 .kzp__bar {
   position: absolute;
   top: 0;
@@ -137,134 +102,27 @@
   background: rgba(23, 23, 23, 0.08);
 }
 
-/* Нижняя часть ноутбука: планка толщиной 15,5 мм при ширине корпуса, снизу
- * скруглена, в середине выемка под палец. Выемка нарисована градиентом,
- * отдельного узла на неё нет. */
-.kzp__base {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 104%;
-  aspect-ratio: 325 / 15.5;
-  background:
-    radial-gradient(ellipse 7% 150% at 50% 0, rgba(255, 255, 255, 0.28) 99%, transparent 100%),
-    linear-gradient(#9a9a9a, #5a5a5a 45%, #3a3a3a);
-  border-radius: 0 0 3% 3% / 0 0 100% 100%;
-  box-shadow: 0 16px 30px rgba(23, 23, 23, 0.26);
-  translate: -50% 0;
-}
-
-/* ---- корпус iPhone 17 Pro ---- */
-
-.kzp--phone .kzp__device,
-.kzp--phone-crop .kzp__device,
-.kzp--stage .kzp__device {
-  --kzp-rim: #3d3d42;
-  aspect-ratio: 71.9 / 150;
-  padding: 3.69%;
-  background: linear-gradient(118deg, #4c4c52, #17171a 24%, #2a2a2f 58%, #0f0f11);
-  border-radius: 16.36% / 7.84%;
-}
-
-.kzp--phone .kzp__screen,
-.kzp--phone-crop .kzp__screen,
-.kzp--stage .kzp__screen {
-  inset: 3.69%;
-  border-radius: 13.68% / 6.29%;
-}
-
-/* Кнопки нарисованы двумя полосками по бортам, каждая — градиент с резкими
- * границами. Слева кнопка действия и качелька громкости, справа боковая
- * кнопка и управление камерой. */
-.kzp--phone .kzp__device::before,
-.kzp--phone-crop .kzp__device::before,
-.kzp--stage .kzp__device::before,
-.kzp--phone .kzp__device::after,
-.kzp--phone-crop .kzp__device::after,
-.kzp--stage .kzp__device::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  /* По размерам кнопка выступает на 0,45 мм, это 0,62% ширины корпуса. На
-     карточке в 300 точек это меньше пикселя, поэтому снизу подпёрто двумя. */
-  width: max(2px, 0.62%);
-}
-
-.kzp--phone .kzp__device::before,
-.kzp--phone-crop .kzp__device::before,
-.kzp--stage .kzp__device::before {
-  left: max(-2px, -0.62%);
-  background: linear-gradient(
-    to bottom,
-    transparent 0 16.5%,
-    var(--kzp-rim) 16.5% 20.5%,
-    transparent 20.5% 25.5%,
-    var(--kzp-rim) 25.5% 31.5%,
-    transparent 31.5% 33%,
-    var(--kzp-rim) 33% 39%,
-    transparent 39%
-  );
-}
-
-.kzp--phone .kzp__device::after,
-.kzp--phone-crop .kzp__device::after,
-.kzp--stage .kzp__device::after {
-  right: max(-2px, -0.62%);
-  background: linear-gradient(
-    to bottom,
-    transparent 0 25%,
-    var(--kzp-rim) 25% 35%,
-    transparent 35% 40.5%,
-    var(--kzp-rim) 40.5% 45.5%,
-    transparent 45.5%
-  );
-}
-
-/* Остров: 31,2% ширины экрана, отступ сверху 1,26% его высоты. */
-.kzp--phone .kzp__notch,
-.kzp--phone-crop .kzp__notch,
-.kzp--stage .kzp__notch {
-  top: 1.26%;
-  left: 50%;
-  width: 31.17%;
-  aspect-ratio: 125.4 / 37.33;
-  border-radius: 999px;
-  translate: -50% 0;
-}
-
 /* ================================================================ синие */
 
-/* 01. Телефон. Корпус целиком стоит в светлом поле, снизу остаётся место
- * под подпись. Кадр по умолчанию для всего мобильного. */
+/* 01. Телефон. Корпус целиком стоит в светлом поле. */
 .kzp--phone {
   --kzp-bg: var(--blue-050);
 }
 
 .kzp--phone .kzp__device {
-  top: 6%;
+  top: 9%;
   left: 50%;
-  width: 36%;
-  box-shadow: 0 26px 54px rgba(23, 23, 23, 0.3);
+  width: 39%;
   translate: -50% 0;
 }
 
-.kzp--phone .kzp__cap {
-  bottom: 7%;
-  left: 50%;
-  color: var(--ink-600);
-  translate: -50% 0;
-}
-
-/* 02. Браузер. Белое окно висит в синем поле, подпись стоит над ним. Кадр
- * для сайтов и админок. */
+/* 02. Браузер. Белое окно висит в синем поле. */
 .kzp--browser {
   --kzp-bg: var(--blue-600);
-  --kzp-ink: var(--ink-000);
 }
 
 .kzp--browser .kzp__device {
-  top: 24%;
+  top: 16%;
   left: 8%;
   width: 84%;
   height: 68%;
@@ -276,13 +134,7 @@
   inset: 9% 0 0;
 }
 
-.kzp--browser .kzp__cap {
-  top: 10%;
-  left: 8%;
-}
-
-/* 03. Дуги. Две толстые дуги по диагонали, снимок карточкой между ними.
- * Кадр под проект с сильной айдентикой. */
+/* 03. Дуги. Две толстые дуги по диагонали, снимок карточкой между ними. */
 .kzp--arcs {
   --kzp-bg: var(--blue-050);
 }
@@ -305,41 +157,27 @@
 }
 
 .kzp--arcs .kzp__device {
-  top: 21%;
+  top: 25%;
   left: 13%;
   width: 74%;
   height: 50%;
 }
 
-.kzp--arcs .kzp__cap {
-  bottom: 12%;
-  left: 13%;
-  color: var(--ink-600);
-}
-
 /* ============================================================ фиолетовые */
 
-/* 04. Телефон крупно. Корпус срезан нижним краем, свободный верх забирает
- * подпись. Кадр для одного экрана, который надо разглядеть. */
+/* 04. Телефон крупно. Корпус срезан нижним краем. */
 .kzp--phone-crop {
   --kzp-bg: var(--kzp-violet-600);
-  --kzp-ink: var(--ink-000);
 }
 
 .kzp--phone-crop .kzp__device {
-  top: 24%;
+  --kzd-shadow: drop-shadow(0 -2cqw 8cqw rgba(17, 6, 54, 0.5));
+  top: 16%;
   left: 22%;
   width: 56%;
-  box-shadow: 0 -8px 60px rgba(17, 6, 54, 0.45);
 }
 
-.kzp--phone-crop .kzp__cap {
-  top: 10%;
-  left: 8%;
-}
-
-/* 05. Круг. Снимок лежит поперёк большого круга и выходит за него с двух
- * сторон. Кадр для широких экранов и разворотов. */
+/* 05. Круг. Снимок лежит поперёк большого круга. */
 .kzp--circle {
   --kzp-bg: var(--kzp-violet-050);
   --kzp-shape: var(--kzp-violet-600);
@@ -362,14 +200,7 @@
   height: 38%;
 }
 
-.kzp--circle .kzp__cap {
-  bottom: 9%;
-  left: 15%;
-  color: var(--kzp-violet-900);
-}
-
-/* 06. Скобки. Два угла держат снимок сверху слева и снизу справа. Кадр,
- * когда дуги слишком громкие, а пустое поле слишком тихое. */
+/* 06. Скобки. Два угла держат снимок сверху слева и снизу справа. */
 .kzp--brackets {
   --kzp-bg: var(--ink-000);
   --kzp-shape: var(--kzp-violet-600);
@@ -381,87 +212,51 @@
 }
 
 .kzp--brackets .kzp__shape--1 {
-  top: 8%;
-  left: 8%;
+  top: 10%;
+  left: 10%;
   background:
     linear-gradient(to right, var(--kzp-shape) 0 13%, transparent 13%),
     linear-gradient(to bottom, var(--kzp-shape) 0 13%, transparent 13%);
 }
 
 .kzp--brackets .kzp__shape--2 {
-  right: 8%;
-  bottom: 22%;
+  right: 10%;
+  bottom: 10%;
   background:
     linear-gradient(to left, var(--kzp-shape) 0 13%, transparent 13%),
     linear-gradient(to top, var(--kzp-shape) 0 13%, transparent 13%);
 }
 
 .kzp--brackets .kzp__device {
-  top: 19%;
+  top: 22%;
   left: 19%;
   width: 62%;
-  height: 50%;
-}
-
-.kzp--brackets .kzp__cap {
-  bottom: 8%;
-  left: 8%;
-  color: var(--kzp-violet-900);
+  height: 56%;
 }
 
 /* ============================================================ нейтральные */
 
-/* 07. Ноутбук. Корпус с подставкой на сером поле. Кадр для десктопных
- * интерфейсов, где важна ширина экрана. */
+/* 07. Ноутбук на сером поле. */
 .kzp--laptop {
   --kzp-bg: var(--ink-100);
 }
 
-/* Крышка MacBook Pro 14: боковые рамки 5,1 мм, снизу подбородок 19,7 мм. */
 .kzp--laptop .kzp__device {
-  top: 20%;
+  top: 21%;
   left: 11%;
   width: 78%;
-  aspect-ratio: 312.6 / 221.2;
-  padding: 1.63% 1.63% 6.3%;
-  background: linear-gradient(160deg, #2e2e33, #151518 60%, #1f1f23);
-  border-radius: 1.7% / 2.4%;
 }
 
-.kzp--laptop .kzp__screen {
-  inset: 1.63% 1.63% 6.3%;
-  border-radius: 0.6% / 0.9%;
-}
-
-/* Вырез под камеру: 370 x 64 точки, верх упирается в край экрана. */
-.kzp--laptop .kzp__notch {
-  top: 0;
-  left: 50%;
-  width: 12.24%;
-  aspect-ratio: 370 / 64;
-  border-radius: 0 0 14% 14% / 0 0 50% 50%;
-  translate: -50% 0;
-}
-
-.kzp--laptop .kzp__cap {
-  bottom: 9%;
-  left: 11%;
-  color: var(--ink-600);
-}
-
-/* 08. Полосы. Снимок стоит на фирменной штриховке и держится белым полем
- * вокруг. Кадр для мелких экранов, которые теряются на пустом фоне. */
+/* 08. Полосы. Снимок стоит на фирменной штриховке. */
 .kzp--stripes {
   --kzp-bg: var(--ink-000);
   --kzp-shape: var(--ink-300);
 }
 
-/* Полосы широкие и светлые, и заканчиваются выше подписи: на частой чёрной
- * штриховке снимок терялся, а подпись на ней не читалась вовсе. */
 .kzp--stripes .kzp__shape--1 {
-  top: 8%;
+  top: 10%;
   right: 0;
-  bottom: 24%;
+  bottom: 10%;
   left: 0;
   background: repeating-linear-gradient(90deg, var(--kzp-shape) 0 5%, transparent 5% 12%);
 }
@@ -469,10 +264,10 @@
 /* Карточка уже штриховки и сдвинута вправо: по бокам должно остаться поле,
  * иначе полос не видно вовсе и кадр превращается в белый лист. */
 .kzp--stripes .kzp__device {
-  top: 17%;
+  top: 22%;
   left: 24%;
   width: 62%;
-  height: 46%;
+  height: 56%;
   padding: 3%;
 }
 
@@ -480,17 +275,9 @@
   inset: 3%;
 }
 
-.kzp--stripes .kzp__cap {
-  bottom: 12%;
-  left: 8%;
-  color: var(--ink-600);
-}
-
-/* 09. Сцена. Тёмное поле, светлый круг и телефон поверх. Самый громкий кадр,
- * для обложки кейса. */
+/* 09. Сцена. Тёмное поле, светлый круг и телефон поверх. */
 .kzp--stage {
   --kzp-bg: var(--ink-900);
-  --kzp-ink: var(--ink-000);
   --kzp-shape: var(--ink-000);
 }
 
@@ -505,15 +292,9 @@
 }
 
 .kzp--stage .kzp__device {
-  --kzp-rim: #5f5f66;
-  top: 18%;
+  --kzd-shadow: drop-shadow(0 4cqw 9cqw rgba(0, 0, 0, 0.65));
+  top: 14%;
   left: 52%;
-  width: 40%;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  width: 42%;
   translate: -50% 0;
-}
-
-.kzp--stage .kzp__cap {
-  top: 9%;
-  left: 8%;
 }

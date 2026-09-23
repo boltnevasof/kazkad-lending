@@ -145,22 +145,24 @@ html {
   margin-top: 40px;
 }
 
-/* Подсказка стоит у нижнего края экрана, а не в потоке героя: содержимое
- * героя центрировано, и снизу как раз остаётся воздух. */
+/* Подсказка стоит по центру у нижнего края экрана, а не в потоке героя:
+ * содержимое героя центрировано, и снизу как раз остаётся воздух. */
 .kz-hero-cue {
   position: absolute;
   right: 0;
   bottom: 40px;
   left: 0;
+  text-align: center;
 }
 
 .kz-hero-scroll {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   padding: 0;
-  color: var(--text-muted);
-  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
+  color: var(--text-body);
+  font: var(--weight-medium) var(--size-body-lg) / 1 var(--font-core);
+  letter-spacing: -0.01em;
   background: none;
   border: 0;
   cursor: pointer;
@@ -168,7 +170,7 @@ html {
 }
 
 .kz-hero-scroll:hover {
-  color: var(--text-strong);
+  color: var(--text-accent);
 }
 
 .kz-hero-scroll__mark {

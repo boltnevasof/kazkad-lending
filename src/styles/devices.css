@@ -1,0 +1,270 @@
+/* Корпуса устройств: iPhone 17 Pro и MacBook Pro 14.
+ *
+ * Свёрстаны отдельно от пресетов кадров, чтобы их можно было ставить куда
+ * угодно. Каждый корпус — контейнер, и вся внутренняя геометрия задана в
+ * cqw, процентах его собственной ширины. Один cqw — один процент ширины
+ * корпуса, поэтому у телефона шириной 71,9 мм один миллиметр равен 1,3908
+ * cqw, у крышки ноутбука шириной 312,6 мм — 0,3199 cqw. Все числа ниже
+ * пересчитаны из миллиметров чертежей Apple, а не подобраны на глаз.
+ *
+ * cqw нельзя писать на самом контейнере, он меряет только предков, поэтому
+ * корпус состоит из корня с пропорцией и вложенного тела со всеми деталями. */
+
+/* ================================================== iPhone 17 Pro ====== */
+
+/* Корпус 71,9 x 150 мм, радиус 11,76 мм. Экран 66,59 x 144,78 мм с рамкой
+ * ровно 2,65 мм со всех сторон и радиусом 9,11 мм. Остров 20,76 x 6,18 мм
+ * в 1,82 мм от экрана. */
+.kzd-iphone {
+  position: relative;
+  display: block;
+  aspect-ratio: 71.9 / 150;
+  container-type: inline-size;
+}
+
+.kzd-iphone__body {
+  position: absolute;
+  inset: 0;
+  background: #0a0a0b;
+  border-radius: 16.36cqw;
+  filter: var(--kzd-shadow, drop-shadow(0 3cqw 6cqw rgba(23, 23, 23, 0.34)));
+}
+
+/* Алюминиевый кант по периметру: кольцо из градиента, середина вырезана
+ * маской. */
+.kzd-iphone__body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: max(1px, 0.8cqw);
+  background: linear-gradient(155deg, #e9eaec, #83848a 26%, #d6d7da 52%, #66676c 74%, #bbbcc0);
+  border-radius: 16.36cqw;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.kzd-iphone__screen {
+  position: absolute;
+  inset: 3.69cqw;
+  overflow: hidden;
+  border-radius: 12.67cqw;
+  background: #000;
+}
+
+/* Блик стекла поверх снимка, едва заметный. */
+.kzd-iphone__screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03) 30%, transparent 48%);
+  pointer-events: none;
+}
+
+.kzd-iphone__shot {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.kzd-iphone__island {
+  position: absolute;
+  top: 2.53cqw;
+  left: 50%;
+  z-index: 2;
+  width: 28.88cqw;
+  height: 8.6cqw;
+  background: #000;
+  border-radius: 4.3cqw;
+  translate: -50% 0;
+}
+
+/* Объектив фронтальной камеры в правой части острова. */
+.kzd-iphone__island::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 2cqw;
+  width: 4.4cqw;
+  height: 4.4cqw;
+  background: radial-gradient(circle at 35% 32%, #23345c 16%, #0b1122 55%, #000 95%);
+  border-radius: 50%;
+  translate: 0 -50%;
+}
+
+/* Полоска домой у нижнего края экрана. Полупрозрачная белая, на светлых
+ * снимках просто растворяется, так ведёт себя и настоящая. */
+.kzd-iphone__home {
+  position: absolute;
+  bottom: 2.9cqw;
+  left: 50%;
+  z-index: 2;
+  width: 30.6cqw;
+  height: 1.2cqw;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 99px;
+  translate: -50% 0;
+}
+
+/* Кнопки по бортам. Выступ настоящих — 0,45 мм, на маленьком кадре это
+ * меньше пикселя, поэтому у ширины стоит нижний предел. Слева кнопка
+ * действия и качелька громкости, справа боковая кнопка и управление
+ * камерой, высоты и отступы в миллиметрах взяты с чертежа. */
+.kzd-iphone__btn {
+  position: absolute;
+  width: max(2px, 0.8cqw);
+  background: linear-gradient(to bottom, #8e8f94, #5b5c61 50%, #85868b);
+}
+
+.kzd-iphone__btn--action,
+.kzd-iphone__btn--volup,
+.kzd-iphone__btn--voldown {
+  left: calc(-1 * max(2px, 0.8cqw) + max(1px, 0.35cqw));
+  border-radius: 1cqw 0 0 1cqw;
+}
+
+.kzd-iphone__btn--side,
+.kzd-iphone__btn--camera {
+  right: calc(-1 * max(2px, 0.8cqw) + max(1px, 0.35cqw));
+  border-radius: 0 1cqw 1cqw 0;
+}
+
+.kzd-iphone__btn--action {
+  top: 39.6cqw;
+  height: 12.5cqw;
+}
+
+.kzd-iphone__btn--volup {
+  top: 58.4cqw;
+  height: 16.1cqw;
+}
+
+.kzd-iphone__btn--voldown {
+  top: 77.7cqw;
+  height: 16.1cqw;
+}
+
+.kzd-iphone__btn--side {
+  top: 61.5cqw;
+  height: 20.9cqw;
+}
+
+.kzd-iphone__btn--camera {
+  top: 102.9cqw;
+  height: 11.1cqw;
+}
+
+/* ================================================ MacBook Pro 14 ====== */
+
+/* Крышка 312,6 x 221,2 мм, под ней планка корпуса толщиной 15,5 мм, итого
+ * пропорция 312,6 к 236,7. Экран 302,4 x 196,4 мм: рамки по 5,1 мм с боков
+ * и сверху, снизу 19,7 мм вместе с шарниром. Вырез камеры 37 x 6,4 мм. */
+.kzd-macbook {
+  position: relative;
+  display: block;
+  aspect-ratio: 312.6 / 236.7;
+  container-type: inline-size;
+}
+
+.kzd-macbook__lid {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 70.76cqw;
+  background: #0c0c0d;
+  border-radius: 2.24cqw 2.24cqw 0.9cqw 0.9cqw;
+  filter: var(--kzd-shadow, drop-shadow(0 1.6cqw 3.2cqw rgba(23, 23, 23, 0.3)));
+}
+
+/* Тот же алюминиевый кант, что у телефона. */
+.kzd-macbook__lid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: max(1px, 0.4cqw);
+  background: linear-gradient(160deg, #e6e7e9, #97989c 30%, #d2d3d6 58%, #7c7d81);
+  border-radius: 2.24cqw 2.24cqw 0.9cqw 0.9cqw;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.kzd-macbook__screen {
+  position: absolute;
+  inset: 1.63cqw 1.63cqw 6.3cqw;
+  overflow: hidden;
+  border-radius: 1.2cqw 1.2cqw 0 0;
+  background: #000;
+}
+
+.kzd-macbook__screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 34%, transparent 52%);
+  pointer-events: none;
+}
+
+.kzd-macbook__shot {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.kzd-macbook__notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  width: 11.84cqw;
+  height: 2.05cqw;
+  background: #000;
+  border-radius: 0 0 0.7cqw 0.7cqw;
+  translate: -50% 0;
+}
+
+/* Планка корпуса: серебро, сверху тёмная щель под крышкой и выемка под
+ * палец по центру, снизу скруглена. */
+.kzd-macbook__base {
+  position: absolute;
+  top: 70.6cqw;
+  left: 50%;
+  width: 103cqw;
+  height: 4.96cqw;
+  background:
+    radial-gradient(ellipse 8cqw 130% at 50% 0, rgba(0, 0, 0, 0.32) 97%, transparent 100%),
+    linear-gradient(#f2f3f4, #c7c8cb 42%, #85868a);
+  border-radius: 0 0 1.8cqw 1.8cqw / 0 0 90% 90%;
+  box-shadow: 0 1.6cqw 3.6cqw rgba(23, 23, 23, 0.28);
+  translate: -50% 0;
+}
+
+/* Щель между крышкой и корпусом. */
+.kzd-macbook__base::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1.5cqw;
+  left: 1.5cqw;
+  height: max(1px, 0.22cqw);
+  background: rgba(23, 23, 23, 0.35);
+}
