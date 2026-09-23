@@ -21,6 +21,8 @@ const PRESETS = {
   brackets: { shapes: 2, card: true },
   laptop: { device: 'macbook' },
   stripes: { shapes: 1, card: true },
+  corner: { card: true },
+  ring: { shapes: 1, card: true },
   stage: { shapes: 1, device: 'iphone' },
   // Связка: окно браузера и телефон рядом. Берёт два снимка, десктопный в
   // src и мобильный в phone.
