@@ -14,7 +14,7 @@ const PRESETS = {
   'phone-crop': { notch: true },
   circle: { shapes: 1, card: true },
   brackets: { shapes: 2, card: true },
-  laptop: { base: true },
+  laptop: { base: true, notch: true },
   stripes: { shapes: 1, card: true },
   stage: { shapes: 1, notch: true },
 };
@@ -48,11 +48,11 @@ export default function Shot({
             <span className="kzp__line" />
           </span>
         ) : null}
-        {cfg.notch ? <span className="kzp__notch" aria-hidden="true" /> : null}
         <span className="kzp__screen">
           {/* Пустая alt, когда подпись уже стоит в кадре: читалке незачем
               произносить одно и то же дважды. */}
           <img className="kzp__photo" src={src} alt={caption && !alt ? '' : alt} loading="lazy" />
+          {cfg.notch ? <span className="kzp__notch" aria-hidden="true" /> : null}
         </span>
         {cfg.base ? <span className="kzp__base" aria-hidden="true" /> : null}
       </span>

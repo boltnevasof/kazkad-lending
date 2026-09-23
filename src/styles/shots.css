@@ -85,19 +85,27 @@
   z-index: 0;
 }
 
-/* ---- части устройств ---- */
+/* ---- части устройств ----
+ *
+ * Корпуса собраны по размерам Apple, а не на глаз. iPhone 17 Pro: корпус
+ * 71,9 x 150 мм, экран 2622 x 1206 при 460 ppi, то есть 66,59 x 144,78 мм,
+ * значит рамка ровно 2,65 мм со всех сторон — это 3,69% ширины корпуса.
+ * Радиус экрана 55 pt = 9,11 мм, радиус корпуса на рамку больше. Остров
+ * 20,76 мм шириной, это 31,2% ширины экрана.
+ *
+ * MacBook Pro 14: крышка 312,6 x 221,2 мм, экран 3024 x 1964 при 254 ppi,
+ * то есть 302,4 x 196,4 мм. Боковые рамки 5,1 мм, снизу подбородок 19,7 мм.
+ * Вырез 370 x 64 точки, это 12,24% ширины экрана.
+ *
+ * Проценты паддинга всегда считаются от ширины, поэтому одинаковое число
+ * со всех сторон даёт одинаковую рамку и в миллиметрах. */
 
-/* Островок над экраном: без него корпус читается как просто чёрная рамка. */
+/* Вырез лежит внутри экрана, поэтому его проценты — это проценты экрана,
+ * а не всего корпуса. */
 .kzp__notch {
   position: absolute;
-  top: 2.4%;
-  left: 50%;
   z-index: 2;
-  width: 26%;
-  height: 2.6%;
-  background: var(--ink-900);
-  border-radius: 999px;
-  translate: -50% 0;
+  background: #000;
 }
 
 .kzp__bar {
@@ -129,18 +137,99 @@
   background: rgba(23, 23, 23, 0.08);
 }
 
-/* Подставка ноутбука: планка шире экрана, снизу скруглена, в середине выемка
- * под палец. Выемка нарисована градиентом, отдельного узла на неё нет. */
+/* Нижняя часть ноутбука: планка толщиной 15,5 мм при ширине корпуса, снизу
+ * скруглена, в середине выемка под палец. Выемка нарисована градиентом,
+ * отдельного узла на неё нет. */
 .kzp__base {
   position: absolute;
   top: 100%;
   left: 50%;
-  width: 116%;
-  height: 5.5%;
+  width: 104%;
+  aspect-ratio: 325 / 15.5;
   background:
-    radial-gradient(ellipse 7% 130% at 50% 0, rgba(255, 255, 255, 0.22) 99%, transparent 100%),
-    linear-gradient(var(--ink-600), var(--ink-800));
-  border-radius: 0 0 4% 4% / 0 0 100% 100%;
+    radial-gradient(ellipse 7% 150% at 50% 0, rgba(255, 255, 255, 0.28) 99%, transparent 100%),
+    linear-gradient(#9a9a9a, #5a5a5a 45%, #3a3a3a);
+  border-radius: 0 0 3% 3% / 0 0 100% 100%;
+  box-shadow: 0 16px 30px rgba(23, 23, 23, 0.26);
+  translate: -50% 0;
+}
+
+/* ---- корпус iPhone 17 Pro ---- */
+
+.kzp--phone .kzp__device,
+.kzp--phone-crop .kzp__device,
+.kzp--stage .kzp__device {
+  --kzp-rim: #3d3d42;
+  aspect-ratio: 71.9 / 150;
+  padding: 3.69%;
+  background: linear-gradient(118deg, #4c4c52, #17171a 24%, #2a2a2f 58%, #0f0f11);
+  border-radius: 16.36% / 7.84%;
+}
+
+.kzp--phone .kzp__screen,
+.kzp--phone-crop .kzp__screen,
+.kzp--stage .kzp__screen {
+  inset: 3.69%;
+  border-radius: 13.68% / 6.29%;
+}
+
+/* Кнопки нарисованы двумя полосками по бортам, каждая — градиент с резкими
+ * границами. Слева кнопка действия и качелька громкости, справа боковая
+ * кнопка и управление камерой. */
+.kzp--phone .kzp__device::before,
+.kzp--phone-crop .kzp__device::before,
+.kzp--stage .kzp__device::before,
+.kzp--phone .kzp__device::after,
+.kzp--phone-crop .kzp__device::after,
+.kzp--stage .kzp__device::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* По размерам кнопка выступает на 0,45 мм, это 0,62% ширины корпуса. На
+     карточке в 300 точек это меньше пикселя, поэтому снизу подпёрто двумя. */
+  width: max(2px, 0.62%);
+}
+
+.kzp--phone .kzp__device::before,
+.kzp--phone-crop .kzp__device::before,
+.kzp--stage .kzp__device::before {
+  left: max(-2px, -0.62%);
+  background: linear-gradient(
+    to bottom,
+    transparent 0 16.5%,
+    var(--kzp-rim) 16.5% 20.5%,
+    transparent 20.5% 25.5%,
+    var(--kzp-rim) 25.5% 31.5%,
+    transparent 31.5% 33%,
+    var(--kzp-rim) 33% 39%,
+    transparent 39%
+  );
+}
+
+.kzp--phone .kzp__device::after,
+.kzp--phone-crop .kzp__device::after,
+.kzp--stage .kzp__device::after {
+  right: max(-2px, -0.62%);
+  background: linear-gradient(
+    to bottom,
+    transparent 0 25%,
+    var(--kzp-rim) 25% 35%,
+    transparent 35% 40.5%,
+    var(--kzp-rim) 40.5% 45.5%,
+    transparent 45.5%
+  );
+}
+
+/* Остров: 31,2% ширины экрана, отступ сверху 1,26% его высоты. */
+.kzp--phone .kzp__notch,
+.kzp--phone-crop .kzp__notch,
+.kzp--stage .kzp__notch {
+  top: 1.26%;
+  left: 50%;
+  width: 31.17%;
+  aspect-ratio: 125.4 / 37.33;
+  border-radius: 999px;
   translate: -50% 0;
 }
 
@@ -153,20 +242,11 @@
 }
 
 .kzp--phone .kzp__device {
-  top: 7%;
+  top: 6%;
   left: 50%;
-  width: 42%;
-  height: 74%;
-  padding: 2%;
-  background: var(--ink-900);
-  border-radius: 11% / 6.2%;
+  width: 36%;
   box-shadow: 0 26px 54px rgba(23, 23, 23, 0.3);
   translate: -50% 0;
-}
-
-.kzp--phone .kzp__screen {
-  inset: 2%;
-  border-radius: 9% / 5%;
 }
 
 .kzp--phone .kzp__cap {
@@ -247,23 +327,10 @@
 }
 
 .kzp--phone-crop .kzp__device {
-  top: 26%;
-  left: 21%;
-  width: 58%;
-  height: 92%;
-  padding: 1.6%;
-  background: var(--ink-900);
-  border-radius: 9% / 5.6%;
+  top: 24%;
+  left: 22%;
+  width: 56%;
   box-shadow: 0 -8px 60px rgba(17, 6, 54, 0.45);
-}
-
-.kzp--phone-crop .kzp__screen {
-  inset: 1.6%;
-  border-radius: 7.4% / 4.6%;
-}
-
-.kzp--phone-crop .kzp__notch {
-  top: 3.2%;
 }
 
 .kzp--phone-crop .kzp__cap {
@@ -350,23 +417,34 @@
   --kzp-bg: var(--ink-100);
 }
 
+/* Крышка MacBook Pro 14: боковые рамки 5,1 мм, снизу подбородок 19,7 мм. */
 .kzp--laptop .kzp__device {
-  top: 22%;
+  top: 20%;
   left: 11%;
   width: 78%;
-  height: 48%;
-  padding: 1.3%;
-  background: var(--ink-900);
-  border-radius: 1.6% / 2.6%;
-  box-shadow: 0 22px 44px rgba(23, 23, 23, 0.22);
+  aspect-ratio: 312.6 / 221.2;
+  padding: 1.63% 1.63% 6.3%;
+  background: linear-gradient(160deg, #2e2e33, #151518 60%, #1f1f23);
+  border-radius: 1.7% / 2.4%;
 }
 
 .kzp--laptop .kzp__screen {
-  inset: 1.3%;
+  inset: 1.63% 1.63% 6.3%;
+  border-radius: 0.6% / 0.9%;
+}
+
+/* Вырез под камеру: 370 x 64 точки, верх упирается в край экрана. */
+.kzp--laptop .kzp__notch {
+  top: 0;
+  left: 50%;
+  width: 12.24%;
+  aspect-ratio: 370 / 64;
+  border-radius: 0 0 14% 14% / 0 0 50% 50%;
+  translate: -50% 0;
 }
 
 .kzp--laptop .kzp__cap {
-  bottom: 12%;
+  bottom: 9%;
   left: 11%;
   color: var(--ink-600);
 }
@@ -427,20 +505,12 @@
 }
 
 .kzp--stage .kzp__device {
-  top: 20%;
+  --kzp-rim: #5f5f66;
+  top: 18%;
   left: 52%;
   width: 40%;
-  height: 86%;
-  padding: 1.9%;
-  background: #000;
-  border-radius: 10% / 5.4%;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
   translate: -50% 0;
-}
-
-.kzp--stage .kzp__screen {
-  inset: 1.9%;
-  border-radius: 8.4% / 4.4%;
 }
 
 .kzp--stage .kzp__cap {
