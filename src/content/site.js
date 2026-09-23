@@ -181,6 +181,18 @@ export const CASES = {
       group: 'платформы',
       url: 'https://intrade.ed-services.site/',
       fill: 'blue',
+      // Плитка в списке кейсов и обложка страницы кейса. На обложке связка:
+      // окно с лентой событий и телефон с мини-приложением впереди.
+      image: '/assets/cases/trendtrade/market.webp',
+      // Интерфейс светлый, поэтому вуаль фиолетовая, а не чёрная: под чёрной
+      // белые карточки превращались в мутный серый.
+      scrim: 'linear-gradient(rgba(36, 20, 99, 0.88), rgba(120, 71, 229, 0.62) 46%, rgba(36, 20, 99, 0.9))',
+      media: {
+        preset: 'duo',
+        src: '/assets/cases/trendtrade/market.webp',
+        phone: '/assets/cases/trendtrade/app.webp',
+        frame: { '--kzp-bg': '#241463' },
+      },
       summary: 'Площадка, где пользователи торгуют исходами событий. Российский аналог Polymarket.',
       task:
         'Построить биржу предсказаний целиком, от котировок и сделок до приёма платежей и двух языковых версий.',
@@ -375,7 +387,29 @@ const SCREENS = {
       preset: 'stripes',
     },
   ],
-  trendtrade: ['Экран торгов', 'Приём оплаты', 'Админка биржи'],
+  // TrendTrade в фиолетовом: окно на фирменном фиолетовом, карточка события
+  // поперёк круга, мини-приложение в телефоне на глубоком фиолетовом.
+  // Цвет #7847e5 снят с кнопок самого продукта.
+  trendtrade: [
+    {
+      title: 'Лента событий',
+      shot: '/assets/cases/trendtrade/market.webp',
+      preset: 'browser',
+      frame: { '--kzp-bg': '#7847e5' },
+    },
+    {
+      title: 'Карточка события',
+      shot: '/assets/cases/trendtrade/event.webp',
+      preset: 'circle',
+      frame: { '--kzp-bg': '#f1edff', '--kzp-shape': '#7847e5' },
+    },
+    {
+      title: 'Мини-приложение',
+      shot: '/assets/cases/trendtrade/app.webp',
+      preset: 'phone',
+      frame: { '--kzp-bg': '#241463' },
+    },
+  ],
   piligrim: ['Заявки на погрузку', 'Карточка груза', 'Документы по отгрузке'],
   moove: ['Лента материалов', 'Карточка участника', 'Редактор статьи'],
   pinfin: ['Клиенты бухгалтера', 'Разбор транзакций', 'Счета и акты'],

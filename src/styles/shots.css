@@ -264,6 +264,34 @@
   translate: 0 -50%;
 }
 
+/* 10. Связка. Окно браузера и телефон одного продукта в одном кадре:
+ * телефон стоит впереди и заходит на правый край окна. Кадр широкий,
+ * рассчитан на пропорцию около 1.9, то есть на обложку кейса. */
+.kzp--duo {
+  --kzp-bg: var(--kzp-violet-900);
+}
+
+.kzp--duo .kzp__device {
+  top: 46%;
+  left: 4%;
+  width: 78%;
+  background: var(--ink-000);
+  box-shadow: 0 30px 60px rgba(9, 6, 40, 0.5);
+  translate: 0 -50%;
+}
+
+.kzp__phone {
+  position: absolute;
+  z-index: 2;
+}
+
+.kzp--duo .kzp__phone {
+  --kzd-shadow: drop-shadow(0 4cqw 8cqw rgba(9, 6, 40, 0.6));
+  right: 6%;
+  bottom: 7%;
+  width: 17%;
+}
+
 /* 09. Сцена. Тёмное поле, светлый круг и телефон поверх. */
 .kzp--stage {
   --kzp-bg: var(--ink-900);

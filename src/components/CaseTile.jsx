@@ -21,6 +21,7 @@ export default function CaseTile({
   title,
   image,
   imagePos,
+  scrim,
   fill = 'tint',
   size = 'md',
   linkLabel = 'посмотреть кейс',
@@ -39,7 +40,13 @@ export default function CaseTile({
       href={href}
       onClick={onClick}
       data-reveal=""
-      style={{ background: FILLS[fill] || FILLS.tint, '--kz-delay': `${delay}ms` }}
+      /* Вуаль поверх снимка по умолчанию нейтральная, но кейс может задать
+         свою: на светлом интерфейсе чёрная вуаль даёт мутный серый. */
+      style={{
+        background: FILLS[fill] || FILLS.tint,
+        '--kz-delay': `${delay}ms`,
+        ...(scrim ? { '--kz-tile-scrim': scrim } : null),
+      }}
       {...rest}
     >
       {image ? (

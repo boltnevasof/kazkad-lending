@@ -53,6 +53,7 @@ export default function CasesPage() {
                 title={c.title}
                 image={c.image}
                 imagePos={c.imagePos}
+                scrim={c.scrim}
                 fill={c.fill}
                 href={`/cases/${c.slug}`}
                 onClick={(e) => {

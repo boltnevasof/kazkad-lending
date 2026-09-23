@@ -112,7 +112,7 @@ export default function CasePage() {
           {item.media ? (
             /* Настоящий снимок проекта в кадре на широком поле. */
             <div className="kz-case-media is-shot" data-reveal="">
-              <Shot preset={item.media.preset} src={item.media.src} style={item.media.frame} />
+              <Shot preset={item.media.preset} src={item.media.src} phone={item.media.phone} style={item.media.frame} />
             </div>
           ) : (
             <div

@@ -5,6 +5,7 @@
 //   <Shot preset="phone" src="/assets/cases/akpack-app.jpg" alt="Каталог" />
 //   <Shot preset="arcs" src="…" style={{ '--kzp-shape': '#e2231a' }} />
 //   <Shot preset="browser" src="…" ratio="16 / 9" />
+//   <Shot preset="duo" src="…десктоп" phone="…мобильный" ratio="1.9" />
 //
 // Корпуса лежат в components/devices, фигуры описаны в src/styles/shots.css.
 
@@ -21,9 +22,12 @@ const PRESETS = {
   laptop: { device: 'macbook' },
   stripes: { shapes: 1, card: true },
   stage: { shapes: 1, device: 'iphone' },
+  // Связка: окно браузера и телефон рядом. Берёт два снимка, десктопный в
+  // src и мобильный в phone.
+  duo: { bar: true, withPhone: true },
 };
 
-export default function Shot({ preset = 'phone', src, alt = '', ratio, className = '', style, ...rest }) {
+export default function Shot({ preset = 'phone', src, phone, alt = '', ratio, className = '', style, ...rest }) {
   const kind = PRESETS[preset] ? preset : 'phone';
   const cfg = PRESETS[kind];
   const box = { ...(ratio ? { '--kzp-ratio': ratio } : null), ...style };
@@ -52,6 +56,8 @@ export default function Shot({ preset = 'phone', src, alt = '', ratio, className
           </span>
         </span>
       )}
+
+      {cfg.withPhone && phone ? <Iphone17Pro className="kzp__phone" src={phone} alt="" /> : null}
     </span>
   );
 }
