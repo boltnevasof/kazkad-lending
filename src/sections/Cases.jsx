@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Icon } from '../design-system/index.js';
 import ArrowButton from '../components/ArrowButton.jsx';
 import CaseArt from '../components/CaseArt.jsx';
 import Shot from '../components/Shot.jsx';
@@ -9,6 +10,16 @@ import { useNav } from '../lib/nav.js';
 // Кейсы рядами: слева название проекта, что мы сделали и цифры, справа экраны
 // этого проекта с подписями. Ряд занимает почти весь экран, поэтому на главной
 // их три, а весь список живёт на /cases.
+
+// Адрес проекта показываем без протокола и без www: в ряду важна не ссылка,
+// а то, что проект живой и его можно открыть.
+function hostOf(url) {
+  try {
+    return new URL(url).host.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+}
 
 const FILLS = {
   tint: 'var(--blue-050)',
@@ -130,14 +141,6 @@ export default function Cases() {
                   </a>
                 </h3>
                 <p className="kz-case-row__text">{item.summary}</p>{' '}
-                <ArrowButton
-                  className="kz-case-row__btn"
-                  variant="secondary"
-                  href={path}
-                  onClick={open(path)}
-                >
-                  смотреть кейс
-                </ArrowButton>
                 {item.metrics && item.metrics.length > 0 ? (
                   <div className="kz-case-row__stats">
                     {item.metrics.slice(0, 2).map((metric) => (
@@ -148,6 +151,22 @@ export default function Cases() {
                     ))}
                   </div>
                 ) : null}
+                <span className="kz-case-row__actions">
+                  <ArrowButton variant="secondary" href={path} onClick={open(path)}>
+                    смотреть кейс
+                  </ArrowButton>{' '}
+                  {item.url ? (
+                    <a
+                      className="kz-case-row__site"
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {hostOf(item.url)}
+                      <Icon name="arrow-up-right" size={14} />
+                    </a>
+                  ) : null}
+                </span>
               </div>
 
               <Screens item={item} path={path} onOpen={open(path)} />

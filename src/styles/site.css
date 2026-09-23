@@ -1612,11 +1612,12 @@ html {
 
 /* Цифры прижаты к низу колонки, чтобы стоять на одной линии с нижним краем
  * экранов справа. */
+/* Цифры проекта идут сразу за описанием, а не прижимаются к низу колонки:
+ * это главное, что нужно прочитать о проекте после его названия. */
 .kz-case-row__stats {
   display: flex;
   gap: 40px;
-  margin-top: auto;
-  padding-top: 48px;
+  padding-top: 26px;
 }
 
 .kz-case-row__stats > span {
@@ -1737,10 +1738,27 @@ html {
   }
 }
 
-/* Кнопка стоит под описанием проекта, цифры остаются прижатыми к низу. */
-.kz-case-row__btn {
-  align-self: flex-start;
+/* Кнопка и адрес проекта стоят под описанием, цифры остаются прижатыми
+ * к низу колонки. */
+.kz-case-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
   margin-top: 28px;
+}
+
+.kz-case-row__site {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font: var(--weight-medium) var(--size-body-sm) / 1 var(--font-core);
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.kz-case-row__site:hover {
+  color: var(--text-accent);
 }
 
 .kz-cases__all {
