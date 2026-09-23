@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Hero from '../sections/Hero.jsx';
 import Method from '../sections/Method.jsx';
@@ -8,6 +8,7 @@ import Faq from '../sections/Faq.jsx';
 import Contact from '../sections/Contact.jsx';
 import Footer from '../sections/Footer.jsx';
 import { useNav } from '../lib/nav.js';
+import { initHeroJump } from '../lib/hero-jump.js';
 
 export default function Landing() {
   const { goSection, openTelegram } = useNav();
@@ -22,6 +23,10 @@ export default function Landing() {
     if (target) target.scrollIntoView({ block: 'start', behavior: 'auto' });
     else window.scrollTo(0, 0);
   }, [location.key, location.state]);
+
+  // Первое движение прокрутки на первом экране уводит к кейсам. Живёт только
+  // на лендинге: на остальных страницах прокрутка обычная.
+  useEffect(() => initHeroJump(), []);
 
   return (
     <>
