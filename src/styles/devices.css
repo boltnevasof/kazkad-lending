@@ -54,7 +54,7 @@
   inset: 3.69cqw;
   overflow: hidden;
   border-radius: 12.67cqw;
-  background: #000;
+  background: var(--kzd-screen, #000);
 }
 
 /* Блик стекла поверх снимка, едва заметный. */
@@ -66,15 +66,19 @@
   pointer-events: none;
 }
 
+/* Снимок обычно шире экрана, какую часть показывать решает --kzd-pos.
+ * А --kzd-top опускает его ниже острова: на снимках без статус-бара
+ * остров ложился прямо на шапку приложения. Полоса над снимком красится
+ * цветом --kzd-screen, обычно это фон самого приложения. */
 .kzd-iphone__shot {
   position: absolute;
-  inset: 0;
+  top: var(--kzd-top, 0px);
+  right: 0;
+  left: 0;
   display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100% - var(--kzd-top, 0px));
   object-fit: cover;
-  /* Снимок обычно шире экрана. Какую часть показывать, решает кадр:
-   * --kzd-pos приходит из данных кейса. */
   object-position: var(--kzd-pos, center top);
 }
 
