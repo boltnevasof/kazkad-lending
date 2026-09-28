@@ -9,6 +9,9 @@ import './styles/shots.css';
 // Последним: медиазапросы не добавляют специфичности и должны идти
 // в каскаде после базовых правил, иначе не перебьют их.
 import './styles/responsive.css';
+// Страница /trackers после всех общих стилей: она перебивает часть общих
+// компонентов под свой макет.
+import './styles/trackers.css';
 import App from './App.jsx';
 
 const container = document.getElementById('root');

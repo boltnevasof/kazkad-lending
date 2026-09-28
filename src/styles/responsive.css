@@ -113,6 +113,9 @@
        получает лишнюю вертикальную прокрутку. */
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
+    /* Без этого привязка тянула первый экран к самому краю: лента на загрузке
+       сама прокручивалась на ширину поля, и экраны стояли левее текста. */
+    scroll-padding-inline: var(--container-gutter);
     scrollbar-width: none;
   }
 

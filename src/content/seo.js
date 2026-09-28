@@ -126,6 +126,16 @@ const CASES_PAGE = {
     'Сайты, веб-платформы, личные кабинеты и Telegram-боты, которые запустила студия Kazkad. По каждому проекту видно задачу, решение и результат.',
 };
 
+// Лендинг для партнёров-трекеров. Описание — подзаголовок первого экрана.
+const TRACKERS_PAGE = {
+  path: '/trackers',
+  title: 'Kazkad × трекеры | Бесплатная IT консультация клиентам и 15% вам',
+  description:
+    'Разбираем, где в бизнесе клиента теряются заявки и деньги, и за день собираем прототип сайта, бота или кабинета. Вы советуете нас клиенту, мы доводим его до запуска с датой в договоре.',
+  // Звезда за логотипом на первом экране, как на главной.
+  preload: ['/assets/star-glow.webp'],
+};
+
 const PRIVACY_PAGE = {
   path: '/privacy',
   title: 'Политика конфиденциальности | Kazkad',
@@ -262,6 +272,7 @@ export function seoFor(pathname) {
   if (path === METHOD_PAGE.path) return methodPage();
   if (path === '/cases') return casesPage();
   if (path === '/privacy') return build(PRIVACY_PAGE);
+  if (path === TRACKERS_PAGE.path) return build(TRACKERS_PAGE);
 
   const match = path.match(/^\/cases\/([^/]+)$/);
   const item = match ? findCase(match[1]) : null;
@@ -272,7 +283,14 @@ export function seoFor(pathname) {
 
 // Адреса, которые собираются в готовый HTML и попадают в карту сайта.
 export function prerenderRoutes() {
-  return ['/', METHOD_PAGE.path, '/cases', ...CASES.items.map((c) => `/cases/${c.slug}`), '/privacy'];
+  return [
+    '/',
+    METHOD_PAGE.path,
+    '/cases',
+    ...CASES.items.map((c) => `/cases/${c.slug}`),
+    TRACKERS_PAGE.path,
+    '/privacy',
+  ];
 }
 
 const escapeAttr = (value) =>

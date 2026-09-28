@@ -42,6 +42,9 @@ function entry(path) {
     return { path, priority: '0.9', changefreq: 'monthly', lastmod: lastmod('src/content/method.js') };
   }
   if (path === '/cases') return { path, priority: '0.8', changefreq: 'monthly', lastmod: casesDate };
+  if (path === '/trackers') {
+    return { path, priority: '0.5', changefreq: 'monthly', lastmod: lastmod('src/content/trackers.js') };
+  }
   if (path === '/privacy') {
     return { path, priority: '0.2', changefreq: 'yearly', lastmod: lastmod('src/content/legal.js') };
   }

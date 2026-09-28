@@ -6,6 +6,7 @@ import CasePage from './pages/CasePage.jsx';
 import PrivacyPage from './pages/PrivacyPage.jsx';
 import MethodPage from './pages/MethodPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
+import TrackersPage from './pages/TrackersPage.jsx';
 import Preloader from './components/Preloader.jsx';
 import SiteNav from './components/SiteNav.jsx';
 import SlideCurtain from './components/SlideCurtain.jsx';
@@ -27,6 +28,10 @@ const UNCOVER_MS = 440;
 // высота: к моменту, когда герой ушёл под шапку, стекло уже плотное.
 const NAV_GLASS_RANGE = 88;
 
+// Отдельные лендинги со своей шапкой и своими разделами: общая навигация сайта
+// там не показывается, а переходы по разделам идут внутри той же страницы.
+const STANDALONE = ['/trackers'];
+
 export default function App() {
   const [booted, setBooted] = useState(() => prefersReducedMotion());
   const [section, setSection] = useState('#top');
@@ -37,6 +42,7 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const onLanding = location.pathname === '/';
+  const standalone = STANDALONE.includes(location.pathname.replace(/(.)\/+$/, '$1'));
 
   // Готовый HTML страницы уже несёт свои title и описание, но переход по
   // ссылке внутри сайта страницу не перезагружает, поэтому меняем их сами.
@@ -142,7 +148,8 @@ export default function App() {
       runCurtain(() => {
         // С другой страницы возвращаемся на лендинг и передаём якорь через
         // state — доскроллит уже сам Landing, когда разметка появится.
-        if (location.pathname !== '/') {
+        // Отдельный лендинг держит свои разделы у себя и никуда не уходит.
+        if (location.pathname !== '/' && !standalone) {
           navigate('/', { state: { anchor: href } });
           return;
         }
@@ -153,7 +160,7 @@ export default function App() {
         replayReveal(target || document.querySelector('#top'));
       });
     },
-    [location.pathname, navigate, runCurtain],
+    [location.pathname, navigate, runCurtain, standalone],
   );
 
   const goPath = useCallback(
@@ -178,14 +185,16 @@ export default function App() {
   return (
     <NavContext.Provider value={nav}>
       <div className="kz-site">
-        <SiteNav
-          links={NAV_LINKS}
-          activeHref={activeHref}
-          cta={HERO.cta}
-          onCtaClick={openTelegram}
-          onNavigate={goSection}
-          onOpenCases={() => goPath('/cases')}
-        />
+        {standalone ? null : (
+          <SiteNav
+            links={NAV_LINKS}
+            activeHref={activeHref}
+            cta={HERO.cta}
+            onCtaClick={openTelegram}
+            onNavigate={goSection}
+            onOpenCases={() => goPath('/cases')}
+          />
+        )}
 
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -193,6 +202,7 @@ export default function App() {
           <Route path="/cases/:slug" element={<CasePage />} />
           <Route path="/kaskadnaya-razrabotka" element={<MethodPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/trackers" element={<TrackersPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
 

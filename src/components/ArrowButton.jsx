@@ -9,12 +9,15 @@ export default function ArrowButton({
   variant = 'primary',
   size = 'md',
   icon = 'arrow-right',
+  // Размер стрелки, если он не совпадает с размером кнопки: в макете /trackers
+  // у кнопки xl стрелка 20px, а на главной у той же кнопки 16px.
+  arrowSize,
   children,
   className = '',
   href,
   ...rest
 }) {
-  const px = ARROW_SIZE[size] || ARROW_SIZE.md;
+  const px = arrowSize || ARROW_SIZE[size] || ARROW_SIZE.md;
   const Tag = href ? 'a' : 'button';
   const tagProps = href ? { href } : { type: 'button' };
 

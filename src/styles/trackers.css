@@ -1,0 +1,1521 @@
+/* Лендинг для партнёров-трекеров: /trackers (src/pages/TrackersPage.jsx).
+ *
+ * Значения один в один из макета «Kazkad x trackers» в Claude Design:
+ * базовые правила — кадр «десктоп 1440», ниже 1100px — кадр «планшет 834»,
+ * ниже 760px — кадр «мобильный 375». Кнопки, кнопка шапки, кадр снимка и FAQ
+ * берут общие стили сайта (motion.css, shots.css, site.css).
+ *
+ * Шапка перестраивается по своим порогам. В макете десктопная шапка
+ * помещается только от ~1330px, а на планшете 834 кнопка «созвониться»
+ * уходит за край. Поэтому шапка ужимается ступенями и только там, где меню
+ * физически не влезает, прячется в бургер.
+ *
+ * Шире 1440 фоны секций идут во всю ширину, а содержимое держится колонкой
+ * 1280px по центру, как в макете (1440 минус поля по 80px) и как на главной.
+ *
+ * Моушен общий с главной (motion.css): появление по data-reveal, заголовки
+ * по словам, стекло шапки по --kz-nav-p. Здесь только то, что своё. */
+
+.kzt-page {
+  --kzt-header: 88px;
+  --kzt-gutter: 80px;
+  /* 100% считается там, где поле применяется: от ширины страницы. */
+  --kzt-pad-x: max(var(--kzt-gutter), calc((100% - 1280px) / 2));
+  --kzt-pad-y: 120px;
+  background: #fff;
+  color: #272727;
+}
+
+.kzt-page section[id] {
+  scroll-margin-top: var(--kzt-header);
+}
+
+/* ------------------------------------------------------------------ логотип */
+
+.kzt-lockup {
+  --kzt-l-size: 21px;
+  --kzt-l-mark: 24px;
+  --kzt-l-gap: 14px;
+  --kzt-l-brand-gap: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kzt-l-gap);
+  line-height: 1;
+  color: #171717;
+}
+
+.kzt-lockup__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kzt-l-brand-gap);
+}
+
+.kzt-lockup__mark {
+  display: block;
+  width: auto;
+  height: var(--kzt-l-mark);
+}
+
+.kzt-lockup__name {
+  font: 800 var(--kzt-l-size) / 1 var(--font-core);
+  letter-spacing: -0.03em;
+  color: #171717;
+}
+
+.kzt-lockup__x {
+  font: 600 var(--kzt-l-size) / 1 var(--font-core);
+  letter-spacing: -0.02em;
+  color: #272727;
+}
+
+.kzt-lockup__who {
+  font: 700 var(--kzt-l-size) / 1 var(--font-core);
+  letter-spacing: -0.025em;
+  color: #272727;
+}
+
+.kzt-lockup--hero {
+  --kzt-l-size: 30px;
+  --kzt-l-mark: 34px;
+  --kzt-l-gap: 18px;
+  --kzt-l-brand-gap: 12px;
+}
+
+/* -------------------------------------------------------------------- шапка */
+
+.kzt-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  height: var(--kzt-header);
+  padding: 0 var(--kzt-pad-x);
+}
+
+/* Стекло, как у шапки главной: отдельный слой, который набирает плотность
+ * по мере прокрутки (--kz-nav-p считает App.jsx). Вверху страницы шапка
+ * монолитная, без линии; линия приходит вместе со стеклом. */
+.kzt-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--glass-fill);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  box-shadow: 0 1px 0 var(--border-hairline);
+  opacity: var(--kz-nav-p, 0);
+  transition: opacity 160ms linear;
+}
+
+/* Под открытым меню шапка сплошная белая: полупрозрачное стекло над чёрным
+ * полотном читалось бы серой полосой. */
+.kzt-header.is-menu::before {
+  opacity: 1;
+  background: #fff;
+}
+
+/* Слой стекла позиционирован и лёг бы поверх содержимого. */
+.kzt-header > * {
+  position: relative;
+  z-index: 1;
+}
+
+.kzt-header__logo {
+  display: inline-flex;
+  flex: none;
+  color: #171717;
+}
+
+.kzt-header__logo:hover {
+  color: #171717;
+}
+
+.kzt-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-left: min(200px, 12vw);
+  white-space: nowrap;
+}
+
+/* Синяя черта под активным разделом стоит у нижнего края пунктов, как на главной. */
+.kzt-header__nav .kz-nav__marker {
+  z-index: 1;
+}
+
+.kzt-header__cta {
+  display: flex;
+  margin-left: auto;
+}
+
+/* Главная прячет .kz-nav__cta уже на 900px, здесь свой порог (см. ниже). */
+.kzt-header__cta .kz-nav__cta {
+  display: flex;
+  margin-left: 0;
+  text-decoration: none;
+}
+
+.kzt-cta-short {
+  display: none;
+}
+
+.kzt-header__menu {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: -10px -10px -10px auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #171717;
+  cursor: pointer;
+}
+
+/* Бургер главной, но по размеру иконки menu из макета: 18 на 14, концы
+ * скруглены. В крестик складывается тем же движением. */
+.kzt-header__menu .kz-burger {
+  width: 18px;
+  height: 14px;
+}
+
+.kzt-header__menu .kz-burger span {
+  border-radius: 1px;
+}
+
+.kzt-header.is-menu .kz-burger span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.kzt-header.is-menu .kz-burger span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.kzt-header.is-menu .kz-burger span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Полотно меню открывается под шапкой, а не поверх неё. */
+.kzt-menu {
+  top: var(--kzt-header);
+  padding-top: 32px;
+}
+
+/* -------------------------------------------------------------- общие части */
+
+.kzt-section {
+  padding: var(--kzt-pad-y) var(--kzt-pad-x);
+}
+
+.kzt-head {
+  max-width: 720px;
+}
+
+.kzt-h2 {
+  margin: 0;
+  font: 700 44px / 1.1 var(--font-core);
+  letter-spacing: -0.025em;
+  color: #171717;
+  text-wrap: balance;
+}
+
+.kzt-lead {
+  margin: 16px 0 0;
+  font: 400 20px / 1.4 var(--font-core);
+  color: #6f6f6f;
+  text-wrap: pretty;
+}
+
+.kzt-h3 {
+  margin: 0;
+  font: 600 22px / 1.2 var(--font-core);
+  letter-spacing: -0.02em;
+  color: #171717;
+  text-wrap: balance;
+}
+
+.kzt-text {
+  margin: 0;
+  font: 400 16px / 1.5 var(--font-core);
+  color: #6f6f6f;
+  text-wrap: pretty;
+}
+
+.kzt-accent {
+  color: #1763e6;
+}
+
+/* Ширину звезды на узком экране ограничивает секция, как в макете. */
+.kzt-glow {
+  position: absolute;
+  z-index: 0;
+  height: auto;
+  max-width: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.kzt-page .kz-btn {
+  text-decoration: none;
+}
+
+/* ----------------------------------------------------------- первый экран */
+
+.kzt-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 812px;
+  padding: 40px var(--kzt-pad-x) 120px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.kzt-hero__glow {
+  top: -60px;
+  left: calc(50% - 280px);
+  width: 560px;
+  opacity: 0.55;
+}
+
+.kzt-hero__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  max-width: 900px;
+}
+
+.kzt-hero__title {
+  margin: 0;
+  font: 700 64px / 1.06 var(--font-core);
+  letter-spacing: -0.03em;
+  color: #171717;
+  text-wrap: balance;
+}
+
+.kzt-hero__lead {
+  max-width: 720px;
+  margin: 0;
+  font: 400 20px / 1.4 var(--font-core);
+  color: #6f6f6f;
+  text-wrap: pretty;
+}
+
+.kzt-hero__cta {
+  margin-top: 8px;
+}
+
+/* ------------------------------------------------- что получает ваш клиент */
+
+.kzt-client {
+  border-top: 1px solid #ebebeb;
+}
+
+.kzt-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 64px;
+  background: #d9d9d9;
+  border: 1px solid #d9d9d9;
+}
+
+.kzt-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 56px;
+  min-height: 300px;
+  padding: 40px 48px 48px;
+}
+
+.kzt-tile__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  color: #1763e6;
+}
+
+.kzt-tile--main {
+  grid-column: 1 / -1;
+  min-height: 280px;
+  padding: 48px;
+  background: #1763e6;
+}
+
+.kzt-tile__main-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: end;
+}
+
+.kzt-tile__main-title {
+  margin: 0;
+  font: 700 36px / 1.1 var(--font-core);
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.kzt-tile__main-text {
+  margin: 0;
+  font: 400 18px / 1.45 var(--font-core);
+  color: #fff;
+  text-wrap: pretty;
+}
+
+.kzt-tile--grey {
+  background: #f5f5f5;
+}
+
+.kzt-tile--grey .kzt-tile__icon {
+  background: #1763e6;
+  color: #fff;
+}
+
+.kzt-tile--white {
+  background: #fff;
+}
+
+.kzt-tile--white .kzt-tile__icon {
+  background: #ebf2fa;
+}
+
+.kzt-tile--tint {
+  background: #ebf2fa;
+}
+
+.kzt-tile__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kzt-tile__title {
+  margin: 0;
+  font: 600 24px / 1.15 var(--font-core);
+  letter-spacing: -0.02em;
+  color: #171717;
+  text-wrap: balance;
+}
+
+.kzt-tile__text {
+  margin: 0;
+  font: 400 16px / 1.5 var(--font-core);
+  color: #6f6f6f;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------- что получаете вы */
+
+.kzt-you {
+  background: #f5f5f5;
+}
+
+.kzt-you__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 40px;
+  margin-top: 64px;
+}
+
+.kzt-you__item {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 36px 32px 40px 0;
+  border-top: 1px solid #272727;
+  color: #1763e6;
+}
+
+.kzt-you__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ------------------------------------------------------ как это работает */
+
+.kzt-how__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* Обёртка кнопки нужна для проявления: на самой кнопке transition появления
+ * перебил бы её ховеры. flex — чтобы обёртка не добавляла строке высоты. */
+.kzt-how__cta {
+  display: flex;
+  flex: none;
+}
+
+.kzt-how__track {
+  position: relative;
+  margin-top: 72px;
+}
+
+.kzt-how__line {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #272727;
+}
+
+.kzt-how__line--done {
+  right: auto;
+  width: 50%;
+  background: #1763e6;
+}
+
+/* Линия не проявляется, а прочерчивается слева направо. */
+.kzt-how__line[data-reveal] {
+  opacity: 1;
+  translate: none;
+  scale: 0 1;
+  transform-origin: left center;
+  transition: scale 1100ms var(--ease-out) var(--kz-delay, 0ms);
+}
+
+.kzt-how__line[data-reveal].is-in {
+  scale: 1 1;
+}
+
+.kzt-how__steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kzt-how__step {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.kzt-how__num {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid #272727;
+  font: 800 16px / 1 var(--font-core);
+  color: #171717;
+}
+
+.kzt-how__num.is-done {
+  background: #1763e6;
+  border-color: #1763e6;
+  color: #fff;
+}
+
+.kzt-how__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kzt-how__who {
+  font: 500 14px / 1 var(--font-core);
+  color: #6f6f6f;
+}
+
+.kzt-how__who.is-mine {
+  color: #1763e6;
+}
+
+.kzt-how__prices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 40px;
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid #ebebeb;
+}
+
+.kzt-how__price {
+  font: 500 14px / 1.4 var(--font-core);
+  color: #6f6f6f;
+}
+
+.kzt-how__price.is-accent {
+  font-weight: 600;
+  color: #1763e6;
+}
+
+/* ------------------------------------------ почему можно доверить клиента */
+
+.kzt-trust {
+  background: #272727;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.kzt-trust .kzt-h2 {
+  color: #fff;
+}
+
+.kzt-trust .kzt-lead {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.kzt-trust__stages {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.kzt-trust__stage {
+  margin: 0;
+  font: 400 16px / 1.5 var(--font-core);
+  color: rgba(255, 255, 255, 0.6);
+  text-wrap: pretty;
+}
+
+.kzt-trust__stage span {
+  font-weight: 600;
+  color: #fff;
+}
+
+.kzt-trust__cases {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  margin-top: 64px;
+}
+
+.kzt-case {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.kzt-case:hover {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Карточки въезжают мягче и с большим сдвигом, как ряды кейсов на главной. */
+.kzt-case[data-reveal] {
+  translate: 0 32px;
+  transition-duration: 900ms;
+}
+
+.kzt-case[data-reveal].is-in {
+  translate: none;
+}
+
+.kzt-case__media {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color var(--duration-base) var(--ease-standard);
+}
+
+/* Под курсором, как у карточек кейсов на главной: рамка синеет, кадр чуть
+ * подрастает, название окрашивается. */
+.kzt-case:hover .kzt-case__media {
+  border-color: var(--surface-accent);
+}
+
+.kzt-case__media .kzp {
+  width: 100%;
+  transition: transform 700ms var(--ease-out);
+}
+
+.kzt-case:hover .kzt-case__media .kzp {
+  transform: scale(1.04);
+}
+
+/* span экрана строчный, и пропорция снимка на нём не работала: в макете
+ * экран держит 2000 x 1047. */
+.kzt-case__media .kzp__screen {
+  display: block;
+}
+
+.kzt-case__media .kzp__photo {
+  object-position: center top;
+}
+
+.kzt-case__title {
+  margin-top: 20px;
+  font: 600 22px / 1.2 var(--font-core);
+  letter-spacing: -0.015em;
+  color: #fff;
+  transition: color var(--duration-base) var(--ease-standard);
+}
+
+.kzt-case:hover .kzt-case__title {
+  color: var(--text-accent);
+}
+
+.kzt-case__text {
+  margin-top: 12px;
+  font: 400 16px / 1.5 var(--font-core);
+  color: rgba(255, 255, 255, 0.6);
+  text-wrap: pretty;
+}
+
+.kzt-case__site {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font: 500 14px / 1 var(--font-core);
+  color: #8fb6f7;
+}
+
+.kzt-guarantee {
+  display: grid;
+  grid-template-columns: 400px minmax(0, 1fr);
+  gap: 80px;
+  align-items: start;
+  margin-top: 96px;
+  padding-top: 40px;
+  border-top: 1px solid #fff;
+}
+
+.kzt-guarantee__num {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.kzt-guarantee__big {
+  font: 800 96px / 0.9 var(--font-core);
+  letter-spacing: -0.05em;
+  color: #fff;
+}
+
+.kzt-guarantee__unit {
+  font: 700 28px / 1.1 var(--font-core);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.kzt-guarantee__text {
+  max-width: 760px;
+  margin: 0;
+  font: 700 32px / 1.15 var(--font-core);
+  letter-spacing: -0.025em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.kzt-guarantee__text span {
+  color: #8fb6f7;
+}
+
+/* ---------------------------------------------------------------- вопросы */
+
+.kzt-faq {
+  display: grid;
+  grid-template-columns: 400px minmax(0, 1fr);
+  gap: 80px;
+  align-items: start;
+}
+
+/* Заголовок стоит в левой колонке и едет за прокруткой, пока справа идут
+ * вопросы, как на главной. Работает, потому что у предков overflow-x: clip,
+ * а не hidden. На узком экране заголовок встаёт над списком (см. ниже). */
+.kzt-faq > .kzt-h2 {
+  position: sticky;
+  top: calc(var(--kzt-header) + 40px);
+}
+
+/* Главная на 1000px обнуляет правый отступ ответа, в макете он остаётся. */
+.kzt-faq .kz-faq__answer {
+  padding-right: 48px;
+}
+
+/* ------------------------------------------------------------- созвонимся */
+
+.kzt-contact {
+  position: relative;
+  padding-bottom: 28px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.kzt-contact__glow {
+  bottom: -200px;
+  left: -160px;
+  width: 560px;
+  opacity: 0.38;
+}
+
+/* Шире 1440 звезда держится у колонки содержимого, а не у края экрана. */
+@media (min-width: 1441px) {
+  .kzt-contact__glow {
+    left: calc((100% - 1280px) / 2 - 240px);
+  }
+}
+
+.kzt-contact__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 80px;
+  align-items: end;
+}
+
+.kzt-contact__main {
+  max-width: 760px;
+}
+
+.kzt-contact__title {
+  margin: 0;
+  font: 700 56px / 1.06 var(--font-core);
+  letter-spacing: -0.03em;
+  color: #171717;
+  text-wrap: balance;
+}
+
+.kzt-contact .kzt-lead {
+  margin-top: 20px;
+}
+
+.kzt-contact__cta {
+  margin-top: 40px;
+}
+
+.kzt-contact__links {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 40px;
+  border-left: 1px solid #d9d9d9;
+  font: 400 16px / 1.5 var(--font-core);
+}
+
+/* Подчёркивание, которое растёт слева направо, как в дизайн-системе. */
+.kzt-page .kz-grow-link {
+  position: relative;
+  align-self: flex-start;
+  color: #272727;
+}
+
+.kzt-page .kz-grow-link:hover {
+  color: #171717;
+}
+
+.kzt-page .kz-grow-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.kzt-page .kz-grow-link:hover::after {
+  transform: scaleX(1);
+}
+
+.kzt-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 96px;
+  padding-top: 20px;
+  border-top: 1px solid #272727;
+  font: 400 14px / 1.5 var(--font-core);
+  color: #6f6f6f;
+}
+
+.kzt-footer__company {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kzt-footer__mark {
+  display: block;
+  width: auto;
+  height: 16px;
+}
+
+/* ================================================================== шапка */
+
+/* Десктопная шапка из макета помещается от ~1330px. Уже этого — размеры
+ * шапки планшета: логотип меньше, пункты плотнее, у кнопки короткая подпись. */
+@media (max-width: 1339px) {
+  .kzt-page {
+    --kzt-header: 76px;
+  }
+
+  .kzt-header {
+    gap: 28px;
+  }
+
+  .kzt-header .kzt-lockup {
+    --kzt-l-size: 19px;
+    --kzt-l-mark: 21px;
+    --kzt-l-gap: 9.5px;
+    --kzt-l-brand-gap: 7.6px;
+  }
+
+  .kzt-header .kzt-lockup__x {
+    letter-spacing: inherit;
+  }
+
+  .kzt-header__nav {
+    gap: 18px;
+    margin-left: 8px;
+  }
+
+  .kzt-cta-long {
+    display: none;
+  }
+
+  .kzt-cta-short {
+    display: inline;
+  }
+}
+
+/* Планшет 834: в макете кнопка уходит за край, поэтому промежутки уже. */
+@media (max-width: 924px) {
+  .kzt-header {
+    gap: 16px;
+  }
+
+  .kzt-header__nav {
+    gap: 10px;
+    margin-left: 0;
+  }
+
+  .kzt-header .kz-nav__cta-label {
+    padding: 0 16px;
+  }
+}
+
+/* Меню и кнопка больше не помещаются в одну строку — прячем их в бургер. */
+@media (max-width: 833px) {
+  .kzt-header__nav,
+  .kzt-header__cta {
+    display: none;
+  }
+
+  .kzt-header__menu {
+    display: inline-flex;
+  }
+}
+
+/* ================================================================ планшет */
+
+@media (max-width: 1100px) {
+  .kzt-page {
+    --kzt-header: 76px;
+    --kzt-gutter: 40px;
+    --kzt-pad-y: 96px;
+  }
+
+  .kzt-hero {
+    min-height: 760px;
+    padding-top: 60px;
+  }
+
+  .kzt-hero__glow {
+    top: -40px;
+    left: calc(50% - 230px);
+    width: 460px;
+  }
+
+  .kzt-hero__body {
+    gap: 28px;
+    max-width: 640px;
+  }
+
+  .kzt-lockup--hero {
+    --kzt-l-size: 26px;
+    --kzt-l-mark: 28px;
+    --kzt-l-gap: 13px;
+    --kzt-l-brand-gap: 10.4px;
+  }
+
+  .kzt-lockup--hero .kzt-lockup__x {
+    letter-spacing: inherit;
+  }
+
+  .kzt-hero__title {
+    font-size: 52px;
+  }
+
+  .kzt-hero__lead {
+    max-width: none;
+    font-size: 19px;
+  }
+
+  .kzt-hero__cta {
+    margin-top: 6px;
+  }
+
+  .kzt-head {
+    max-width: none;
+  }
+
+  .kzt-h2 {
+    font-size: 32px;
+  }
+
+  .kzt-lead {
+    margin-top: 12px;
+    font-size: 17px;
+  }
+
+  .kzt-h3 {
+    font-size: 20px;
+  }
+
+  .kzt-text {
+    font-size: 15px;
+  }
+
+  /* что получает клиент */
+  .kzt-tiles {
+    margin-top: 48px;
+  }
+
+  .kzt-tile {
+    gap: 40px;
+    min-height: 240px;
+    padding: 32px 28px 36px;
+  }
+
+  .kzt-tile .kzt-tile__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .kzt-tile .kzt-tile__icon > span {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .kzt-tile .kzt-tile__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .kzt-tile--main {
+    gap: 48px;
+    min-height: 0;
+    padding: 40px;
+  }
+
+  .kzt-tile--main .kzt-tile__icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .kzt-tile--main .kzt-tile__icon > span {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .kzt-tile--main .kzt-tile__icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .kzt-tile__main-body {
+    gap: 32px;
+  }
+
+  .kzt-tile__main-title {
+    font: 600 30px / 1.2 var(--font-core);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .kzt-tile__main-text {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .kzt-tile__body {
+    gap: 8px;
+  }
+
+  .kzt-tile__title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .kzt-tile__text {
+    font-size: 15px;
+  }
+
+  /* что получаете вы */
+  .kzt-you__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 48px;
+  }
+
+  .kzt-you__item {
+    gap: 24px;
+    padding: 32px 0 36px;
+  }
+
+  .kzt-you__icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .kzt-you__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .kzt-you__body {
+    gap: 8px;
+  }
+
+  /* как это работает */
+  .kzt-how__head {
+    gap: 24px;
+  }
+
+  .kzt-how__track {
+    margin-top: 56px;
+  }
+
+  .kzt-how__line,
+  .kzt-how__who,
+  .kzt-how__prices {
+    display: none;
+  }
+
+  .kzt-how__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kzt-how__step {
+    gap: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #272727;
+  }
+
+  .kzt-how__num {
+    font-size: 15px;
+  }
+
+  .kzt-how__body {
+    gap: 8px;
+  }
+
+  /* почему можно доверить клиента */
+  .kzt-trust__stages {
+    gap: 32px;
+    margin-top: 40px;
+    padding-top: 20px;
+  }
+
+  .kzt-trust__stage {
+    font-size: 15px;
+  }
+
+  .kzt-trust__cases {
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .kzt-case__title {
+    margin-top: 16px;
+    font-size: 20px;
+  }
+
+  .kzt-case__text {
+    margin-top: 10px;
+    font-size: 15px;
+  }
+
+  .kzt-case__site {
+    margin-top: 12px;
+    font-size: 13px;
+  }
+
+  .kzt-guarantee {
+    display: flex;
+    gap: 40px;
+    align-items: baseline;
+    margin-top: 72px;
+    padding-top: 28px;
+  }
+
+  .kzt-guarantee__num {
+    flex: none;
+    gap: 10px;
+  }
+
+  .kzt-guarantee__big {
+    font-size: 80px;
+  }
+
+  .kzt-guarantee__unit {
+    font-size: 22px;
+    letter-spacing: inherit;
+  }
+
+  .kzt-guarantee__text {
+    max-width: none;
+    font-size: 26px;
+  }
+
+  /* вопросы */
+  .kzt-faq {
+    display: block;
+  }
+
+  /* Одна колонка: липкий заголовок наезжал бы на вопросы. */
+  .kzt-faq > .kzt-h2 {
+    position: static;
+  }
+
+  .kzt-faq .kz-faq {
+    margin-top: 40px;
+  }
+
+  /* созвонимся */
+  .kzt-contact {
+    padding-bottom: 24px;
+  }
+
+  .kzt-contact__grid {
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 48px;
+  }
+
+  .kzt-contact__main {
+    max-width: none;
+  }
+
+  .kzt-contact__title {
+    font: 700 40px / 1.1 var(--font-core);
+    letter-spacing: -0.025em;
+  }
+
+  .kzt-contact .kzt-lead {
+    margin-top: 12px;
+  }
+
+  .kzt-contact__cta {
+    margin-top: 28px;
+  }
+
+  .kzt-contact__links {
+    gap: 12px;
+    padding-left: 28px;
+    font-size: 15px;
+  }
+
+  .kzt-footer {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 72px;
+    padding-top: 16px;
+    font-size: 13px;
+  }
+
+  .kzt-footer__mark {
+    height: 14px;
+  }
+}
+
+/* ================================================================ телефон */
+
+@media (max-width: 760px) {
+  .kzt-page {
+    --kzt-header: 64px;
+    --kzt-gutter: 20px;
+    --kzt-pad-y: 72px;
+  }
+
+  .kzt-header {
+    justify-content: space-between;
+  }
+
+  /* Размытие на телефоне стоит дорого, как и на главной: заливка сплошная. */
+  .kzt-header::before {
+    background: #fff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .kzt-header .kzt-lockup {
+    --kzt-l-size: 17px;
+    --kzt-l-mark: 19px;
+    --kzt-l-gap: 8.5px;
+    --kzt-l-brand-gap: 6.8px;
+  }
+
+  /* кнопки на телефоне на ступень меньше, чем в макете десктопа */
+  .kzt-hero__cta .kz-btn--xl,
+  .kzt-contact__cta .kz-btn--xl {
+    height: 56px;
+    padding: 0 28px;
+    gap: 10px;
+    font: var(--weight-semibold) var(--size-body) / var(--lh-body) var(--font-core);
+    letter-spacing: var(--tracking-body);
+  }
+
+  .kzt-how__head .kz-btn--lg {
+    height: 44px;
+    padding: 0 20px;
+    gap: 8px;
+    font: var(--weight-semibold) var(--size-body-sm) / var(--lh-body) var(--font-core);
+  }
+
+  .kzt-how__head .kz-btn__arrow,
+  .kzt-how__head .kz-btn__arrow > span {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .kzt-how__head .kz-btn__arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* первый экран */
+  .kzt-hero {
+    min-height: 640px;
+    padding: 56px 20px 80px;
+  }
+
+  .kzt-hero__glow {
+    top: -20px;
+    left: calc(50% - 170px);
+    width: 340px;
+  }
+
+  .kzt-hero__body {
+    gap: 22px;
+  }
+
+  .kzt-lockup--hero {
+    --kzt-l-size: 22px;
+    --kzt-l-mark: 24px;
+    --kzt-l-gap: 11px;
+    --kzt-l-brand-gap: 8.8px;
+  }
+
+  .kzt-hero__title {
+    font-size: 36px;
+  }
+
+  .kzt-hero__lead {
+    font-size: 17px;
+  }
+
+  /* что получает клиент */
+  .kzt-tiles {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 36px;
+  }
+
+  .kzt-tile {
+    gap: 28px;
+    min-height: 0;
+    padding: 28px 24px 32px;
+  }
+
+  .kzt-tile--main {
+    gap: 32px;
+    padding: 28px 24px 32px;
+  }
+
+  .kzt-tile--main .kzt-tile__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .kzt-tile--main .kzt-tile__icon > span {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .kzt-tile--main .kzt-tile__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .kzt-tile__main-body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .kzt-tile__main-title {
+    font-size: 26px;
+  }
+
+  .kzt-tile__main-text {
+    font-size: 15px;
+  }
+
+  /* что получаете вы */
+  .kzt-you__grid {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 32px;
+  }
+
+  .kzt-you__item {
+    gap: 18px;
+    padding: 24px 0 28px;
+  }
+
+  /* как это работает: вертикальная линия через номера шагов */
+  .kzt-how__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kzt-how__track {
+    margin: 36px 0 0 20px;
+    border-left: 1px solid #272727;
+  }
+
+  .kzt-how__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .kzt-how__step {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    margin-left: -20px;
+    padding: 0 0 32px;
+    border-top: 0;
+  }
+
+  .kzt-how__body {
+    padding-top: 8px;
+  }
+
+  /* почему можно доверить клиента */
+  .kzt-trust__stages {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .kzt-trust__cases {
+    display: flex;
+    gap: 16px;
+    margin: 40px -20px 0;
+    padding: 0 20px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 20px;
+    scrollbar-width: none;
+  }
+
+  .kzt-trust__cases::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kzt-case {
+    flex: none;
+    width: 280px;
+    scroll-snap-align: start;
+  }
+
+  .kzt-guarantee {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .kzt-guarantee__big {
+    font-size: 64px;
+  }
+
+  .kzt-guarantee__text {
+    font-size: 22px;
+  }
+
+  /* вопросы */
+  .kzt-faq .kz-faq {
+    margin-top: 24px;
+  }
+
+  /* созвонимся */
+  .kzt-contact__grid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 40px;
+  }
+
+  .kzt-contact__title {
+    font-size: 34px;
+  }
+
+  .kzt-contact__links {
+    padding: 24px 0 0;
+    border-left: 0;
+    border-top: 1px solid #d9d9d9;
+  }
+
+  .kzt-footer {
+    margin-top: 56px;
+  }
+}
+
+/* ================================================= уважение к настройкам */
+
+@media (prefers-reduced-motion: reduce) {
+  .kzt-how__line[data-reveal] {
+    scale: none;
+    transition: none;
+  }
+
+  .kzt-case__media,
+  .kzt-case__media .kzp,
+  .kzt-case__title {
+    transition: none;
+  }
+
+  .kzt-case:hover .kzt-case__media .kzp {
+    transform: none;
+  }
+}
