@@ -6,9 +6,13 @@
 // те же, что на главной: заставка, заголовки выезжают по словам, блоки
 // проявляются при прокрутке, шапка набирает стекло и ведёт синюю черту под
 // активным разделом, переходы по разделам идут под шторкой.
+//
+// Блока «Когда клиенту нужны мы» в макете не было. Он собран из тех же
+// деталей, что и вопросы: сетка с заголовком слева и ряды через волосяные линии.
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import ArrowButton from '../components/ArrowButton.jsx';
+import CaseArt from '../components/CaseArt.jsx';
 import Shot from '../components/Shot.jsx';
 import SplitText from '../components/SplitText.jsx';
 import { Icon } from '../design-system/index.js';
@@ -23,6 +27,7 @@ import {
   TRACKERS_HOW,
   TRACKERS_NAV,
   TRACKERS_TRUST,
+  TRACKERS_WHEN,
   TRACKERS_YOU,
 } from '../content/trackers.js';
 
@@ -32,7 +37,18 @@ const GLOW = '/assets/star-glow.webp';
 const EXTERNAL = { target: '_blank', rel: 'noopener noreferrer' };
 
 // Разделы по порядку на странице: по ним шапка решает, какой пункт активен.
-const SECTIONS = ['#top', ...TRACKERS_NAV.map((link) => link.href), '#contact'];
+// Блока «когда нужны мы» в меню нет, но он стоит в списке: пока читаешь его,
+// черта не должна висеть под соседним пунктом.
+const SECTIONS = ['#top', '#when', '#client', '#you', '#how', '#cases', '#faq', '#contact'];
+
+// Поля под схему кейса, у которого ещё нет снимков. Те же, что в списке кейсов.
+const FILLS = {
+  blue: 'var(--surface-accent)',
+  tint: 'var(--surface-tint)',
+  grey: 'var(--ink-500)',
+};
+
+const caseHref = (slug) => `/cases/${slug}`;
 
 // Раздел активен, когда его верх ушёл под шапку. Порог тот же, что на главной.
 const SPY_EDGE = 120;
@@ -198,6 +214,33 @@ function Hero() {
   );
 }
 
+// Узнаваемые ситуации рядами, как вопросы: заголовок слева едет за прокруткой,
+// справа строки через волосяные линии. У каждой строки ссылка на кейс.
+function When({ onOpen }) {
+  return (
+    <section id="when" className="kzt-section kzt-when">
+      <div className="kzt-head">
+        <SplitText as="h2" text={TRACKERS_WHEN.title} className="kzt-h2" />
+        <p className="kzt-lead" data-reveal="" style={delay(260)}>
+          {TRACKERS_WHEN.lead}
+        </p>
+      </div>
+
+      <ul className="kzt-when__list">
+        {TRACKERS_WHEN.items.map((item, i) => (
+          <li key={item.slug} className="kzt-when__item" data-reveal="" style={delay(i * 80)}>
+            <p className="kzt-when__text">{item.text}</p>
+            <a className="kzt-when__case" href={caseHref(item.slug)} onClick={onOpen(caseHref(item.slug))}>
+              {item.label}
+              <Icon name="arrow-right" size={14} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function Client() {
   const { main, tiles } = TRACKERS_CLIENT;
   return (
@@ -308,8 +351,29 @@ function How() {
   );
 }
 
+// Кадр кейса: снимок в окне браузера, а пока снимков нет, схема кейса на поле
+// бренда, как в списке кейсов. На синем и сером поле схема рисуется белым.
+function CaseMedia({ item }) {
+  if (item.shot) {
+    return (
+      <span className="kzt-case__media">
+        <Shot preset="browser" src={item.shot} alt={item.title} style={{ '--kzp-bg': item.bg }} />
+      </span>
+    );
+  }
+  const dark = item.fill === 'blue' || item.fill === 'grey';
+  return (
+    <span
+      className={`kzt-case__media kzt-case__media--art${dark ? ' is-dark' : ''}`}
+      style={{ background: FILLS[item.fill] || FILLS.tint }}
+    >
+      <CaseArt slug={item.slug} variant="square" />
+    </span>
+  );
+}
+
 function Trust({ onOpen }) {
-  const { stages, cases, guarantee } = TRACKERS_TRUST;
+  const { stages, cases, also, guarantee } = TRACKERS_TRUST;
   return (
     <section id="cases" className="kzt-section kzt-trust kz-dark">
       <div className="kzt-head">
@@ -330,22 +394,36 @@ function Trust({ onOpen }) {
       <div className="kzt-trust__cases">
         {cases.map((item, i) => (
           <a
-            key={item.href}
+            key={item.slug}
             className="kzt-case"
-            href={item.href}
+            href={caseHref(item.slug)}
             data-reveal=""
             style={delay(i * 120)}
-            onClick={onOpen(item.href)}
+            onClick={onOpen(caseHref(item.slug))}
           >
-            <span className="kzt-case__media">
-              <Shot preset="browser" src={item.shot} alt={item.title} style={{ '--kzp-bg': item.bg }} />
-            </span>
+            <CaseMedia item={item} />
+            {item.metric ? (
+              <span className="kzt-case__metric">
+                <span className="kzt-case__metric-value">{item.metric.value}</span>{' '}
+                <span className="kzt-case__metric-caption">{item.metric.caption}</span>
+              </span>
+            ) : null}
             <span className="kzt-case__title">{item.title}</span>
             <span className="kzt-case__text">{item.text}</span>
-            <span className="kzt-case__site">{item.site}</span>
+            <span className="kzt-case__site">kazkad.digital{caseHref(item.slug)}</span>
           </a>
         ))}
       </div>
+
+      {also ? (
+        <p className="kzt-trust__also" data-reveal="">
+          {also.text}{' '}
+          <a className="kzt-trust__also-link" href={caseHref(also.slug)} onClick={onOpen(caseHref(also.slug))}>
+            {also.label}
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </p>
+      ) : null}
 
       <div className="kzt-guarantee">
         <div className="kzt-guarantee__num" data-reveal="">
@@ -494,6 +572,7 @@ export default function TrackersPage() {
       <MobileMenu open={menuOpen} onGo={go} onClose={() => setMenuOpen(false)} />
       <main>
         <Hero />
+        <When onOpen={open} />
         <Client />
         <You />
         <How />
